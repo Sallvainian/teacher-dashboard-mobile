@@ -1,0 +1,147 @@
+// src/lib/types/ai-enforcement.ts
+// Types that FORCE AI optimization patterns at compile time
+
+/**
+ * @ai-context COMPILE-TIME ENFORCEMENT
+ * @ai-purpose Force AI optimization patterns through TypeScript
+ * @ai-benefit Prevents reverting to old patterns, ensures consistency
+ */
+
+// Force all async functions to return ActionResult
+export type AIFunction<TArgs extends unknown[], TReturn> = 
+  (...args: TArgs) => Promise<ActionResult<TReturn>>;
+
+// Force context documentation
+export type AIContextHeader = {
+  readonly __aiContext: string;
+  readonly __aiDependencies: string[];
+  readonly __aiSideEffects: string[];
+  readonly __aiExports: string[];
+};
+
+// Template for enforcing AI patterns
+export type AIOptimizedModule<T> = T & AIContextHeader & {
+  // All exported functions must follow AI patterns
+  readonly __enforceAIPatterns: true;
+};
+
+// Force branded types for common IDs
+export type StudentId = string & { readonly __brand: 'StudentId' };
+export type ClassId = string & { readonly __brand: 'ClassId' };
+export type AssignmentId = string & { readonly __brand: 'AssignmentId' };
+export type UserId = string & { readonly __brand: 'UserId' };
+export type FileId = string & { readonly __brand: 'FileId' };
+export type FolderId = string & { readonly __brand: 'FolderId' };
+export type NotificationId = string & { readonly __brand: 'NotificationId' };
+export type GameId = string & { readonly __brand: 'GameId' };
+export type QuestionId = string & { readonly __brand: 'QuestionId' };
+export type ChatId = string & { readonly __brand: 'ChatId' };
+export type MessageId = string & { readonly __brand: 'MessageId' };
+export type SettingId = string & { readonly __brand: 'SettingId' };
+export type GradeId = string & { readonly __brand: 'GradeId' };
+
+// Standard ActionResult that ALL functions must use
+export type ActionResult<T = void> = {
+  success: true;
+  data: T;
+  sideEffects: string[];
+} | {
+  success: false;
+  error: string;
+  details?: string;
+  recoverable: boolean;
+};
+
+// Helper to create AI-compliant functions
+export function createAIFunction<TArgs extends unknown[], TReturn>(
+  impl: (...args: TArgs) => Promise<ActionResult<TReturn>>
+): AIFunction<TArgs, TReturn> {
+  return impl;
+}
+
+// Validation helper that forces proper error handling
+export function validateAIResult<T>(result: ActionResult<T>): T {
+  if (!result.success) {
+    throw new Error(`AI Function Error: ${result.error}`);
+  }
+  return result.data;
+}
+
+// Enhanced Error Types for better type safety
+export interface DatabaseError {
+  readonly type: 'database';
+  readonly message: string;
+  readonly code?: string;
+  readonly details?: unknown;
+}
+
+export interface ServiceError {
+  readonly type: 'service';
+  readonly message: string;
+  readonly service: string;
+  readonly operation?: string;
+}
+
+export interface ValidationError {
+  readonly type: 'validation';
+  readonly message: string;
+  readonly field?: string;
+  readonly value?: unknown;
+}
+
+export interface EventHandlerError {
+  readonly type: 'event';
+  readonly message: string;
+  readonly eventType: string;
+  readonly target?: string;
+}
+
+export type ErrorResult = DatabaseError | ServiceError | ValidationError | EventHandlerError;
+
+// Event Handler Types for better type safety
+export type ChangeEventHandler<T = HTMLInputElement> = (event: Event & { target: T }) => void;
+export type ClickEventHandler = (event: MouseEvent) => void;
+export type KeyboardEventHandler = (event: KeyboardEvent) => void;
+export type FileEventHandler = (event: Event & { target: HTMLInputElement }) => void;
+export type FormEventHandler = (event: SubmitEvent) => void;
+
+// Utility type for unknown errors (replaces 'any' in catch blocks)
+export type UnknownError = unknown;
+
+// Type guard helpers
+export function isHTMLElement(element: unknown): element is HTMLElement {
+  return element instanceof HTMLElement;
+}
+
+export function isHTMLInputElement(element: unknown): element is HTMLInputElement {
+  return element instanceof HTMLInputElement;
+}
+
+export function isHTMLSelectElement(element: unknown): element is HTMLSelectElement {
+  return element instanceof HTMLSelectElement;
+}
+
+// Helper to create branded IDs from strings
+export function createStudentId(id: string): StudentId {
+  return id as StudentId;
+}
+
+export function createClassId(id: string): ClassId {
+  return id as ClassId;
+}
+
+export function createAssignmentId(id: string): AssignmentId {
+  return id as AssignmentId;
+}
+
+export function createUserId(id: string): UserId {
+  return id as UserId;
+}
+
+export function createFileId(id: string): FileId {
+  return id as FileId;
+}
+
+export function createFolderId(id: string): FolderId {
+  return id as FolderId;
+}

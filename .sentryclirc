@@ -1,0 +1,8 @@
+[defaults]
+url=https://sentry.io/
+org=frank-personal
+project=dashboard-master-module
+
+[auth]
+# Sentry auth token for uploading source maps
+token=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

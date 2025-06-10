@@ -1,0 +1,16 @@
+.npmrc
+.prettierrc
+.prettierignore
+.trae
+.claude
+.idea
+.netlify
+.vscode
+node_modules
+.svelte-kit
+build
+dist
+package-lock.json
+*.log
+.DS_Store
+Thumbs.db
