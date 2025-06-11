@@ -33,6 +33,8 @@
 	let showBulkActions = $state(false);
 	let showColorPanel = $state(false);
 	let showAssignmentActions = $state(false);
+	let bulkActionLoading = $state(false);
+	let assignmentActionLoading = $state(false);
 	
 	// Assignment flags - simplified to 3 essential flags
 	const FLAGS = {
@@ -470,6 +472,9 @@
 
 	async function applyBulkGrade() {
 		if (!bulkGradeValue || selectedCells.size === 0) return;
+		
+		bulkActionLoading = true;
+		try {
 
 		// Only apply to cells without existing grades
 		let skippedCount = 0;
@@ -538,10 +543,18 @@
 		clearSelection();
 		bulkGradeValue = '';
 		showBulkActions = false;
+		} catch (error) {
+			console.error('Failed to apply bulk grades:', error);
+		} finally {
+			bulkActionLoading = false;
+		}
 	}
 
 	async function deleteBulkGrades() {
 		if (selectedCells.size === 0) return;
+		
+		bulkActionLoading = true;
+		try {
 
 		const gradesToDelete: Array<{ studentId: string; assignmentId: string }> = [];
 
@@ -586,6 +599,11 @@
 
 		clearSelection();
 		showBulkActions = false;
+		} catch (error) {
+			console.error('Failed to delete bulk grades:', error);
+		} finally {
+			bulkActionLoading = false;
+		}
 	}
 
 	function getGradeColor(points: number, maxPoints: number): string {
@@ -934,6 +952,8 @@
 								<button
 									onclick={() => showAssignmentDropdown = !showAssignmentDropdown}
 									class="bg-white/20 hover:bg-white/30 px-3 py-2 rounded text-sm font-medium transition-colors flex items-center gap-2 {showAssignmentDropdown ? 'bg-white/40' : ''}"
+									aria-label="Filter assignments by category or search"
+									aria-expanded={showAssignmentDropdown}
 								>
 									<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -1105,19 +1125,21 @@
 							<div class="flex items-end">
 								<button
 									onclick={applyBulkGrade}
-									disabled={!bulkGradeValue || selectedCells.size === 0}
-									class="btn btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+									disabled={!bulkGradeValue || selectedCells.size === 0 || bulkActionLoading}
+									class="btn btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed {bulkActionLoading ? 'loading' : ''}"
+									aria-label="Apply grade value to all selected cells"
 								>
-									Apply to Selected
+{bulkActionLoading ? 'Applying...' : 'Apply to Selected'}
 								</button>
 							</div>
 							<div class="flex items-end">
 								<button
 									onclick={deleteBulkGrades}
-									disabled={selectedCells.size === 0}
-									class="btn btn-error w-full disabled:opacity-50 disabled:cursor-not-allowed"
+									disabled={selectedCells.size === 0 || bulkActionLoading}
+									class="btn btn-error w-full disabled:opacity-50 disabled:cursor-not-allowed {bulkActionLoading ? 'loading' : ''}"
+									aria-label="Delete grades from all selected cells"
 								>
-									Delete Selected Grades
+{bulkActionLoading ? 'Deleting...' : 'Delete Selected Grades'}
 								</button>
 							</div>
 							<div class="flex items-end">
@@ -1314,7 +1336,11 @@
 							</div>
 						{/if}
 						<div class="overflow-x-auto">
-							<table class="w-full table-fixed">
+							<table 
+								class="w-full table-fixed"
+								role="grid"
+								aria-label="Student grades for {selectedClass?.name || 'selected class'}"
+							>
 								<thead class="bg-card-dark">
 									<tr class="border-b-2 border-purple-500">
 										<th class="bg-card-dark p-2 text-left border-r border-border w-[200px] min-w-[200px] sticky left-0 z-20">
@@ -1380,7 +1406,13 @@
 								{#each classStudents as student (student.id)}
 									<tr class="border-b border-border hover:bg-surface-hover transition-colors">
 										<td class="p-2 sticky left-0 bg-surface z-10 w-[200px] min-w-[200px] border-r border-border">
-											<button class="hover:text-purple transition-colors" onclick={() => selectRow(student.id)}>{student.name}</button>
+											<button 
+												class="hover:text-purple transition-colors" 
+												onclick={() => selectRow(student.id)}
+												aria-label="Select all grade cells for {student.name}"
+											>
+												{student.name}
+											</button>
 										</td>
 										{#each classAssignments as assignment (assignment.id)}
 											{@const grade = $gradebookStore.grades.find(g => g.studentId === student.id && g.assignmentId === assignment.id)}

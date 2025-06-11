@@ -10,6 +10,7 @@
 	import { chatStore } from '$lib/stores/chat';
 	import { authStore } from '$lib/stores/auth';
 	import type { UnknownError } from '$lib/types/ai-enforcement';
+	import type { ConversationWithDetails } from '$lib/types/chat';
 
 	interface RecentMessage {
 		id: string; // Or number, depending on your data
@@ -103,9 +104,13 @@
 				storagePercentage = Math.round((stats.total_size_bytes / (10 * 1024 * 1024 * 1024)) * 100); // Assume 10GB limit
 			}
 
-			// Load recent messages from chat store
+			// Load recent messages from chat store with timeout
 			try {
-				await chatStore.loadConversations();
+				const chatTimeout = new Promise((_, reject) => {
+					setTimeout(() => reject(new Error('Chat load timeout')), 3000);
+				});
+				
+				await Promise.race([chatStore.loadConversations(), chatTimeout]);
 				
 				// Get current user ID to filter out own messages
 				let currentUserId: string | null = null;
@@ -115,14 +120,15 @@
 				authUnsubscribe();
 				
 				// Use subscription to get conversations data
-				let conversations: unknown[] = [];
+				let conversations: ConversationWithDetails[] = [];
 				const unsubscribe = chatStore.conversations.subscribe((convs) => {
-					conversations = convs;
+					conversations = convs as ConversationWithDetails[];
 				});
 				unsubscribe(); // Immediately unsubscribe after getting the value
 				
 				recentMessages = conversations
-					.filter(conv => conv.last_message)
+					.filter((conv): conv is ConversationWithDetails & { last_message: NonNullable<ConversationWithDetails['last_message']> } => 
+						conv.last_message !== undefined && conv.last_message !== null)
 					.filter(conv => conv.last_message.sender_id !== currentUserId) // Filter out own messages
 					.sort((a, b) => new Date(b.last_message.created_at).getTime() - new Date(a.last_message.created_at).getTime())
 					.slice(0, 3)
@@ -132,7 +138,7 @@
 						time: formatRelativeDate(conv.last_message.created_at)
 					}));
 			} catch (chatError) {
-				console.log('No chat messages available:', chatError);
+				console.log('Chat load timed out or failed:', chatError);
 				recentMessages = [];
 			}
 

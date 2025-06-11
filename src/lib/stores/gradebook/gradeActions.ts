@@ -5,6 +5,7 @@ import { get } from 'svelte/store';
 import { gradebookService } from '$lib/services/supabaseService';
 import { grades, assignments, error } from './core';
 import type { Grade, Assignment } from '$lib/types/gradebook';
+import { createStudentId, createAssignmentId } from '$lib/types/ai-optimized';
 
 // Record a grade for a student
 export async function recordGrade(
@@ -40,14 +41,14 @@ export async function recordGrade(
 		// Update local store
 		grades.update((arr: Grade[]) => {
 			const idx = arr.findIndex(
-				(g: Grade) => g.studentId === studentId && g.assignmentId === assignmentId
+				(g: Grade) => g.studentId === createStudentId(studentId) && g.assignmentId === createAssignmentId(assignmentId)
 			);
 			if (idx > -1) {
 				const newArr = [...arr];
 				newArr[idx].points = pts;
 				return newArr;
 			}
-			return [...arr, { studentId, assignmentId, points: pts }];
+			return [...arr, { studentId: createStudentId(studentId), assignmentId: createAssignmentId(assignmentId), points: pts }];
 		});
 	} catch (err: unknown) {
 		console.error('Error recording grade:', err);

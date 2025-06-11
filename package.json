@@ -74,15 +74,13 @@
 		"vite-imagetools": "^7.0.4",
 		"vite-plugin-checker": "^0.9.3",
 		"vite-plugin-compression": "^0.5.1",
-		"vite-plugin-pwa": "^1.0.0",
+		"vite-plugin-pwa": "^0.21.2",
 		"vitest": "^3.1.4"
 	},
 	"dependencies": {
 		"@fontsource/inter": "^5.2.5",
 		"@giphy/js-fetch-api": "^5.6.0",
-		"@giphy/svelte-components": "^1.1.0",
 		"@jridgewell/sourcemap-codec": "^1.5.0",
-		"@sentry/sveltekit": "^9.24.0",
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.49.4",
 		"caniuse-lite": "1.0.30001720",

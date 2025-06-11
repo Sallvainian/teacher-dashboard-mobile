@@ -1,7 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-import { sentrySvelteKit } from '@sentry/sveltekit';
-import { SvelteKitPWA } from '@vite-pwa/sveltekit';
+// import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import { imagetools } from 'vite-imagetools';
 import Icons from 'unplugin-icons/vite';
 import compression from 'vite-plugin-compression';
@@ -10,47 +9,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 export default defineConfig({
 	plugins: [
 		// PWA Support - Offline functionality for educational environments
-		SvelteKitPWA({
-			strategies: 'injectManifest',
-			registerType: 'prompt',
-			workbox: {
-				globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
-				cleanupOutdatedCaches: true,
-				runtimeCaching: [
-					{
-						urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
-						handler: 'NetworkFirst',
-						options: {
-							cacheName: 'supabase-cache',
-							expiration: {
-								maxEntries: 100,
-								maxAgeSeconds: 60 * 60 * 24 // 24 hours
-							}
-						}
-					}
-				]
-			},
-			manifest: {
-				name: 'Teacher Dashboard',
-				short_name: 'Dashboard',
-				description: 'Educational Dashboard for Teachers',
-				theme_color: '#1e40af',
-				background_color: '#ffffff',
-				display: 'standalone',
-				icons: [
-					{
-						src: '/favicon.png',
-						sizes: '192x192',
-						type: 'image/png'
-					},
-					{
-						src: '/favicon.png',
-						sizes: '512x512',
-						type: 'image/png'
-					}
-				]
-			}
-		}),
+		// TODO: Fix service worker configuration - disabled for now
 
 		// Image Optimization - Generate WebP/AVIF formats automatically
 		imagetools({
@@ -87,13 +46,6 @@ export default defineConfig({
 		// 	}
 		// }),
 
-		sentrySvelteKit({
-			sourceMapsUploadOptions: {
-				org: 'frank-personal',
-				project: 'dashboard-master-module',
-				authToken: process.env.SENTRY_AUTH_TOKEN || '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'
-			}
-		}),
 		sveltekit(),
 
 		// Asset Compression - Gzip/Brotli for better loading times
@@ -122,7 +74,7 @@ export default defineConfig({
 
 	server: {
 		port: 5173,
-		host: true,
+		host: 'localhost',
 		// Fixed HMR WebSocket connection issues
 		hmr: {
 			host: 'localhost',
@@ -160,7 +112,6 @@ export default defineConfig({
 				manualChunks: {
 					supabase: ['@supabase/supabase-js', '@supabase/ssr'],
 					utilities: ['date-fns', 'uuid', 'zod'],
-					sentry: ['@sentry/sveltekit']
 				}
 			}
 		},

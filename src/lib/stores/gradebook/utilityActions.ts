@@ -79,8 +79,15 @@ export async function ensureDataLoaded(): Promise<boolean> {
 		// Import supabase client dynamically if needed to ensure it's initialized
 		const { supabase } = await import('$lib/supabaseClient');
 
-		// Check authentication state
-		await supabase.auth.getSession();
+		// Check authentication state with timeout protection
+		try {
+			const timeoutPromise = new Promise((_, reject) => {
+				setTimeout(() => reject(new Error('Auth session timeout')), 20000);
+			});
+			await Promise.race([supabase.auth.getSession(), timeoutPromise]);
+		} catch (error) {
+			console.warn('Auth session check timed out, continuing with data load');
+		}
 
 		// Load data
 		await loadAllData();

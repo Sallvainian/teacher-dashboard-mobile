@@ -25,7 +25,6 @@ A comprehensive web application for educators to manage classroom activities, st
 - **Data Tables**: AG-Grid Community, Handsontable
 - **Testing**: Vitest, Testing Library
 - **CI/CD**: GitHub Actions, Netlify
-- **Error Tracking**: Sentry
 
 ## 🏗 Architecture
 

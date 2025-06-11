@@ -7,7 +7,7 @@ export const ssr = false;
 
 // Ensure auth is initialized before rendering any pages
 export const load: LayoutLoad = async () => {
-	// Initialize auth as early as possible
+	// Initialize auth with timeout protection
 	await ensureAuthInitialized();
 
 	return {};

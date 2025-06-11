@@ -1,0 +1,71 @@
+{
+	// Svelte & SvelteKit
+	"svelte.enable-ts-plugin": true,
+	"svelte.plugin.svelte.format.enable": true,
+	"svelte.plugin.svelte.format.config.svelteStrictMode": true,
+
+	// TypeScript
+	"typescript.preferences.importModuleSpecifier": "relative",
+	"typescript.updateImportsOnFileMove.enabled": "always",
+
+	// Prettier
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[svelte]": {
+		"editor.defaultFormatter": "svelte.svelte-vscode"
+	},
+
+	// ESLint
+	"eslint.validate": ["javascript", "typescript", "svelte"],
+
+	// Tailwind CSS
+	"tailwindCSS.experimental.classRegex": [["class:\\s*?[\"'`]([^\"'`]*).*?[\"'`]", "([^\"'`]*)"]],
+
+	// File associations
+	"files.associations": {
+		"*.css": "postcss"
+	},
+
+	// WSL-specific settings
+	"terminal.integrated.defaultProfile.linux": "bash",
+	"terminal.integrated.profiles.linux": {
+		"bash": {
+			"path": "/bin/bash"
+		}
+	},
+
+	// Git
+	"git.autofetch": true,
+	"git.confirmSync": false,
+
+	// Editor
+	"editor.linkedEditing": true,
+	"editor.bracketPairColorization.enabled": true,
+	"editor.guides.bracketPairs": true,
+
+	// Exclude files from explorer
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/node_modules": false
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"sqltools.connections": [
+		{
+			"previewLimit": 50,
+			"server": "aws-0-us-east-2.pooler.supabase.com",
+			"port": 6543,
+			"driver": "PostgreSQL",
+			"name": "Supabase",
+			"database": "postgres",
+			"username": "postgres.yutlcpluuhjxwudfathv"
+		}
+	]
+}

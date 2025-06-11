@@ -6,6 +6,7 @@ import { gradebookService } from '$lib/services/supabaseService';
 import { classes, selectedClassId, error } from './core';
 import { addGlobalStudent, assignStudentToClass } from './studentActions';
 import type { Class } from '$lib/types/gradebook';
+import { createClassId } from '$lib/types/ai-optimized';
 
 // Add a new class
 export async function addClass(name: string, userId?: string): Promise<void> {
@@ -31,7 +32,7 @@ export async function addClass(name: string, userId?: string): Promise<void> {
 
 		// Update local store
 		const newClass: Class = {
-			id: result.id,
+			id: createClassId(result.id),
 			name: result.name,
 			studentIds: []
 		};

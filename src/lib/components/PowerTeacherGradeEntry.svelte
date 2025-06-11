@@ -51,7 +51,7 @@
   let summary = $derived(() => {
     const scores = Array.from(grades.values())
       .map(g => g.score)
-      .filter(s => s !== null && s !== undefined && s !== '');
+      .filter((s): s is string => s !== null && s !== undefined && s !== '');
     
     if (scores.length === 0) return {
       average: '--',
@@ -172,7 +172,7 @@
   }
 
   function saveEdit(studentId: string) {
-    const grade = grades.get(studentId) || {};
+    const grade = grades.get(studentId) || { score: null, flags: {}, comment: '' };
     grade.score = editValue;
     grades.set(studentId, grade);
     
@@ -190,7 +190,7 @@
   }
 
   function toggleFlag(studentId: string, flag: string) {
-    const grade = grades.get(studentId) || {};
+    const grade = grades.get(studentId) || { score: null, flags: {}, comment: '' };
     if (!grade.flags) grade.flags = {};
     grade.flags[flag] = !grade.flags[flag];
     grades.set(studentId, grade);
@@ -211,7 +211,7 @@
     if (!startGrade?.score) return;
     
     for (let i = startRow + 1; i < students.length; i++) {
-      const grade = grades.get(students[i].id) || {};
+      const grade = grades.get(students[i].id) || { score: null, flags: {}, comment: '' };
       grade.score = startGrade.score;
       grades.set(students[i].id, grade);
     }
@@ -219,7 +219,7 @@
 
   function fillAll(value: string) {
     students.forEach(student => {
-      const grade = grades.get(student.id) || {};
+      const grade = grades.get(student.id) || { score: null, flags: {}, comment: '' };
       grade.score = value;
       grades.set(student.id, grade);
     });

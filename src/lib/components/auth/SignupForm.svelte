@@ -86,6 +86,7 @@
 							onclick={resendConfirmation}
 							class="btn btn-sm btn-outline {loading ? 'loading' : ''}"
 							disabled={loading}
+							aria-label="Resend email confirmation to verify your account"
 						>
 							Resend Confirmation Email
 						</button>

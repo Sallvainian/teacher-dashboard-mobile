@@ -388,7 +388,6 @@ Remember: This is a production application for educators. Code quality, type saf
 - **DeepResearchMCP** - Deep research capabilities
 - **vercel-api-mcp-fork** - Vercel API operations
 - **pdf-extraction** - PDF content extraction
-- **Sentry** - Error tracking and monitoring
 - **doc-tools-mcp** - Document creation tools
 
 ### Built-in Tools (Claude Code)
@@ -425,7 +424,6 @@ Remember: This is a production application for educators. Code quality, type saf
 - Added missing auth store methods: `signUpStudent`, `signUpTeacher`, `role`
 - Fixed implicit any type errors throughout codebase
 - Fixed Handsontable prop types
-- Updated Sentry to v8 API (changed from `span.setTag` to `span.setAttribute`)
 - Fixed RoleSignupForm return type mismatch
 
 #### 4. Fixed PostCSS @apply Warning
@@ -454,7 +452,6 @@ Remember: This is a production application for educators. Code quality, type saf
 - Zero TypeScript errors
 - File upload functionality restored
 - All components properly typed
-- Sentry integration working with v8 API
 - PostCSS properly configured
 - **IMPORTANT**: Soft delete/trash feature is FULLY IMPLEMENTED but requires database migration
 

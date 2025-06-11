@@ -1,7 +1,7 @@
 // src/lib/stores/auth/initialization.ts
 // Auth initialization, session management, and auth state listener
 
-import { supabase } from '$lib/supabaseClient';
+import { supabase, supabaseUrl } from '$lib/supabaseClient';
 import { authStore } from './core';
 import { fetchUserProfile } from './profileActions';
 
@@ -21,6 +21,23 @@ export async function initialize(): Promise<void> {
 	}));
 
 	try {
+		// Check if we're in demo mode
+		if (supabaseUrl.includes('demo')) {
+			console.log('🚀 Running in demo mode - auth functionality limited');
+			authStore.update(state => ({
+				...state,
+				loading: false,
+				isInitialized: true,
+				error: 'Demo mode - please configure Supabase credentials for full functionality'
+			}));
+			return;
+		}
+
+		// Set a timeout for Supabase operations to prevent hanging
+		const timeoutPromise = new Promise((_, reject) => {
+			setTimeout(() => reject(new Error('Supabase connection timeout')), 20000);
+		});
+
 		// First try to get session from local storage quickly
 		const storedSession =
 			typeof window !== 'undefined'
@@ -48,32 +65,7 @@ export async function initialize(): Promise<void> {
 			}
 		}
 
-		// Now verify/refresh the session with Supabase
-		const { data, error: sessionError } = await supabase.auth.getSession();
-		if (sessionError) throw sessionError;
-
-		if (data?.session) {
-			authStore.update(state => ({
-				...state,
-				session: data.session,
-				user: data.session.user
-			}));
-
-			// Make role fetching non-blocking for faster initial load
-			setTimeout(() => {
-				fetchUserProfile(data.session.user.id).catch(console.error);
-			}, 0);
-		} else if (!storedSession) {
-			// Only clear if we didn't have a stored session
-			authStore.update(state => ({
-				...state,
-				session: null,
-				user: null,
-				role: null
-			}));
-		}
-
-		// Only set up auth listener once
+		// Only set up auth listener once - this doesn't block
 		if (!authListenerSetup) {
 			supabase.auth.onAuthStateChange(
 				async (event, newSession) => {
@@ -95,6 +87,40 @@ export async function initialize(): Promise<void> {
 			);
 			authListenerSetup = true;
 		}
+
+		// Try to verify/refresh the session with Supabase in background
+		// Don't await this to prevent blocking app initialization
+		setTimeout(async () => {
+			try {
+				const sessionCall = supabase.auth.getSession();
+				const { data, error: sessionError } = await Promise.race([sessionCall, timeoutPromise]) as any;
+				
+				if (sessionError) throw sessionError;
+
+				if (data?.session) {
+					authStore.update(state => ({
+						...state,
+						session: data.session,
+						user: data.session.user
+					}));
+
+					// Make role fetching non-blocking
+					setTimeout(() => {
+						fetchUserProfile(data.session.user.id).catch(console.error);
+					}, 0);
+				} else if (!storedSession) {
+					// Only clear if we didn't have a stored session
+					authStore.update(state => ({
+						...state,
+						session: null,
+						user: null,
+						role: null
+					}));
+				}
+			} catch (timeoutError) {
+				console.warn('Supabase session verification timed out, using cached session if available');
+			}
+		}, 0);
 	} catch (err: unknown) {
 		console.error('Auth initialization error:', err);
 		authStore.update(state => ({

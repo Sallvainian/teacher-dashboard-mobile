@@ -1,23 +1,9 @@
-import * as Sentry from "@sentry/sveltekit";
 import { sequence } from "@sveltejs/kit/hooks";
 import type { Handle } from '@sveltejs/kit';
 
-// Use the DSN from the environment
-const SENTRY_DSN = import.meta.env.PUBLIC_SENTRY_DSN;
 
-Sentry.init({
-  dsn: SENTRY_DSN,
-
-  // Adds request headers and IP for users, for more info visit:
-  // https://docs.sentry.io/platforms/javascript/guides/sveltekit/configuration/options/#sendDefaultPii
-  sendDefaultPii: true,
-
-  // We recommend adjusting this value in production, or using tracesSampler
-  // for finer control
-  tracesSampleRate: 1.0,
-});
-
-const myErrorHandler: Parameters<typeof Sentry.handleErrorWithSentry>[0] = ({ error, event }: { error: unknown; event: import('@sveltejs/kit').RequestEvent }) => {
+// Simple error handler without Sentry for now
+const myErrorHandler = ({ error, event }: { error: unknown; event: import('@sveltejs/kit').RequestEvent }) => {
   console.error("An error occurred on the server side:", error, event);
 };
 
@@ -38,6 +24,5 @@ const handleChromeDevTools: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
-export const handleError = Sentry.handleErrorWithSentry(myErrorHandler);
-// Use sequence to run our custom handler before Sentry's handler
-export const handle = sequence(handleChromeDevTools, Sentry.sentryHandle());
+export const handleError = myErrorHandler;
+export const handle = sequence(handleChromeDevTools);

@@ -7,6 +7,7 @@ import { dbStudentToAppStudent } from '$lib/utils/modelConverters';
 import { authStore } from '../auth';
 import { students, classes, error } from './core';
 import type { Student, Class } from '$lib/types/gradebook';
+import { createStudentId } from '$lib/types/ai-optimized';
 
 // Add a global student
 export async function addGlobalStudent(name: string, userId?: string): Promise<string | null> {
@@ -52,8 +53,8 @@ export async function assignStudentToClass(studentId: string, classId: string): 
 		// Update local store
 		classes.update((clsArray: Class[]) =>
 			clsArray.map((cls: Class) =>
-				cls.id === classId && !cls.studentIds.includes(studentId)
-					? { ...cls, studentIds: [...cls.studentIds, studentId] }
+				cls.id === classId && !cls.studentIds.includes(createStudentId(studentId))
+					? { ...cls, studentIds: [...cls.studentIds, createStudentId(studentId)] }
 					: cls
 			)
 		);

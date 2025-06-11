@@ -1,0 +1,35 @@
+{
+  "recommendations": [
+    // Core Svelte Development
+    "svelte.svelte-vscode",
+    "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    
+    // TypeScript & JavaScript
+    "ms-vscode.vscode-typescript-next",
+    "usernamehw.errorlens",
+    "christian-kohler.path-intellisense",
+    
+    // Database & Backend
+    "Prisma.prisma",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg",
+    
+    // Git & GitHub
+    "eamodio.gitlens",
+    "GitHub.vscode-pull-request-github",
+    
+    // Testing
+    "zixuanchen.vitest-explorer",
+    "hbenl.vscode-test-explorer",
+    
+    // Utilities
+    "mikestead.dotenv",
+    "redhat.vscode-yaml",
+    "streetsidesoftware.code-spell-checker",
+    "gruntfuggly.todo-tree"
+  ],
+  
+  "unwantedRecommendations": []
+}
