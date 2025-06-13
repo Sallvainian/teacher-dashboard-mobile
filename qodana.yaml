@@ -11,6 +11,10 @@ exclude:
       - build  
       - dist
       - coverage
+<<<<<<< Updated upstream
+=======
+      - .vercel
+>>>>>>> Stashed changes
       - static
   # Disable ESLint since we have our own setup
   - name: Eslint

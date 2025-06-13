@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Backend**: Supabase (PostgreSQL + Auth)
 - **Data Tables**: AG-Grid Community, Handsontable
 - **Testing**: Vitest, Testing Library
+<<<<<<< Updated upstream
 - **CI/CD**: GitHub Actions, Netlify
 
 ## AI-OPTIMIZED DEVELOPMENT PATTERNS
@@ -56,6 +57,9 @@ async function addStudent(name: string): Promise<ActionResult<StudentId>>
  * @ai-sideEffects Updates students store, modifies students table
  */
 ```
+=======
+- **CI/CD**: GitHub Actions, Vercel
+>>>>>>> Stashed changes
 
 ## Code Style Guidelines
 
@@ -359,6 +363,7 @@ Remember: This is a production application for educators. Code quality, type saf
 
 ## Session Memory - January 2025
 
+<<<<<<< Updated upstream
 ### CRITICAL WARNING - NPM COMMANDS
 **NEVER RUN NPM COMMANDS** - Running `npm run dev`, `npm run check`, `npm run lint`, or any npm script commands causes module loading errors and breaks the development server. This includes:
 - `npm run dev` - Breaks the dev server with module not found errors
@@ -405,6 +410,8 @@ Remember: This is a production application for educators. Code quality, type saf
 - **TodoRead/TodoWrite** - Task management
 - **WebSearch** - Web search functionality
 
+=======
+>>>>>>> Stashed changes
 ### Critical Fixes Applied
 
 #### 1. Fixed File Storage System
@@ -424,6 +431,10 @@ Remember: This is a production application for educators. Code quality, type saf
 - Added missing auth store methods: `signUpStudent`, `signUpTeacher`, `role`
 - Fixed implicit any type errors throughout codebase
 - Fixed Handsontable prop types
+<<<<<<< Updated upstream
+=======
+- Updated Sentry to v8 API (changed from `span.setTag` to `span.setAttribute`)
+>>>>>>> Stashed changes
 - Fixed RoleSignupForm return type mismatch
 
 #### 4. Fixed PostCSS @apply Warning
@@ -452,15 +463,26 @@ Remember: This is a production application for educators. Code quality, type saf
 - Zero TypeScript errors
 - File upload functionality restored
 - All components properly typed
+<<<<<<< Updated upstream
+=======
+- Sentry integration working with v8 API
+>>>>>>> Stashed changes
 - PostCSS properly configured
 - **IMPORTANT**: Soft delete/trash feature is FULLY IMPLEMENTED but requires database migration
 
 ### Pending Database Migration
+<<<<<<< Updated upstream
 **UPDATE (February 2025)**: The soft delete filter has been added to fileService.ts. 
 **TO ACTIVATE**: Run the migration in Supabase SQL Editor:
 - Migration file: `supabase/migrations/20250203_soft_delete_files.sql`
 - After running migration, the trash/recycle bin feature will be fully functional
 - Features enabled: soft delete, trash view, file restoration, and permanent deletion
+=======
+**CRITICAL**: The trash/recycle bin feature for files is ready but REQUIRES this migration to be run in Supabase:
+- Migration file exists at: `supabase/migrations/20250203_soft_delete_files.sql`
+- After running migration, uncomment the `.eq('is_deleted', false)` filters in `fileService.ts`
+- This enables: soft delete, trash view, file restoration, and permanent deletion
+>>>>>>> Stashed changes
 
 ### Development Workflow Reminders
 1. Always run `npm run check` before committing

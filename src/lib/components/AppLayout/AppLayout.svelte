@@ -1,16 +1,27 @@
 <script lang="ts">
-	import { navigating } from '$app/stores';
+	import { navigating, page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import LoadingBounce from '$components/LoadingBounce.svelte';
-	import { isInitialized } from '$stores/auth';
+	import { isInitialized, isAuthenticated } from '$stores/auth';
 	import { gradebookStore } from '$stores/gradebook';
 	import { debounce } from '$utils/performanceOptimized';
 	import { isHTMLElement } from '$lib/utils/domHelpers';
+	import { initializeNotifications } from '$lib/stores/notifications';
 	import AppHeader from './AppHeader.svelte';
 	import AppSidebar from './AppSidebar.svelte';
 	import ImportWizard from '$components/ImportWizard.svelte';
 
 	// Get children prop
 	let { children } = $props();
+
+	// Define public routes that don't require authentication
+	const PUBLIC_ROUTES = ['/auth/login', '/auth/signup', '/auth/reset-password'];
+	
+	// Check if current route is public
+	let isPublicRoute = $derived(PUBLIC_ROUTES.includes($page.url.pathname));
+	
+	// Also treat root route as needing redirect handling
+	let isRootRoute = $derived($page.url.pathname === '/');
 
 	// Local state
 	let sidebarCollapsed = $state(false);
@@ -44,6 +55,27 @@
 	$effect(() => {
 		debouncedDataLoad();
 	});
+
+	// Initialize notifications when authenticated
+	$effect(() => {
+		if ($isAuthenticated) {
+			initializeNotifications();
+		}
+	});
+
+	// Handle authentication redirects
+	$effect(() => {
+		// Only redirect after auth is initialized to avoid redirect loops
+		if ($isInitialized && !isRootRoute) {
+			if (!$isAuthenticated && !isPublicRoute) {
+				// Redirect to login if not authenticated and not on a public route
+				goto('/auth/login');
+			} else if ($isAuthenticated && isPublicRoute) {
+				// Redirect to dashboard if authenticated and on a public route
+				goto('/dashboard');
+			}
+		}
+	});
 </script>
 
 <!-- Loading state while auth initializes -->
@@ -54,7 +86,20 @@
 			<p class="text-muted mt-4">Initializing...</p>
 		</div>
 	</div>
-{:else}
+{:else if isPublicRoute || isRootRoute}
+	<!-- Public routes (auth pages) - simple layout without sidebar/header -->
+	<div class="min-h-screen bg-bg-base text-text-base">
+		{#if $navigating}
+			<div
+				class="absolute inset-0 bg-bg-base backdrop-blur-sm flex items-center justify-center z-50"
+			>
+				<LoadingBounce />
+			</div>
+		{/if}
+		{@render children?.()}
+	</div>
+{:else if $isAuthenticated}
+	<!-- Authenticated layout with full dashboard -->
 	<div class="min-h-screen bg-bg-base text-text-base flex flex-col transition-colors">
 		<!-- Header -->
 		<AppHeader bind:userMenuOpen bind:classesDropdownOpen />
@@ -94,4 +139,12 @@
 			}}
 		/>
 	{/if}
+{:else}
+	<!-- Fallback - should not normally be reached due to redirects -->
+	<div class="min-h-screen bg-bg-base flex items-center justify-center">
+		<div class="text-center">
+			<LoadingBounce />
+			<p class="text-muted mt-4">Redirecting...</p>
+		</div>
+	</div>
 {/if}

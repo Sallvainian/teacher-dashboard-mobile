@@ -22,11 +22,19 @@ Closes #[issue number]
 ## CLAUDE.md Compliance Checklist
 
 ### Must Pass Requirements
+<<<<<<< Updated upstream
 - [ ] **TypeScript**: No TS errors (`npm check` passes)
 - [ ] **Linting**: ESLint passes (`npm lint` passes)
 - [ ] **Tests**: All tests pass (`npm test` passes)
 - [ ] **Build**: Production build succeeds (`npm build` passes)
 - [ ] **Validation**: Combined validation passes (`npm validate` passes)
+=======
+- [ ] **TypeScript**: No TS errors (`pnpm check` passes)
+- [ ] **Linting**: ESLint passes (`pnpm lint` passes)
+- [ ] **Tests**: All tests pass (`pnpm test` passes)
+- [ ] **Build**: Production build succeeds (`pnpm build` passes)
+- [ ] **Validation**: Combined validation passes (`pnpm validate` passes)
+>>>>>>> Stashed changes
 
 ### Code Quality Standards
 - [ ] Uses proper Svelte 5 patterns (runes, callback props)

@@ -30,7 +30,11 @@ jobs:
             ${{ runner.os }}-node-
             
       - name: Install dependencies
+<<<<<<< Updated upstream
         run: npm install
+=======
+        run: npm ci
+>>>>>>> Stashed changes
         
       - name: Run ESLint
         run: npm run lint
@@ -83,7 +87,11 @@ jobs:
             ${{ runner.os }}-node-
             
       - name: Install dependencies
+<<<<<<< Updated upstream
         run: npm install
+=======
+        run: npm ci
+>>>>>>> Stashed changes
         
       - name: Validate TypeScript config files
         run: |
@@ -175,7 +183,11 @@ jobs:
             ${{ runner.os }}-node-
             
       - name: Install dependencies
+<<<<<<< Updated upstream
         run: npm install
+=======
+        run: npm ci
+>>>>>>> Stashed changes
         
       - name: Analyze bundle
         run: |

@@ -4,6 +4,7 @@ import netlify from '@sveltejs/adapter-netlify';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: vitePreprocess(),
+	// Remove runes setting - let Svelte auto-detect
 	kit: {
 		adapter: netlify(),
 		alias: {
@@ -12,9 +13,6 @@ const config = {
 			$services: 'src/lib/services',
 			$utils: 'src/lib/utils',
 			$types: 'src/lib/types'
-		},
-		serviceWorker: {
-			register: false
 		},
 		prerender: {
 			handleHttpError: ({ status, path, referrer, message }) => {

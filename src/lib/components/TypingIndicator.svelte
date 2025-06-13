@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { typingUsers = $bindable([]) }: { typingUsers: string[] } = $props();
+	let { typingUsers = [] }: { typingUsers: string[] } = $props();
 
 	function getTypingText(): string {
 		if (typingUsers.length === 0) return '';

@@ -3,6 +3,10 @@ node_modules_backup/
 
 # Output
 .output
+<<<<<<< Updated upstream
+=======
+.vercel
+>>>>>>> Stashed changes
 .netlify
 .wrangler
 /.svelte-kit
@@ -32,6 +36,11 @@ vite.config.ts.timestamp-*
 # Claude settings
 **/.claude/settings.local.json
 
+<<<<<<< Updated upstream
+=======
+# Sentry Config File
+.env.sentry-build-plugin
+>>>>>>> Stashed changes
 pnpm-lock.yaml
 
 # Platform-specific info

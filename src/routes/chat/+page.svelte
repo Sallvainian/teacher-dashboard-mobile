@@ -89,23 +89,37 @@
 		}
 	});
 
-	// Force reload conversations on mount to ensure all data is fresh
+	// Load conversations on mount if not already loaded
 	onMount(async () => {
-		await chatStore.loadConversations();
+		if (conversations.length === 0) {
+			await chatStore.loadConversations();
+		}
 	});
 
 	const unsubscribeMessages = chatStore.activeMessages.subscribe((msgs) => {
 		const user = getUser($authStore);
 		if (user) {
-			messages = msgs.map((msg) => ({
-				id: msg.id,
-				content: msg.content,
-				sender_name: msg.sender?.full_name ?? msg.sender?.email ?? 'Unknown',
-				sender_avatar: msg.sender?.avatar_url ?? '',
-				created_at: msg.created_at ?? new Date().toISOString(),
-				is_own_message: msg.sender_id === user.id,
-				attachments: msg.attachments ?? []
-			}));
+			
+			messages = msgs.map((msg, index) => {
+				// Better fallback for sender name
+				let senderName = 'Unknown User';
+				if (msg.sender) {
+					senderName = msg.sender.full_name || msg.sender.email || 'Unknown User';
+				} else if (msg.sender_id === user.id) {
+					// If it's the current user but sender is missing
+					senderName = user.full_name || user.email || 'You';
+				}
+				
+				return {
+					id: msg.id,
+					content: msg.content,
+					sender_name: senderName,
+					sender_avatar: msg.sender?.avatar_url ?? '',
+					created_at: msg.created_at ?? new Date().toISOString(),
+					is_own_message: msg.sender_id === user.id,
+					attachments: msg.attachments ?? []
+				};
+			});
 		}
 	});
 
@@ -131,28 +145,53 @@
 
 	// Helper functions
 	function getConversationDisplayName(conversation: ConversationWithDetails): string {
+		console.log('📛 NAME: Getting display name for conversation:', conversation);
+		
 		if (conversation.name) {
+			console.log('📛 NAME: Using conversation.name:', conversation.name);
 			return conversation.name;
 		}
 
 		if (conversation.is_group) {
+			console.log('📛 NAME: Group chat detected');
 			return 'Group Chat';
 		}
 
 		// For direct messages, show the other participant's name
 		const user = getUser($authStore);
+		console.log('📛 NAME: Current user:', user?.id);
+		console.log('📛 NAME: Conversation participants:', conversation.participants);
+		
 		const otherParticipant = conversation.participants?.find(
 			(p: ConversationParticipant) => p.user_id !== user?.id
 		);
+
+		console.log('📛 NAME: Found other participant:', otherParticipant);
 
 		// Check multiple places for user data
 		if (otherParticipant) {
 			// First check if user data is directly on the participant
 			if (otherParticipant.user) {
-				return otherParticipant.user.full_name || otherParticipant.user.email || 'Unknown User';
+				const fullName = otherParticipant.user.full_name?.trim();
+				const email = otherParticipant.user.email?.trim();
+				
+				console.log('📛 NAME: Participant user data:', { fullName, email });
+				
+				if (fullName && fullName.length > 0) {
+					console.log('📛 NAME: Using full_name:', fullName);
+					return fullName;
+				}
+				if (email && email.length > 0) {
+					console.log('📛 NAME: Using email:', email);
+					return email;
+				}
 			}
+			// If no user data, try to use participant user_id as fallback
+			console.log('📛 NAME: No user data, using fallback user ID:', otherParticipant.user_id);
+			return `User ${otherParticipant.user_id}`;
 		}
 
+		console.log('📛 NAME: No other participant found, using Unknown User');
 		return 'Unknown User';
 	}
 
@@ -194,7 +233,7 @@
 				.from('messages')
 				.select(`
 					sender_id,
-					sender:app_users (id, full_name, email)
+					sender:app_users!messages_sender_id_fkey (id, full_name, email)
 				`)
 				.eq('conversation_id', conv.id)
 				.neq('sender_id', currentUserId)
@@ -325,11 +364,7 @@
 
 	// Note: messages is already a state variable, no need for activeMessages
 
-	onMount(async () => {
-		// Load conversations when component mounts
-		await chatStore.loadConversations();
-		scrollToBottom();
-	});
+	// scrollToBottom will be called by the $effect when messages update
 
 	onDestroy(() => {
 		// Clean up subscriptions
@@ -630,6 +665,50 @@
 					<p class="text-sm">{error}</p>
 				</div>
 			{/if}
+			
+			<!-- Debug buttons -->
+			<div class="mt-4 flex gap-2">
+				<button 
+					class="btn btn-secondary text-xs" 
+					onclick={() => {
+						console.log('🧪 DEBUG: Testing toast notification');
+						import('$lib/stores/notifications').then(({ showInfoToast, showSuccessToast, showErrorToast }) => {
+							showInfoToast('Test info toast message', 'Debug Test', 5000);
+							showSuccessToast('Test success toast', 'Success!', 5000);
+							showErrorToast('Test error toast', 'Error!', 5000);
+						});
+					}}
+				>
+					Test Toast
+				</button>
+				<button 
+					class="btn btn-secondary text-xs" 
+					onclick={() => {
+						console.log('🧪 DEBUG: Current store states:');
+						console.log('Conversations:', $state.snapshot(conversations));
+						console.log('Messages:', $state.snapshot(messages));
+						console.log('Active conversation:', $state.snapshot(activeConversation));
+						console.log('Typing users:', $state.snapshot(typingUsers));
+					}}
+				>
+					Debug Stores
+				</button>
+				<button 
+					class="btn btn-secondary text-xs" 
+					onclick={() => {
+						console.log('🧪 DEBUG: Sending test message');
+						if (activeConversation) {
+							import('$lib/stores/chat').then(({ chatStore }) => {
+								chatStore.sendMessage(activeConversation.id, 'Test debug message from UI');
+							});
+						} else {
+							console.log('❌ No active conversation');
+						}
+					}}
+				>
+					Send Test Message
+				</button>
+			</div>
 		</div>
 
 		<!-- Chat Interface -->

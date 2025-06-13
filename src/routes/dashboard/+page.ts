@@ -6,19 +6,28 @@ import { ensureAuthInitialized } from '$lib/utils/authInit';
 import { getIsAuthenticated } from '$lib/utils/storeHelpers';
 
 export const load: PageLoad = async ({ data }) => {
-	// Ensure auth is initialized first
-	await ensureAuthInitialized();
+	try {
+		// Ensure auth is initialized first
+		await ensureAuthInitialized();
 
-	// Get current auth state
-	const auth = get(authStore);
+		// Get current auth state
+		const auth = get(authStore);
 
-	// If not authenticated, redirect to login
-	if (!getIsAuthenticated(auth)) {
-		throw redirect(307, '/auth/login');
+		// If not authenticated, redirect to login
+		if (!getIsAuthenticated(auth)) {
+			throw redirect(303, '/auth/login');
+		}
+
+		// Return the data from the server
+		return {
+			data: data
+		};
+	} catch (error) {
+		// If it's a redirect, re-throw it
+		if (error instanceof Error && 'status' in error && 'location' in error) {
+			throw error;
+		}
+		// For any other error, redirect to login
+		throw redirect(303, '/auth/login');
 	}
-
-	// Return the data from the server
-	return {
-		data: data
-	};
 };

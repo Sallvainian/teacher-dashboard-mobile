@@ -1,6 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-// import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import { imagetools } from 'vite-imagetools';
 import Icons from 'unplugin-icons/vite';
 import compression from 'vite-plugin-compression';
@@ -8,9 +7,6 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
 	plugins: [
-		// PWA Support - Offline functionality for educational environments
-		// TODO: Fix service worker configuration - disabled for now
-
 		// Image Optimization - Generate WebP/AVIF formats automatically
 		imagetools({
 			defaultDirectives: (url) => {
@@ -74,25 +70,28 @@ export default defineConfig({
 
 	server: {
 		port: 5173,
-		host: 'localhost',
-		// Fixed HMR WebSocket connection issues
+		// Cross-platform development support
+		// This configuration works for both:
+		// 1. Windows/macOS/Linux native development
+		// 2. Windows Subsystem for Linux (WSL) development
+		host: '0.0.0.0', // Listen on all network interfaces
 		hmr: {
-			host: 'localhost',
-			protocol: 'ws',
-			overlay: true
+			port: 5173,
+			clientPort: 5173 // Auto-detect correct host for HMR
 		},
-		// Windows-specific file watching optimizations
+		// Optimized file watching
 		watch: {
-			usePolling: false,
+			usePolling: false, // Better performance than polling
 			ignored: ['**/node_modules/**', '**/.git/**']
 		},
-		// Handle CORS for development
-		cors: true
+		// Enable CORS for API development
+		cors: true,
+		fs: {
+			strict: false // Allow importing from outside the project root
+		}
 	},
 
 	optimizeDeps: {
-		// Exclude problematic Windows native binaries from optimization
-		exclude: ['@rollup/rollup-win32-x64-msvc'],
 		// Include dependencies that benefit from pre-bundling
 		include: [
 			'@supabase/supabase-js',
@@ -111,7 +110,7 @@ export default defineConfig({
 				// Split large dependencies into separate chunks
 				manualChunks: {
 					supabase: ['@supabase/supabase-js', '@supabase/ssr'],
-					utilities: ['date-fns', 'uuid', 'zod'],
+					utilities: ['date-fns', 'uuid', 'zod']
 				}
 			}
 		},

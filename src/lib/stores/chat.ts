@@ -174,6 +174,8 @@ function setUserTyping(conversationId: string, userId: string, userName: string)
 				isTyping: true
 			}
 		});
+	} else {
+		console.log('❌ TYPING: No typing channel available for broadcast');
 	}
 }
 
@@ -198,6 +200,8 @@ function setUserNotTyping(conversationId: string, userId: string): void {
 				isTyping: false
 			}
 		});
+	} else {
+		console.log('❌ TYPING: No typing channel available for stop typing broadcast');
 	}
 }
 
@@ -301,7 +305,7 @@ async function loadConversations(): Promise<void> {
 					.select(
 						`
 						*,
-						sender:app_users (id, full_name, email, avatar_url)
+						sender:app_users!messages_sender_id_fkey (id, full_name, email, avatar_url)
 					`
 					)
 					.eq('conversation_id', conv.id)
@@ -316,15 +320,28 @@ async function loadConversations(): Promise<void> {
 					.select(
 						`
 						*,
-						user:app_users (id, full_name, email, avatar_url)
+						user:app_users!conversation_participants_user_id_fkey (id, full_name, email, avatar_url)
 					`
 					)
 					.eq('conversation_id', conv.id)
 					.eq('is_active', true);  // Only get active participants
 
 				if (participantsError) {
-					console.error('Error loading participants for conversation', conv.id, participantsError);
+					console.error('❌ PARTICIPANTS: Error loading participants for conversation', conv.id, participantsError);
 				}
+				
+				// Debug: Check if participants have user data
+				if (participants) {
+					participants.forEach((p, index) => {
+						console.log(`👤 PARTICIPANT ${index}:`, {
+							user_id: p.user_id,
+							has_user_data: !!p.user,
+							user_full_name: p.user?.full_name,
+							user_email: p.user?.email
+						});
+					});
+				}
+				
 
 				// Calculate unread count
 				const userParticipant = participants?.find((p) => p.user_id === user.id);
@@ -340,13 +357,17 @@ async function loadConversations(): Promise<void> {
 					unreadCount = count ?? 0;
 				}
 
-				return {
+				const processedConversation = {
 					...conv,
 					participants: participants ?? [],
 					conversation_participants: participants ?? [],
 					last_message: lastMessage,
 					unread_count: unreadCount
 				};
+				
+				console.log('🔄 CONVERSATION: Processed conversation:', processedConversation);
+				
+				return processedConversation;
 			})
 		);
 
@@ -361,12 +382,14 @@ async function loadConversations(): Promise<void> {
 
 async function loadMessages(conversationId: string): Promise<void> {
 	try {
+		console.log('📖 MESSAGES: Loading messages for conversation:', conversationId);
+		
 		const { data: messagesData, error: messagesError } = await supabase
 			.from('messages')
 			.select(
 				`
 				*,
-				sender:app_users (id, full_name, email, avatar_url),
+				sender:app_users!messages_sender_id_fkey (id, full_name, email, avatar_url),
 				message_attachments (*)
 			`
 			)
@@ -375,10 +398,16 @@ async function loadMessages(conversationId: string): Promise<void> {
 
 		if (messagesError) throw messagesError;
 
-		messages.update((current) => ({
-			...current,
-			[conversationId]: messagesData ?? []
-		}));
+		console.log('📖 MESSAGES: Loaded', messagesData?.length || 0, 'messages');
+
+		messages.update((current) => {
+			const updated = {
+				...current,
+				[conversationId]: messagesData ?? []
+			};
+			console.log('📖 MESSAGES: Updated messages store for conversation');
+			return updated;
+		});
 
 		// Mark messages as read
 		await markConversationAsRead(conversationId);
@@ -393,6 +422,8 @@ async function sendMessage(conversationId: string, content: string): Promise<voi
 		const user = getUser(get(authStore));
 		if (!user) throw new Error('User not authenticated');
 
+		console.log('📤 SEND: Sending message to conversation:', conversationId);
+
 		const { data: message, error: messageError } = await supabase
 			.from('messages')
 			.insert({
@@ -404,27 +435,39 @@ async function sendMessage(conversationId: string, content: string): Promise<voi
 			.select(
 				`
 				*,
-				sender:app_users (id, full_name, email, avatar_url)
+				sender:app_users!messages_sender_id_fkey (id, full_name, email, avatar_url)
 			`
 			)
 			.single();
 
 		if (messageError) throw messageError;
 
-		// Add message to local state
-		messages.update((current) => ({
-			...current,
-			[conversationId]: [...(current[conversationId] ?? []), message]
-		}));
+		console.log('📤 SEND: Message sent successfully:', message.id);
 
-		// Update conversation's last message
-		conversations.update((current) =>
-			current.map((conv) =>
+		// Add message to local state
+		messages.update((current) => {
+			const updated = {
+				...current,
+				[conversationId]: [...(current[conversationId] ?? []), message]
+			};
+			console.log('📤 SEND: Updated local messages store, new count:', updated[conversationId].length);
+			return updated;
+		});
+
+		// Update conversation's last message and move to top
+		conversations.update((current) => {
+			const updatedConversations = current.map((conv) =>
 				conv.id === conversationId
 					? { ...conv, last_message: message, updated_at: message.created_at }
 					: conv
-			)
-		);
+			);
+			
+			// Sort conversations by updated_at to move the active one to the top
+			return updatedConversations.sort((a, b) => 
+				new Date(b.updated_at ?? b.created_at).getTime() - 
+				new Date(a.updated_at ?? a.created_at).getTime()
+			);
+		});
 	} catch (err: UnknownError) {
 		console.error('Error sending message:', err);
 		error.set(err instanceof Error ? err.message : 'Failed to send message');
@@ -574,7 +617,7 @@ function setupRealtimeSubscriptions(): void {
 	const user = getUser(get(authStore));
 	if (!user || subscriptionsActive || setupInProgress) return;
 
-	console.log('🔌 Setting up realtime subscriptions for user:', user.id);
+	console.log('🔌 REALTIME: Setting up subscriptions for user:', user.id);
 
 	// Prevent multiple simultaneous setup calls
 	setupInProgress = true;
@@ -594,11 +637,18 @@ function setupRealtimeSubscriptions(): void {
 				schema: 'public',
 				table: 'conversations'
 			},
-			(_payload) => {
-				loadConversations();
+			(payload) => {
+				console.log('🔄 REALTIME: Conversations table change:', payload.eventType, payload);
+				// Only reload conversations if it's a conversation creation/deletion, not updates
+				if (payload.eventType === 'INSERT' || payload.eventType === 'DELETE') {
+					loadConversations();
+				}
+				// For UPDATE events, we don't need to reload since message updates handle this
 			}
 		)
-		.subscribe();
+		.subscribe((status) => {
+			console.log('🔌 REALTIME: Conversations channel subscription status:', status);
+		});
 
 	// Subscribe to messages with unique channel name
 	messagesChannel = supabase
@@ -611,67 +661,100 @@ function setupRealtimeSubscriptions(): void {
 				table: 'messages'
 			},
 			async (payload) => {
+				console.log('📨 REALTIME: ========== NEW MESSAGE EVENT ==========');
+				console.log('📨 REALTIME: Payload:', payload);
 				const newMessage = payload.new as Message;
 
 				// Check if user is part of this conversation
-				const { data: participation } = await supabase
+				const { data: participation, error: participationError } = await supabase
 					.from('conversation_participants')
 					.select('conversation_id')
 					.eq('conversation_id', newMessage.conversation_id)
 					.eq('user_id', user.id)
 					.single();
 
-				if (!participation) return;
+				console.log('🔍 REALTIME: User participation check:', participation, 'Error:', participationError);
+				if (!participation) {
+					console.log('❌ REALTIME: User not participant in this conversation, IGNORING MESSAGE');
+					return;
+				}
 
 				// Load full message with sender info
-				const { data: fullMessage } = await supabase
+				const { data: fullMessage, error: messageError } = await supabase
 					.from('messages')
-					.select(`*, sender:app_users (id, full_name, email, avatar_url)`)
+					.select(`*, sender:app_users!messages_sender_id_fkey (id, full_name, email, avatar_url)`)
 					.eq('id', newMessage.id)
 					.single();
 
+				console.log('📥 REALTIME: Loaded full message:', fullMessage, 'Error:', messageError);
+
 				if (fullMessage) {
+					console.log('✅ REALTIME: Processing message - sender:', fullMessage.sender?.full_name || 'Unknown', 'content:', fullMessage.content.substring(0, 50));
+					
 					// Create notification for new messages from other users
 					if (fullMessage.sender_id !== user.id) {
+						console.log('🔔 REALTIME: Creating notification for message from other user');
 						const senderName = fullMessage.sender?.full_name ?? fullMessage.sender?.email ?? 'Someone';
+						
 						addPrivateMessageNotification(
 							senderName,
 							fullMessage.content,
-							fullMessage.conversation_id,
+							fullMessage.content,
+							'medium',
+							fullMessage.sender_id,
 							fullMessage.id
 						);
 						
 						// Show toast notification for new messages
-						console.log('📱 Showing toast for new message:', { sender: senderName, messageId: fullMessage.id });
 						const messagePreview = fullMessage.content.length > 50 
 							? fullMessage.content.substring(0, 50) + '...' 
 							: fullMessage.content;
+						
 						showInfoToast(
 							`${messagePreview}`,
 							`New message from ${senderName}`,
 							5000
 						);
+					} else {
+						console.log('📝 REALTIME: Message from current user, no notification needed');
 					}
 					
 					// Add to messages if we have this conversation loaded
 					messages.update((current) => {
+						console.log('💾 REALTIME: Current messages state before update:', Object.keys(current));
+						console.log('💾 REALTIME: Looking for conversation:', fullMessage.conversation_id);
+						
 						if (current[fullMessage.conversation_id]) {
 							const existingMessages = current[fullMessage.conversation_id];
 							const isDuplicate = existingMessages.some(msg => msg.id === fullMessage.id);
 							
+							console.log('🔄 REALTIME: Adding message to conversation, existingCount:', existingMessages.length, 'isDuplicate:', isDuplicate);
+							
 							if (!isDuplicate) {
-								return {
+								const updated = {
 									...current,
 									[fullMessage.conversation_id]: [...current[fullMessage.conversation_id], fullMessage]
 								};
+								console.log('✅ REALTIME: Updated messages state - new count:', updated[fullMessage.conversation_id].length);
+								return updated;
 							}
+						} else {
+							console.log('⚠️ REALTIME: Conversation not loaded in messages store, creating new array');
+							// Create the conversation in messages store if it doesn't exist
+							const updated = {
+								...current,
+								[fullMessage.conversation_id]: [fullMessage]
+							};
+							console.log('✅ REALTIME: Created new conversation in messages store');
+							return updated;
 						}
 						return current;
 					});
 
 					// Update conversation last message and unread count
-					conversations.update((current) =>
-						current.map((conv) =>
+					conversations.update((current) => {
+						console.log('💬 REALTIME: Updating conversation list');
+						const updatedConversations = current.map((conv) =>
 							conv.id === fullMessage.conversation_id
 								? { 
 									...conv, 
@@ -680,12 +763,27 @@ function setupRealtimeSubscriptions(): void {
 									unread_count: fullMessage.sender_id !== user.id ? (conv.unread_count ?? 0) + 1 : conv.unread_count
 								}
 								: conv
-						)
-					);
+						);
+						
+						// Sort conversations by updated_at to move the active one to the top
+						const sorted = updatedConversations.sort((a, b) => 
+							new Date(b.updated_at ?? b.created_at).getTime() - 
+							new Date(a.updated_at ?? a.created_at).getTime()
+						);
+						console.log('📋 REALTIME: Updated conversations list:', sorted);
+						return sorted;
+					});
+					
+					console.log('🎉 REALTIME: Message processing complete!');
+				} else {
+					console.log('❌ REALTIME: No full message data, skipping processing');
 				}
+				console.log('📨 REALTIME: ========== END MESSAGE EVENT ==========');
 			}
 		)
-		.subscribe();
+		.subscribe((status) => {
+			console.log('🔌 REALTIME: Messages channel subscription status:', status);
+		});
 
 	// Subscribe to typing indicators with shared channel name for all users
 	typingChannel = supabase
@@ -717,30 +815,35 @@ function setupRealtimeSubscriptions(): void {
 				});
 			}
 		})
-		.subscribe();
+		.subscribe((status) => {
+			console.log('🔌 REALTIME: Typing channel subscription status:', status);
+		});
 
 	// Reset setup flag after all subscriptions are complete
 	setupInProgress = false;
 }
 
 function cleanupRealtimeSubscriptions(): void {
-	console.log('🧹 Cleaning up realtime subscriptions');
-	
+	console.log('🧹 REALTIME: Cleaning up subscriptions');
 	subscriptionsActive = false;
 	setupInProgress = false;
 
 	if (conversationsChannel) {
+		console.log('🧹 REALTIME: Removing conversations channel');
 		supabase.removeChannel(conversationsChannel);
 		conversationsChannel = null;
 	}
 	if (messagesChannel) {
+		console.log('🧹 REALTIME: Removing messages channel');
 		supabase.removeChannel(messagesChannel);
 		messagesChannel = null;
 	}
 	if (typingChannel) {
+		console.log('🧹 REALTIME: Removing typing channel');
 		supabase.removeChannel(typingChannel);
 		typingChannel = null;
 	}
+	console.log('🧹 REALTIME: Cleanup complete');
 }
 
 // Initialize store when auth state changes
@@ -756,6 +859,13 @@ function initializeAuthSubscription() {
 	authUnsubscribe = authStore.subscribe(async (auth) => {
 		const typedAuth = typedAuthStore(auth);
 		
+		console.log('🔐 AUTH: Auth state changed:', { 
+			hasUser: !!typedAuth.user, 
+			isInitialized: typedAuth.isInitialized,
+			subscriptionsActive,
+			conversationCount: conversations.current().length
+		});
+		
 		// Clear any pending reconnect
 		if (reconnectTimeout) {
 			clearTimeout(reconnectTimeout);
@@ -763,21 +873,21 @@ function initializeAuthSubscription() {
 		}
 		
 		if (typedAuth.user && typedAuth.isInitialized) {
-			// Only reconnect if we don't already have conversations loaded
-			const currentConversations = conversations.current();
-			if (currentConversations.length === 0) {
-				// Increased debounce to prevent rapid reconnects
+			// Only setup subscriptions if they're not already active
+			if (!subscriptionsActive) {
+				console.log('🔐 AUTH: Setting up subscriptions for authenticated user');
+				// Small debounce to prevent rapid reconnects during auth initialization
 				reconnectTimeout = window.setTimeout(async () => {
 					// Always cleanup before setting up new subscriptions
 					cleanupRealtimeSubscriptions();
 					await loadConversations();
 					setupRealtimeSubscriptions();
-				}, 500); // Increased from 100ms to 500ms
-			} else if (!subscriptionsActive) {
-				// Just ensure subscriptions are active without reloading
-				setupRealtimeSubscriptions();
+				}, 500);
+			} else {
+				console.log('🔐 AUTH: Subscriptions already active, no action needed');
 			}
 		} else {
+			console.log('🔐 AUTH: User logged out or not initialized, cleaning up');
 			// Clear state when user logs out using reset methods
 			conversations.reset();
 			messages.reset();
@@ -808,8 +918,6 @@ if (typeof window !== 'undefined') {
 
 // Cleanup function for components to call
 export function cleanupChat(): void {
-	console.log('🛑 Chat store cleanup called');
-	
 	// Clean up auth subscription
 	if (authUnsubscribe) {
 		authUnsubscribe();
@@ -879,7 +987,7 @@ async function _pollForNewMessages(): Promise<void> {
 			.from('messages')
 			.select(`
 				*,
-				sender:app_users (id, full_name, email, avatar_url)
+				sender:app_users!messages_sender_id_fkey (id, full_name, email, avatar_url)
 			`)
 			.eq('conversation_id', currentActiveConversationId)
 			.gt('created_at', lastMessageCheck.toISOString())
@@ -893,7 +1001,9 @@ async function _pollForNewMessages(): Promise<void> {
 					addPrivateMessageNotification(
 						senderName,
 						message.content,
-						message.conversation_id,
+						message.content,
+						'medium',
+						message.sender_id,
 						message.id
 					);
 				}
