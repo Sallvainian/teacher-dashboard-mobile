@@ -625,7 +625,7 @@ function setupRealtimeSubscriptions(): void {
 	// Clean up any existing subscriptions first
 	cleanupRealtimeSubscriptions();
 
-	subscriptionsActive = true;
+	console.log('🔌 REALTIME: Starting subscription setup...');
 
 	// Subscribe to conversations changes with unique channel name
 	conversationsChannel = supabase
@@ -648,6 +648,10 @@ function setupRealtimeSubscriptions(): void {
 		)
 		.subscribe((status) => {
 			console.log('🔌 REALTIME: Conversations channel subscription status:', status);
+			if (status === 'CHANNEL_ERROR') {
+				console.error('❌ REALTIME: Conversations channel error - likely RLS policy issue');
+				console.log('💡 TIP: Check if user has SELECT permission on conversations table');
+			}
 		});
 
 	// Subscribe to messages with unique channel name
@@ -819,8 +823,10 @@ function setupRealtimeSubscriptions(): void {
 			console.log('🔌 REALTIME: Typing channel subscription status:', status);
 		});
 
-	// Reset setup flag after all subscriptions are complete
+	// Mark subscriptions as active and reset setup flag
+	subscriptionsActive = true;
 	setupInProgress = false;
+	console.log('✅ REALTIME: All subscriptions setup complete');
 }
 
 function cleanupRealtimeSubscriptions(): void {
