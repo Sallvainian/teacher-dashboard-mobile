@@ -31,8 +31,11 @@ export interface AuthStoreState {
 	isInitialized: boolean;
 }
 
+// Track auth updates for debugging
+let authUpdateCount = 0;
+
 // Create the main auth store with all state
-export const authStore = createStore<AuthStoreState>({
+const baseAuthStore = createStore<AuthStoreState>({
 	name: 'auth',
 	initialValue: {
 		user: null,
@@ -46,10 +49,20 @@ export const authStore = createStore<AuthStoreState>({
 	localStorageKey: 'teacher-dashboard-auth-state'
 });
 
+// Wrap the store to add logging
+export const authStore = {
+	...baseAuthStore,
+	update: (updater: (state: AuthStoreState) => AuthStoreState) => {
+		authUpdateCount++;
+		console.log(`🔐 AUTH UPDATE #${authUpdateCount}:`, new Error().stack?.split('\n')[2]?.trim() || 'Unknown source');
+		baseAuthStore.update(updater);
+	}
+};
+
 // Create individual slices for better performance
 export const user = createDerivedStore({
 	name: 'auth.user',
-	stores: [authStore],
+	stores: [baseAuthStore],
 	deriveFn: (values: unknown[]) => {
 		const [$auth] = values as [AuthStoreState];
 		return $auth.user;
@@ -58,7 +71,7 @@ export const user = createDerivedStore({
 
 export const profile = createDerivedStore({
 	name: 'auth.profile',
-	stores: [authStore],
+	stores: [baseAuthStore],
 	deriveFn: (values: unknown[]) => {
 		const [$auth] = values as [AuthStoreState];
 		return $auth.profile;
@@ -67,7 +80,7 @@ export const profile = createDerivedStore({
 
 export const session = createDerivedStore({
 	name: 'auth.session',
-	stores: [authStore],
+	stores: [baseAuthStore],
 	deriveFn: (values: unknown[]) => {
 		const [$auth] = values as [AuthStoreState];
 		return $auth.session;
@@ -76,7 +89,7 @@ export const session = createDerivedStore({
 
 export const loading = createDerivedStore({
 	name: 'auth.loading',
-	stores: [authStore],
+	stores: [baseAuthStore],
 	deriveFn: (values: unknown[]) => {
 		const [$auth] = values as [AuthStoreState];
 		return $auth.loading;
@@ -85,7 +98,7 @@ export const loading = createDerivedStore({
 
 export const error = createDerivedStore({
 	name: 'auth.error',
-	stores: [authStore],
+	stores: [baseAuthStore],
 	deriveFn: (values: unknown[]) => {
 		const [$auth] = values as [AuthStoreState];
 		return $auth.error;
@@ -94,7 +107,7 @@ export const error = createDerivedStore({
 
 export const role = createDerivedStore({
 	name: 'auth.role',
-	stores: [authStore],
+	stores: [baseAuthStore],
 	deriveFn: (values: unknown[]) => {
 		const [$auth] = values as [AuthStoreState];
 		return $auth.role;
@@ -111,7 +124,7 @@ export const isAuthenticated = createDerivedStore({
 
 export const isInitialized = createDerivedStore({
 	name: 'auth.isInitialized',
-	stores: [authStore],
+	stores: [baseAuthStore],
 	deriveFn: ([$auth]) => {
 		return $auth.isInitialized;
 	}

@@ -15,6 +15,7 @@ export async function fetchUserProfile(userId: string): Promise<void> {
 
 		if (error) {
 			console.error('Database error fetching user profile:', error);
+			// Single update for error case
 			authStore.update(state => ({
 				...state,
 				role: null,
@@ -32,6 +33,7 @@ export async function fetchUserProfile(userId: string): Promise<void> {
 				avatar_url: data.avatar_url,
 				role: validatedRole
 			};
+			// Single update with both profile and role
 			authStore.update(state => ({
 				...state,
 				profile: userProfile,
@@ -42,6 +44,7 @@ export async function fetchUserProfile(userId: string): Promise<void> {
 			const fallbackRole = localStorage.getItem(`user-role-${userId}`);
 			if (fallbackRole && isValidUserRole(fallbackRole)) {
 				console.warn(`Using fallback role from localStorage: ${fallbackRole}`);
+				// Single update for fallback role
 				authStore.update(state => ({
 					...state,
 					role: fallbackRole
@@ -54,6 +57,7 @@ export async function fetchUserProfile(userId: string): Promise<void> {
 		}
 	} catch (err: unknown) {
 		console.error('Error fetching user profile:', err);
+		// Single update for error case
 		authStore.update(state => ({
 			...state,
 			role: null,
