@@ -130,7 +130,11 @@ export async function initialize(): Promise<void> {
 		// Fetch profile if we have a user
 		if (storedUserId) {
 			try {
-				await fetchUserProfile(storedUserId);
+				const profileData = await fetchUserProfile(storedUserId, false);
+				if (profileData && 'profile' in profileData) {
+					stateUpdates.profile = profileData.profile;
+					stateUpdates.role = profileData.role;
+				}
 			} catch (profileError) {
 				console.error('Error fetching profile during initialization:', profileError);
 			}

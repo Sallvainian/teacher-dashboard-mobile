@@ -3,9 +3,10 @@
 
 import { supabase } from '$lib/supabaseClient';
 import { authStore, isValidUserRole, type UserProfile } from './core';
+import type { UserRole } from '$lib/types/database';
 
 // Fetch user profile from database
-export async function fetchUserProfile(userId: string): Promise<void> {
+export async function fetchUserProfile(userId: string, updateStore: boolean = true): Promise<{ profile: UserProfile | null; role: UserRole | null } | void> {
 	try {
 		const { data, error } = await supabase
 			.from('app_users')
@@ -15,13 +16,15 @@ export async function fetchUserProfile(userId: string): Promise<void> {
 
 		if (error) {
 			console.error('Database error fetching user profile:', error);
-			// Single update for error case
-			authStore.update(state => ({
-				...state,
-				role: null,
-				profile: null
-			}));
-			return;
+			if (updateStore) {
+				// Single update for error case
+				authStore.update(state => ({
+					...state,
+					role: null,
+					profile: null
+				}));
+			}
+			return updateStore ? undefined : { profile: null, role: null };
 		}
 
 		if (data !== null) {
@@ -33,36 +36,50 @@ export async function fetchUserProfile(userId: string): Promise<void> {
 				avatar_url: data.avatar_url,
 				role: validatedRole
 			};
-			// Single update with both profile and role
-			authStore.update(state => ({
-				...state,
-				profile: userProfile,
-				role: validatedRole
-			}));
+			
+			if (updateStore) {
+				// Single update with both profile and role
+				authStore.update(state => ({
+					...state,
+					profile: userProfile,
+					role: validatedRole
+				}));
+			} else {
+				return { profile: userProfile, role: validatedRole };
+			}
 		} else {
 			// Check localStorage fallback first
 			const fallbackRole = localStorage.getItem(`user-role-${userId}`);
 			if (fallbackRole && isValidUserRole(fallbackRole)) {
 				console.warn(`Using fallback role from localStorage: ${fallbackRole}`);
-				// Single update for fallback role
-				authStore.update(state => ({
-					...state,
-					role: fallbackRole
-				}));
+				if (updateStore) {
+					// Single update for fallback role
+					authStore.update(state => ({
+						...state,
+						role: fallbackRole
+					}));
+				} else {
+					return { profile: null, role: fallbackRole };
+				}
 			} else {
 				// No record found - user needs to be created in app_users table
 				console.warn(`No app_users record found for user ${userId}. Creating default record...`);
 				await createAppUserRecord(userId);
+				// createAppUserRecord will have updated the store or returned data
 			}
 		}
 	} catch (err: unknown) {
 		console.error('Error fetching user profile:', err);
-		// Single update for error case
-		authStore.update(state => ({
-			...state,
-			role: null,
-			profile: null
-		}));
+		if (updateStore) {
+			// Single update for error case
+			authStore.update(state => ({
+				...state,
+				role: null,
+				profile: null
+			}));
+		} else {
+			return { profile: null, role: null };
+		}
 	}
 }
 
@@ -179,5 +196,5 @@ export async function updateUserProfile(userData: Record<string, unknown>): Prom
 
 // Keep the old function for backwards compatibility
 export async function fetchUserRole(userId: string): Promise<void> {
-	return fetchUserProfile(userId);
+	await fetchUserProfile(userId, true);
 }
