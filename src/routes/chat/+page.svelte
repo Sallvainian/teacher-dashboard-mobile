@@ -145,28 +145,20 @@
 
 	// Helper functions
 	function getConversationDisplayName(conversation: ConversationWithDetails): string {
-		console.log('📛 NAME: Getting display name for conversation:', conversation);
-		
 		if (conversation.name) {
-			console.log('📛 NAME: Using conversation.name:', conversation.name);
 			return conversation.name;
 		}
 
 		if (conversation.is_group) {
-			console.log('📛 NAME: Group chat detected');
 			return 'Group Chat';
 		}
 
 		// For direct messages, show the other participant's name
 		const user = getUser($authStore);
-		console.log('📛 NAME: Current user:', user?.id);
-		console.log('📛 NAME: Conversation participants:', conversation.participants);
 		
 		const otherParticipant = conversation.participants?.find(
 			(p: ConversationParticipant) => p.user_id !== user?.id
 		);
-
-		console.log('📛 NAME: Found other participant:', otherParticipant);
 
 		// Check multiple places for user data
 		if (otherParticipant) {
@@ -175,23 +167,17 @@
 				const fullName = otherParticipant.user.full_name?.trim();
 				const email = otherParticipant.user.email?.trim();
 				
-				console.log('📛 NAME: Participant user data:', { fullName, email });
-				
 				if (fullName && fullName.length > 0) {
-					console.log('📛 NAME: Using full_name:', fullName);
 					return fullName;
 				}
 				if (email && email.length > 0) {
-					console.log('📛 NAME: Using email:', email);
 					return email;
 				}
 			}
 			// If no user data, try to use participant user_id as fallback
-			console.log('📛 NAME: No user data, using fallback user ID:', otherParticipant.user_id);
 			return `User ${otherParticipant.user_id}`;
 		}
 
-		console.log('📛 NAME: No other participant found, using Unknown User');
 		return 'Unknown User';
 	}
 
@@ -665,50 +651,6 @@
 					<p class="text-sm">{error}</p>
 				</div>
 			{/if}
-			
-			<!-- Debug buttons -->
-			<div class="mt-4 flex gap-2">
-				<button 
-					class="btn btn-secondary text-xs" 
-					onclick={() => {
-						console.log('🧪 DEBUG: Testing toast notification');
-						import('$lib/stores/notifications').then(({ showInfoToast, showSuccessToast, showErrorToast }) => {
-							showInfoToast('Test info toast message', 'Debug Test', 5000);
-							showSuccessToast('Test success toast', 'Success!', 5000);
-							showErrorToast('Test error toast', 'Error!', 5000);
-						});
-					}}
-				>
-					Test Toast
-				</button>
-				<button 
-					class="btn btn-secondary text-xs" 
-					onclick={() => {
-						console.log('🧪 DEBUG: Current store states:');
-						console.log('Conversations:', $state.snapshot(conversations));
-						console.log('Messages:', $state.snapshot(messages));
-						console.log('Active conversation:', $state.snapshot(activeConversation));
-						console.log('Typing users:', $state.snapshot(typingUsers));
-					}}
-				>
-					Debug Stores
-				</button>
-				<button 
-					class="btn btn-secondary text-xs" 
-					onclick={() => {
-						console.log('🧪 DEBUG: Sending test message');
-						if (activeConversation) {
-							import('$lib/stores/chat').then(({ chatStore }) => {
-								chatStore.sendMessage(activeConversation.id, 'Test debug message from UI');
-							});
-						} else {
-							console.log('❌ No active conversation');
-						}
-					}}
-				>
-					Send Test Message
-				</button>
-			</div>
 		</div>
 
 		<!-- Chat Interface -->

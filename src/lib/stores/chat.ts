@@ -330,17 +330,6 @@ async function loadConversations(): Promise<void> {
 					console.error('❌ PARTICIPANTS: Error loading participants for conversation', conv.id, participantsError);
 				}
 				
-				// Debug: Check if participants have user data
-				if (participants) {
-					participants.forEach((p, index) => {
-						console.log(`👤 PARTICIPANT ${index}:`, {
-							user_id: p.user_id,
-							has_user_data: !!p.user,
-							user_full_name: p.user?.full_name,
-							user_email: p.user?.email
-						});
-					});
-				}
 				
 
 				// Calculate unread count
@@ -665,8 +654,6 @@ function setupRealtimeSubscriptions(): void {
 				table: 'messages'
 			},
 			async (payload) => {
-				console.log('📨 REALTIME: ========== NEW MESSAGE EVENT ==========');
-				console.log('📨 REALTIME: Payload:', payload);
 				const newMessage = payload.new as Message;
 
 				// Check if user is part of this conversation
@@ -757,7 +744,6 @@ function setupRealtimeSubscriptions(): void {
 
 					// Update conversation last message and unread count
 					conversations.update((current) => {
-						console.log('💬 REALTIME: Updating conversation list');
 						const updatedConversations = current.map((conv) =>
 							conv.id === fullMessage.conversation_id
 								? { 
@@ -774,15 +760,9 @@ function setupRealtimeSubscriptions(): void {
 							new Date(b.updated_at ?? b.created_at).getTime() - 
 							new Date(a.updated_at ?? a.created_at).getTime()
 						);
-						console.log('📋 REALTIME: Updated conversations list:', sorted);
 						return sorted;
 					});
-					
-					console.log('🎉 REALTIME: Message processing complete!');
-				} else {
-					console.log('❌ REALTIME: No full message data, skipping processing');
 				}
-				console.log('📨 REALTIME: ========== END MESSAGE EVENT ==========');
 			}
 		)
 		.subscribe((status) => {
