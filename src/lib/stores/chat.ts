@@ -606,15 +606,13 @@ function setupRealtimeSubscriptions(): void {
 	const user = getUser(get(authStore));
 	if (!user || subscriptionsActive || setupInProgress) return;
 
-	console.log('🔌 REALTIME: Setting up subscriptions for user:', user.id);
+	console.log('🔌 CHAT: Setting up realtime subscriptions');
 
 	// Prevent multiple simultaneous setup calls
 	setupInProgress = true;
 
 	// Clean up any existing subscriptions first
 	cleanupRealtimeSubscriptions();
-
-	console.log('🔌 REALTIME: Starting subscription setup...');
 
 	// Subscribe to conversations changes with unique channel name
 	conversationsChannel = supabase
@@ -635,13 +633,7 @@ function setupRealtimeSubscriptions(): void {
 				// For UPDATE events, we don't need to reload since message updates handle this
 			}
 		)
-		.subscribe((status) => {
-			console.log('🔌 REALTIME: Conversations channel subscription status:', status);
-			if (status === 'CHANNEL_ERROR') {
-				console.error('❌ REALTIME: Conversations channel error - likely RLS policy issue');
-				console.log('💡 TIP: Check if user has SELECT permission on conversations table');
-			}
-		});
+		.subscribe();
 
 	// Subscribe to messages with unique channel name
 	messagesChannel = supabase
@@ -765,9 +757,7 @@ function setupRealtimeSubscriptions(): void {
 				}
 			}
 		)
-		.subscribe((status) => {
-			console.log('🔌 REALTIME: Messages channel subscription status:', status);
-		});
+		.subscribe();
 
 	// Subscribe to typing indicators with shared channel name for all users
 	typingChannel = supabase
@@ -799,37 +789,29 @@ function setupRealtimeSubscriptions(): void {
 				});
 			}
 		})
-		.subscribe((status) => {
-			console.log('🔌 REALTIME: Typing channel subscription status:', status);
-		});
+		.subscribe();
 
 	// Mark subscriptions as active and reset setup flag
 	subscriptionsActive = true;
 	setupInProgress = false;
-	console.log('✅ REALTIME: All subscriptions setup complete');
 }
 
 function cleanupRealtimeSubscriptions(): void {
-	console.log('🧹 REALTIME: Cleaning up subscriptions');
 	subscriptionsActive = false;
 	setupInProgress = false;
 
 	if (conversationsChannel) {
-		console.log('🧹 REALTIME: Removing conversations channel');
 		supabase.removeChannel(conversationsChannel);
 		conversationsChannel = null;
 	}
 	if (messagesChannel) {
-		console.log('🧹 REALTIME: Removing messages channel');
 		supabase.removeChannel(messagesChannel);
 		messagesChannel = null;
 	}
 	if (typingChannel) {
-		console.log('🧹 REALTIME: Removing typing channel');
 		supabase.removeChannel(typingChannel);
 		typingChannel = null;
 	}
-	console.log('🧹 REALTIME: Cleanup complete');
 }
 
 // Initialize store when auth state changes
@@ -863,13 +845,7 @@ function initializeAuthSubscription() {
 		
 		// For logging purposes, only log meaningful changes
 		if (shouldProcess) {
-			console.log('🔐 AUTH: Auth state changed:', { 
-				hasUser: currentAuthState.hasUser, 
-				isInitialized: currentAuthState.isInitialized,
-				subscriptionsActive,
-				conversationCount: conversations.current().length,
-				change: hasUserChanged ? 'user' : hasInitializationChanged ? 'init' : 'userId'
-			});
+			console.log('🔌 CHAT: Auth change, setting up subscriptions');
 		}
 		
 		// Update our tracking state
@@ -891,15 +867,11 @@ function initializeAuthSubscription() {
 			if (typedAuth.user && typedAuth.isInitialized) {
 				// Only setup subscriptions if they're not already active
 				if (!subscriptionsActive) {
-					console.log('🔐 AUTH: Setting up subscriptions for authenticated user');
 					cleanupRealtimeSubscriptions();
 					await loadConversations();
 					setupRealtimeSubscriptions();
-				} else {
-					console.log('🔐 AUTH: Subscriptions already active, no action needed');
 				}
 			} else {
-				console.log('🔐 AUTH: User logged out or not initialized, cleaning up');
 				// Clear state when user logs out using reset methods
 				conversations.reset();
 				messages.reset();
@@ -911,7 +883,7 @@ function initializeAuthSubscription() {
 			}
 		} else if (isInitialSubscription && typedAuth.user && typedAuth.isInitialized && !subscriptionsActive) {
 			// Handle the case where auth is already ready on first subscription
-			console.log('🔐 AUTH: Initial subscription - user already authenticated, setting up subscriptions');
+			console.log('🔌 CHAT: Initial auth ready, setting up subscriptions');
 			cleanupRealtimeSubscriptions();
 			await loadConversations();
 			setupRealtimeSubscriptions();

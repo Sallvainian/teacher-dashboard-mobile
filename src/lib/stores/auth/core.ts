@@ -54,7 +54,7 @@ export const authStore = {
 	...baseAuthStore,
 	update: (updater: (state: AuthStoreState) => AuthStoreState) => {
 		authUpdateCount++;
-		console.log(`🔐 AUTH UPDATE #${authUpdateCount}:`, new Error().stack?.split('\n')[2]?.trim() || 'Unknown source');
+		console.log(`🔐 AUTH UPDATE #${authUpdateCount}`);
 		baseAuthStore.update(updater);
 	}
 };
