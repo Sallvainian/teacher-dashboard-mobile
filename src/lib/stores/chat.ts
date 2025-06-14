@@ -862,13 +862,10 @@ function initializeAuthSubscription() {
 			// Only setup subscriptions if they're not already active
 			if (!subscriptionsActive) {
 				console.log('🔐 AUTH: Setting up subscriptions for authenticated user');
-				// Small debounce to prevent rapid reconnects during auth initialization
-				reconnectTimeout = window.setTimeout(async () => {
-					// Always cleanup before setting up new subscriptions
-					cleanupRealtimeSubscriptions();
-					await loadConversations();
-					setupRealtimeSubscriptions();
-				}, 500);
+				// No debounce needed now that auth updates are batched
+				cleanupRealtimeSubscriptions();
+				await loadConversations();
+				setupRealtimeSubscriptions();
 			} else {
 				console.log('🔐 AUTH: Subscriptions already active, no action needed');
 			}

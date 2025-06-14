@@ -69,17 +69,23 @@ export async function initialize(): Promise<void> {
 		if (!authListenerSetup) {
 			supabase.auth.onAuthStateChange(
 				async (event, newSession) => {
-					authStore.update(state => ({
-						...state,
-						session: newSession,
-						user: newSession?.user ?? null
-					}));
-
+					// Batch the initial session update with profile loading
 					if (newSession?.user) {
+						// Don't update store immediately - wait for profile data
 						await fetchUserProfile(newSession.user.id);
-					} else {
+						// fetchUserProfile will update the store with session + profile together
 						authStore.update(state => ({
 							...state,
+							session: newSession,
+							user: newSession.user
+						}));
+					} else {
+						// User logged out - clear everything in one update
+						authStore.update(state => ({
+							...state,
+							session: null,
+							user: null,
+							profile: null,
 							role: null
 						}));
 					}
@@ -98,16 +104,28 @@ export async function initialize(): Promise<void> {
 				if (sessionError) throw sessionError;
 
 				if (data?.session) {
-					authStore.update(state => ({
-						...state,
-						session: data.session,
-						user: data.session.user
-					}));
+					// Only update if the session is different to prevent unnecessary updates
+					authStore.update(state => {
+						if (state.session?.access_token === data.session.access_token) {
+							// Same session, don't trigger update
+							return state;
+						}
+						return {
+							...state,
+							session: data.session,
+							user: data.session.user
+						};
+					});
 
-					// Make role fetching non-blocking
-					setTimeout(() => {
-						fetchUserProfile(data.session.user.id).catch(console.error);
-					}, 0);
+					// Only fetch profile if user changed
+					authStore.update(state => {
+						if (state.user?.id !== data.session.user.id) {
+							setTimeout(() => {
+								fetchUserProfile(data.session.user.id).catch(console.error);
+							}, 0);
+						}
+						return state;
+					});
 				} else if (!storedSession) {
 					// Only clear if we didn't have a stored session
 					authStore.update(state => ({
