@@ -69,26 +69,21 @@ export async function initialize(): Promise<void> {
 		if (!authListenerSetup) {
 			supabase.auth.onAuthStateChange(
 				async (event, newSession) => {
-					// Skip the initial auth state change if we already handled it
-					if (!initialAuthComplete && event === 'INITIAL_SESSION') {
+					console.log('🔐 SUPABASE AUTH EVENT:', event, 'initialAuthComplete:', initialAuthComplete);
+					
+					// Skip all auth events until initial auth is complete
+					if (!initialAuthComplete) {
+						console.log('🔐 SUPABASE AUTH: Skipping event during initialization');
 						return;
 					}
 
-					// For other events, handle normally
+					// For events after initialization, handle normally
 					if (newSession?.user) {
+						console.log('🔐 SUPABASE AUTH: Processing session change for user:', newSession.user.id);
 						// Wait for profile data to batch update
-						const profilePromise = fetchUserProfile(newSession.user.id);
-						await profilePromise;
-						
-						// Only update if not the initial session we already handled
-						if (initialAuthComplete) {
-							authStore.update(state => ({
-								...state,
-								session: newSession,
-								user: newSession.user
-							}));
-						}
+						await fetchUserProfile(newSession.user.id, true);
 					} else {
+						console.log('🔐 SUPABASE AUTH: User logged out, clearing state');
 						// User logged out - clear everything in one update
 						authStore.update(state => ({
 							...state,

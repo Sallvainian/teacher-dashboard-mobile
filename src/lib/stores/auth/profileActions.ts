@@ -64,8 +64,11 @@ export async function fetchUserProfile(userId: string, updateStore: boolean = tr
 			} else {
 				// No record found - user needs to be created in app_users table
 				console.warn(`No app_users record found for user ${userId}. Creating default record...`);
-				await createAppUserRecord(userId);
-				// createAppUserRecord will have updated the store or returned data
+				const createdData = await createAppUserRecord(userId, updateStore);
+				// If not updating store, return the created data
+				if (!updateStore && createdData && 'profile' in createdData) {
+					return createdData;
+				}
 			}
 		}
 	} catch (err: unknown) {
@@ -84,7 +87,7 @@ export async function fetchUserProfile(userId: string, updateStore: boolean = tr
 }
 
 // Create app user record for new users
-export async function createAppUserRecord(userId: string): Promise<void> {
+export async function createAppUserRecord(userId: string, updateStore: boolean = true): Promise<{ profile: UserProfile | null; role: UserRole | null } | void> {
 	try {
 		// Get user details from auth
 		const {
@@ -93,7 +96,7 @@ export async function createAppUserRecord(userId: string): Promise<void> {
 		} = await supabase.auth.getUser();
 		if (userError ?? !user) {
 			console.error('Could not get user details:', userError);
-			return;
+			return updateStore ? undefined : { profile: null, role: null };
 		}
 
 		// Create app_users record with teacher role as default
@@ -116,13 +119,18 @@ export async function createAppUserRecord(userId: string): Promise<void> {
 				// Store role in localStorage as fallback until RLS is fixed
 				localStorage.setItem(`user-role-${userId}`, 'teacher');
 			}
-			// Fallback to teacher role
-			authStore.update(state => ({
-				...state,
-				role: 'teacher'
-			}));
+			
+			// Return or update with fallback role
+			if (updateStore) {
+				authStore.update(state => ({
+					...state,
+					role: 'teacher'
+				}));
+			} else {
+				return { profile: null, role: 'teacher' };
+			}
 		} else {
-			// Also set the profile data
+			// Prepare the profile data
 			const userProfile: UserProfile = {
 				id: userId,
 				email: user.email ?? '',
@@ -130,19 +138,31 @@ export async function createAppUserRecord(userId: string): Promise<void> {
 				avatar_url: user.user_metadata?.avatar_url ?? null,
 				role: isValidUserRole(data.role) ? data.role : null
 			};
-			authStore.update(state => ({
-				...state,
-				role: isValidUserRole(data.role) ? data.role : null,
-				profile: userProfile
-			}));
+			
+			if (updateStore) {
+				authStore.update(state => ({
+					...state,
+					role: isValidUserRole(data.role) ? data.role : null,
+					profile: userProfile
+				}));
+			} else {
+				return { 
+					profile: userProfile, 
+					role: isValidUserRole(data.role) ? data.role : null 
+				};
+			}
 		}
 	} catch (err: unknown) {
 		console.error('Error creating app_users record:', err);
-		// Fallback to teacher role
-		authStore.update(state => ({
-			...state,
-			role: 'teacher'
-		}));
+		// Return or update with fallback role
+		if (updateStore) {
+			authStore.update(state => ({
+				...state,
+				role: 'teacher'
+			}));
+		} else {
+			return { profile: null, role: 'teacher' };
+		}
 	}
 }
 

@@ -835,6 +835,7 @@ function cleanupRealtimeSubscriptions(): void {
 // Initialize store when auth state changes
 let authUnsubscribe: (() => void) | null = null;
 let reconnectTimeout: number | null = null;
+let lastAuthState: { hasUser: boolean; isInitialized: boolean; userId?: string } | null = null;
 
 function initializeAuthSubscription() {
 	// Clean up any existing subscription first
@@ -845,40 +846,75 @@ function initializeAuthSubscription() {
 	authUnsubscribe = authStore.subscribe(async (auth) => {
 		const typedAuth = typedAuthStore(auth);
 		
-		console.log('🔐 AUTH: Auth state changed:', { 
-			hasUser: !!typedAuth.user, 
+		// Track the new auth state
+		const currentAuthState = {
+			hasUser: !!typedAuth.user,
 			isInitialized: typedAuth.isInitialized,
-			subscriptionsActive,
-			conversationCount: conversations.current().length
-		});
+			userId: typedAuth.user?.id
+		};
 		
-		// Clear any pending reconnect
-		if (reconnectTimeout) {
-			clearTimeout(reconnectTimeout);
-			reconnectTimeout = null;
+		// Only process if this is a meaningful change
+		const isInitialSubscription = lastAuthState === null;
+		const hasUserChanged = lastAuthState?.hasUser !== currentAuthState.hasUser;
+		const hasInitializationChanged = lastAuthState?.isInitialized !== currentAuthState.isInitialized;
+		const hasUserIdChanged = lastAuthState?.userId !== currentAuthState.userId;
+		
+		const shouldProcess = !isInitialSubscription && (hasUserChanged || hasInitializationChanged || hasUserIdChanged);
+		
+		// For logging purposes, only log meaningful changes
+		if (shouldProcess) {
+			console.log('🔐 AUTH: Auth state changed:', { 
+				hasUser: currentAuthState.hasUser, 
+				isInitialized: currentAuthState.isInitialized,
+				subscriptionsActive,
+				conversationCount: conversations.current().length,
+				change: hasUserChanged ? 'user' : hasInitializationChanged ? 'init' : 'userId'
+			});
 		}
 		
-		if (typedAuth.user && typedAuth.isInitialized) {
-			// Only setup subscriptions if they're not already active
-			if (!subscriptionsActive) {
-				console.log('🔐 AUTH: Setting up subscriptions for authenticated user');
-				// No debounce needed now that auth updates are batched
-				cleanupRealtimeSubscriptions();
-				await loadConversations();
-				setupRealtimeSubscriptions();
-			} else {
-				console.log('🔐 AUTH: Subscriptions already active, no action needed');
+		// Update our tracking state
+		lastAuthState = currentAuthState;
+		
+		// Only process if this isn't the initial subscription read
+		if (!shouldProcess && !isInitialSubscription) {
+			return;
+		}
+		
+		// Process the auth change (but not on initial subscription)
+		if (!isInitialSubscription) {
+			// Clear any pending reconnect
+			if (reconnectTimeout) {
+				clearTimeout(reconnectTimeout);
+				reconnectTimeout = null;
 			}
-		} else {
-			console.log('🔐 AUTH: User logged out or not initialized, cleaning up');
-			// Clear state when user logs out using reset methods
-			conversations.reset();
-			messages.reset();
-			activeConversationId.reset();
-			typingUsers.reset();
-			loading.reset();
-			error.reset();
+			
+			if (typedAuth.user && typedAuth.isInitialized) {
+				// Only setup subscriptions if they're not already active
+				if (!subscriptionsActive) {
+					console.log('🔐 AUTH: Setting up subscriptions for authenticated user');
+					cleanupRealtimeSubscriptions();
+					await loadConversations();
+					setupRealtimeSubscriptions();
+				} else {
+					console.log('🔐 AUTH: Subscriptions already active, no action needed');
+				}
+			} else {
+				console.log('🔐 AUTH: User logged out or not initialized, cleaning up');
+				// Clear state when user logs out using reset methods
+				conversations.reset();
+				messages.reset();
+				activeConversationId.reset();
+				typingUsers.reset();
+				loading.reset();
+				error.reset();
+				cleanupRealtimeSubscriptions();
+			}
+		} else if (isInitialSubscription && typedAuth.user && typedAuth.isInitialized && !subscriptionsActive) {
+			// Handle the case where auth is already ready on first subscription
+			console.log('🔐 AUTH: Initial subscription - user already authenticated, setting up subscriptions');
 			cleanupRealtimeSubscriptions();
+			await loadConversations();
+			setupRealtimeSubscriptions();
 		}
 	});
 }
