@@ -58,8 +58,17 @@ export {
 	memoizationManager
 } from '$lib/utils/memoize';
 
-// Re-export auth exports for backward compatibility
-export * from './auth-exports';
+// Re-export auth individual stores for backward compatibility
+export { 
+	user, 
+	profile, 
+	session, 
+	loading, 
+	error, 
+	role, 
+	isAuthenticated, 
+	isInitialized 
+} from './auth/core';
 
 // =================== MIGRATION GUIDE ===================
 /*
