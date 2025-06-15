@@ -1,25 +1,26 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-import { imagetools } from 'vite-imagetools';
+// import { imagetools } from 'vite-imagetools'; // Temporarily disabled
 import Icons from 'unplugin-icons/vite';
 import compression from 'vite-plugin-compression';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
 	plugins: [
-		// Image Optimization - Generate WebP/AVIF formats automatically
-		imagetools({
-			defaultDirectives: (url) => {
-				if (url.searchParams.has('enhanced')) {
-					return new URLSearchParams({
-						format: 'avif;webp;jpg',
-						quality: '80',
-						as: 'picture'
-					});
-				}
-				return new URLSearchParams();
-			}
-		}),
+		// Image Optimization - TEMPORARILY DISABLED for Netlify deployment
+		// TODO: Re-enable when Sharp linux-x64 platform issue is resolved
+		// imagetools({
+		// 	defaultDirectives: (url) => {
+		// 		if (url.searchParams.has('enhanced')) {
+		// 			return new URLSearchParams({
+		// 				format: 'avif;webp;jpg',
+		// 				quality: '80',
+		// 				as: 'picture'
+		// 			});
+		// 		}
+		// 		return new URLSearchParams();
+		// 	}
+		// }),
 
 		// Icon Management - Access thousands of icons as components
 		Icons({
@@ -94,7 +95,6 @@ export default defineConfig({
 	optimizeDeps: {
 		// Include dependencies that benefit from pre-bundling
 		include: [
-			'@supabase/supabase-js',
 			'date-fns',
 			'uuid',
 			'zod'
@@ -104,15 +104,9 @@ export default defineConfig({
 	build: {
 		sourcemap: true,
 		target: 'esnext',
-		// Windows-specific build optimizations
+		// Build optimizations
 		rollupOptions: {
-			output: {
-				// Split large dependencies into separate chunks
-				manualChunks: {
-					supabase: ['@supabase/supabase-js', '@supabase/ssr'],
-					utilities: ['date-fns', 'uuid', 'zod']
-				}
-			}
+			// Netlify adapter handles chunk splitting automatically
 		},
 		// Build optimizations for production
 		chunkSizeWarningLimit: 1000,
