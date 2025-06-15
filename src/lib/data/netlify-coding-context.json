@@ -1,0 +1,427 @@
+{
+  "metadata": {
+    "title": "Netlify Coding Context & Guidelines",
+    "description": "Complete coding guidelines and API reference for Netlify development",
+    "version": "1.0",
+    "created": "2025-01-15",
+    "provider": "netlify",
+    "file_types": ["ts", "tsx", "js", "jsx", "toml"],
+    "capabilities": [
+      "Serverless functions",
+      "Edge functions", 
+      "Netlify Blobs",
+      "Netlify Image CDN",
+      "Environment variables",
+      "Netlify Forms",
+      "Creating new sites",
+      "Netlify DB"
+    ]
+  },
+  "general_rules": {
+    "title": "General Development Guidelines",
+    "description": "Core principles and restrictions for Netlify development",
+    "rules": [
+      {
+        "rule": "Ignore .netlify folder",
+        "description": "The .netlify folder is not for user code. Add it to .gitignore",
+        "importance": "critical"
+      },
+      {
+        "rule": "No version numbers in imports",
+        "description": "Use @netlify/functions, not @netlify/functions@VERSION",
+        "importance": "high"
+      },
+      {
+        "rule": "No CORS headers by default", 
+        "description": "Never add CORS headers (e.g., Access-Control-Allow-Origin) unless explicitly requested",
+        "importance": "high"
+      },
+      {
+        "rule": "Use netlify dev",
+        "description": "Use netlify dev to start the dev server unless user requests different command",
+        "importance": "medium"
+      }
+    ],
+    "component_guidelines": [
+      {
+        "component": "Netlify Blobs",
+        "use_case": "Use for general object/state/data storage"
+      },
+      {
+        "component": "Netlify Image CDN", 
+        "use_case": "Use for on-demand, dynamic image optimization and caching (not for build/development-time image modifications)"
+      },
+      {
+        "component": "Environment Variables",
+        "use_case": "Store secrets, API keys, or sensitive/external values here—never in code"
+      }
+    ]
+  },
+  "serverless_functions": {
+    "title": "Serverless Functions (Synchronous Functions)",
+    "description": "Node.js serverless functions with latest format structures",
+    "runtime": "Node.js",
+    "directory": "netlify/functions",
+    "file_extensions": [".mts", ".ts", ".js"],
+    "key_principles": [
+      "Use latest function format",
+      "Use TypeScript if other functions are TypeScript or no existing functions",
+      "Use vanilla JavaScript only if other .js files exist in functions directory",
+      "Install @netlify/functions for TypeScript types",
+      "No global logic outside exported function unless wrapped in function definition",
+      "Use .mts files for modern ES module syntax"
+    ],
+    "function_structure": {
+      "typescript_example": {
+        "code": "import type { Context, Config } from \"@netlify/functions\";\n\nexport default async (req: Request, context: Context) => {\n  // user code\n  return new Response(\"Hello, world!\")\n}\n\nexport const config: Config = {\n  // use this path instead of /.netlify/functions/{fnName}\n  path: \"/hello-world\"\n};",
+        "description": "Modern TypeScript serverless function with config"
+      },
+      "javascript_example": {
+        "code": "export default async (req, context) => {\n  // user code\n  return new Response(\"Hello, world!\")\n}\n\nexport const config = {\n// use this path instead of /.netlify/functions/{fnName}\n  path: \"/hello-world\"\n};",
+        "description": "Modern JavaScript serverless function with config"
+      }
+    },
+    "configuration": {
+      "title": "In-code Function Configuration",
+      "description": "Prefer in-code configuration via config object export",
+      "config_structure": {
+        "path": "string | string[] - Defines URL path(s) that trigger the function",
+        "excludedPath": "string | string[] - Optional paths to exclude from triggering",
+        "preferStatic": "boolean - Optional, prevents overriding existing static assets"
+      },
+      "path_patterns": [
+        "Supports substring patterns",
+        "Supports URLPattern syntax from web platform",
+        "Default path: /.netlify/functions/{function_name}",
+        "Custom path overrides default completely"
+      ]
+    },
+    "api_reference": {
+      "request_object": "Web platform Request object representing incoming HTTP request",
+      "context_object": "Custom Netlify context object",
+      "global_netlify": "Global Netlify object accessible in functions",
+      "environment_variables": "Use Netlify.env.* for environment variable access"
+    },
+    "file_naming": [
+      "netlify/functions/hello.mts",
+      "netlify/functions/hello/index.mts", 
+      "netlify/functions/hello/hello.mts"
+    ],
+    "directory_configuration": {
+      "ui_path": "Project configuration > Build & deploy > Continuous deployment > Build settings",
+      "toml_config": "[functions]\n  directory = \"my_functions\""
+    }
+  },
+  "background_functions": {
+    "title": "Background Functions",
+    "description": "Long-running functions that don't need immediate response",
+    "characteristics": [
+      "15-minute timeout (wall clock time)",
+      "Immediately return 202 status code with empty response",
+      "Return values are ignored",
+      "Must have '-background' suffix in filename or directory"
+    ],
+    "use_cases": [
+      "Long-running logic without immediate response needed",
+      "Data processing that stores results in Netlify Blobs or database",
+      "Background data synchronization",
+      "Batch processing tasks"
+    ],
+    "file_naming": [
+      "netlify/functions/hello-background.mts",
+      "netlify/functions/hello-background/index.mts"
+    ],
+    "examples": {
+      "typescript": "import { Context } from \"@netlify/functions\";\n\nexport default async (req: Request, context: Context) => {\n  await someLongRunningTask();\n\n  console.log(\"Done\");\n};",
+      "javascript": "export default async (req, context) => {\n  await someLongRunningTask();\n\n  console.log(\"Done\");\n};"
+    }
+  },
+  "scheduled_functions": {
+    "title": "Scheduled Functions", 
+    "description": "Functions that run on intervals or CRON schedules",
+    "characteristics": [
+      "30-second execution limit",
+      "Minimum interval: 1 minute",
+      "CRON executed against UTC timezone",
+      "No response bodies returned",
+      "Only run on published deploys (not previews or branch deploys)"
+    ],
+    "cron_support": [
+      "Supports RFC CRON syntax extensions",
+      "Does not support @reboot and @annually",
+      "Common shortcuts: @hourly, @daily, @weekly, @monthly"
+    ],
+    "request_format": {
+      "body": "JSON-encoded object with next_run property",
+      "next_run": "ISO-8601 timestamp string of next scheduled invocation"
+    },
+    "configuration_options": [
+      "In-code config via exported config object",
+      "netlify.toml for centralized schedule management"
+    ],
+    "toml_config": "[functions.\"test-scheduled-function\"]\n  schedule = \"@hourly\"",
+    "local_testing": "netlify functions:invoke myfunction",
+    "examples": {
+      "typescript": "import type { Config } from \"@netlify/functions\"\n\nexport default async (req: Request) => {\n    const { next_run } = await req.json()\n\n    console.log(\"Received event! Next invocation at:\", next_run)\n}\n\nexport const config: Config = {\n    schedule: \"@hourly\"\n}",
+      "javascript": "export default async (req) => {\n    const { next_run } = await req.json()\n\n    console.log(\"Received event! Next invocation at:\", next_run)\n}\n\nexport const config = {\n    schedule: \"@hourly\"\n}"
+    }
+  },
+  "edge_functions": {
+    "title": "Edge Functions",
+    "description": "Deno-based functions running at the edge with global distribution",
+    "runtime": "Deno",
+    "directory": "netlify/edge-functions",
+    "key_principles": [
+      "Always use latest edge function format",
+      "DO NOT add CORS headers unless explicitly requested",
+      "Install @netlify/edge-functions for TypeScript types",
+      "No global logic outside exported function unless wrapped",
+      "Use TypeScript if other functions are TypeScript or no existing functions",
+      "Use vanilla JavaScript only if other .js files exist"
+    ],
+    "module_support": {
+      "nodejs_builtins": "Use node: prefix (e.g., import { randomBytes } from \"node:crypto\")",
+      "deno_modules": "Use URL imports (e.g., import React from \"https://esm.sh/react\")", 
+      "npm_packages": "Install via npm install and import by name (beta feature)",
+      "import_maps": "Use import map files for shorthand module names"
+    },
+    "import_map_setup": {
+      "file_example": "{\n  \"imports\": {\n    \"html-rewriter\": \"https://ghuc.cc/worker-tools/html-rewriter/index.ts\"\n  }\n}",
+      "toml_config": "[functions]\n  deno_import_map = \"./path/to/your/import_map.json\"",
+      "usage": "import { HTMLRewriter } from \"html-rewriter\";"
+    },
+    "examples": {
+      "typescript": "import type { Context, Config } from \"@netlify/edge-functions\";\n\nexport default async (req: Request, context: Context) => {\n  // user code\n  return new Response(\"Hello, world!\")\n}\n\nexport const config: Config = {\n  path: \"/hello-world\"\n};",
+      "javascript": "export default async (req, context) => {\n  // user code\n  return new Response(\"Hello, world!\")\n}\n\nexport const config = {\n  path: \"/hello-world\"\n};"
+    },
+    "context_extras": {
+      "next": "Invokes next item in request chain",
+      "nextRequest": "Same as next() but requires explicit Request object"
+    },
+    "web_apis": [
+      "console.*", "atob", "btoa", "Fetch API", "TextEncoder", "TextDecoder", 
+      "Performance", "Web Crypto API", "WebSocket API", "Timers", "Streams API", "URLPattern API"
+    ],
+    "configuration": {
+      "path": "URLPattern expression defining paths (must start with '/')",
+      "excludedPath": "Paths to exclude from execution (must start with '/')",
+      "pattern": "Alternative to path using regex",
+      "excludedPattern": "Regex patterns to exclude routes",
+      "method": "HTTP methods that trigger function",
+      "onError": "Error handling: 'continue' | 'fail' | 'fallback'",
+      "cache": "Set to 'manual' to enable response caching"
+    },
+    "toml_configuration": {
+      "description": "Use netlify.toml for precise function order control",
+      "execution_order": [
+        "Configuration-based edge functions run first",
+        "Framework-generated edge functions before user-defined",
+        "Non-cached before cached functions",
+        "Inline-declared override duplicate netlify.toml functions",
+        "Multiple inline functions run alphabetically by filename"
+      ],
+      "example": "[[edge_functions]]\n  path = \"/admin\"\n  function = \"auth\"\n\n[[edge_functions]]\n  path = \"/admin\"\n  function = \"injector\"\n  cache = \"manual\""
+    },
+    "limitations": [
+      "20 MB compressed code size limit",
+      "512 MB per deployment memory limit", 
+      "50ms per request CPU execution time",
+      "40 seconds response header timeout",
+      "Not compatible with split testing, custom headers, prerendering"
+    ]
+  },
+  "netlify_blobs": {
+    "title": "Netlify Blobs",
+    "description": "Object storage service for unstructured data with key-value store capabilities",
+    "npm_module": "@netlify/blobs",
+    "use_cases": [
+      "Prefer over databases for flat file storage",
+      "General object/state/data storage",
+      "Alternative to creating new database unless relational structures needed"
+    ],
+    "requirements": [
+      "Fetch API support (Node.js 18+ recommended)",
+      "Store names cannot exceed 64 bytes",
+      "Object keys cannot exceed 600 bytes",
+      "Maximum object size: 5GB",
+      "Local development uses sandboxed store"
+    ],
+    "api_methods": {
+      "set": "set(key: string, value: ArrayBuffer | Blob | string, { metadata?: object }): Promise<void>",
+      "setJSON": "setJSON(key: string, value: any, { metadata?: object }): Promise<void>",
+      "get": "get(key: string, getOpt?: GetKeyOptions): Promise<any | null>",
+      "getWithMetadata": "getWithMetadata(key: string, getOpts?: GetKeyAndMetadataOptions): Promise<{ data: any, etag: string, metadata: object } | null>",
+      "getMetadata": "getMetadata(key: string, getOpts?: GetKeyAndMetadataOptions): Promise<{ etag: string, metadata: object } | null>",
+      "list": "list(options?: { directories?: boolean, paginate?: boolean, prefix?: string }): Promise<{ blobs: BlobResult[], directories: string[] }>",
+      "delete": "delete(key: string): Promise<void>"
+    },
+    "store_functions": {
+      "getStore": "getStore(name: string, options?: { consistency?: 'strong' | 'eventual' }): Store - Global scope",
+      "getDeployStore": "getDeployStore(input?: GetDeployStoreOptions | string): Store - Deploy-specific scope",
+      "listStores": "listStores(options?: { paginate?: boolean }): Promise<ListStoresResponse>"
+    },
+    "consistency_models": {
+      "eventual": "Default - Fast reads, updates propagated within 60 seconds",
+      "strong": "Immediate visibility at cost of slower reads"
+    },
+    "storage_scopes": {
+      "deploy_specific": "Syncs with deploys, removed with deploy deletions - use getDeployStore()",
+      "global": "Not automatically cleaned up, consistent across branches - use getStore()"
+    },
+    "file_based_uploads": {
+      "deploy_specific": ".netlify/blobs/deploy/store_name/file.ext",
+      "metadata": "Use $filename.ext.json for metadata files"
+    },
+    "examples": {
+      "basic_deploy_store": "import { getDeployStore } from \"@netlify/blobs\";\nconst store = getDeployStore(\"construction\");",
+      "basic_global_store": "import { getStore } from \"@netlify/blobs\";\nconst store = getStore(\"construction\");",
+      "environment_aware": "import { getStore, getDeployStore } from \"@netlify/blobs\";\n\nfunction getBlobStore(...storeOptions){\n  if(Netlify.context?.deploy.context === 'production'){\n    return getStore(...storeOptions);\n  }\n  return getDeployStore(...storeOptions)\n}\n\nconst store = getBlobStore(\"construction\");"
+    }
+  },
+  "image_cdn": {
+    "title": "Netlify Image CDN",
+    "description": "On-demand image transformation and optimization service",
+    "base_route": "/.netlify/images",
+    "transformation_parameters": {
+      "url": "Required - Image URL (relative or remote, URI encoded)",
+      "w": "Width in pixels", 
+      "h": "Height in pixels",
+      "fit": "Resize method: contain, cover, fill",
+      "position": "Cropping alignment: top, bottom, left, right, center",
+      "fm": "Format: avif, jpg, png, webp, gif, blurhash", 
+      "q": "Quality: 1-100, default 75"
+    },
+    "examples": {
+      "local_image": "<img src=\"/.netlify/images?url=/image.jpg&w=100&h=100&fit=cover&fm=webp&q=80\" />",
+      "external_image": "<img src=\"/.netlify/images?url=https://example.com/path/to/image&w=40&h=10&fm=jpg&q=80\" />"
+    },
+    "remote_images": {
+      "configuration": "[images]\n  remote_images = [\"https://externalexample.com/.*\"]",
+      "description": "Allowlist external domains in netlify.toml for remote image processing"
+    },
+    "redirects_rewrites": {
+      "toml_example": "[[redirects]]\n  from = \"/transform-my-images/*\"\n  to = \"/.netlify/images?url=/:splat&w=50&h=50\"\n  status = 200",
+      "redirects_file": "/transform-all/* /.netlify/images?url=/:splat&w=50&h=50 200"
+    },
+    "caching": [
+      "Transformed images cached at edge",
+      "Source images cached for future transformations", 
+      "Cache invalidated after new deploys",
+      "Asset fingerprinting recommended for fine cache control"
+    ],
+    "framework_support": {
+      "Angular": "NgOptimizedImage component automatic",
+      "Astro": "<Image /> component automatic",
+      "Gatsby": "Set NETLIFY_IMAGE_CDN=true with Contentful/Drupal/WordPress plugins",
+      "Next.js": "Set remotePatterns in next.config.js",
+      "Nuxt": "nuxt/image module automatic"
+    }
+  },
+  "environment_variables": {
+    "title": "Environment Variables",
+    "description": "Secure management of configuration and secrets across environments",
+    "creation_methods": [
+      "Netlify UI: Project configuration > Environment variables",
+      "Netlify CLI: Requires linked project",
+      "netlify.toml: Repository level, avoid sensitive values"
+    ],
+    "precedence": "netlify.toml overrides UI/CLI/API, project-specific overrides shared",
+    "cli_commands": {
+      "set": "netlify env:set API_KEY \"value\"",
+      "set_secret": "netlify env:set API_KEY \"secret-value\" --secret",
+      "unset": "netlify env:unset API_KEY",
+      "import": "netlify env:import .env",
+      "list": "netlify env:list --plain --context production",
+      "export": "netlify env:list --plain --context production > .env"
+    },
+    "toml_contexts": {
+      "production": "[context.production.environment]",
+      "deploy_preview": "[context.deploy-preview.environment]", 
+      "branch_deploy": "[context.branch-deploy.environment]",
+      "dev": "[context.dev.environment]",
+      "specific_branch": "[context.staging.environment]"
+    },
+    "env_file_handling": [
+      "Netlify builds do not read .env files directly",
+      "Must import via UI or CLI",
+      "Can export Netlify variables to .env files"
+    ]
+  },
+  "netlify_forms": {
+    "title": "Netlify Forms", 
+    "description": "Form handling with built-in spam protection",
+    "spam_prevention": "Use honeypot field to prevent spam submissions",
+    "key_features": [
+      "Automatic form detection",
+      "Email notifications",
+      "Spam filtering with Akismet, reCAPTCHA, honeypot",
+      "Form submission management"
+    ]
+  },
+  "site_management": {
+    "title": "Creating and Managing Sites",
+    "linking_detection": "Check if PROJECT_FOLDER/.netlify/state.json exists with populated siteId",
+    "commands": {
+      "init": "netlify init - Set up new site with Netlify",
+      "link": "netlify link - Link existing site to local project"
+    },
+    "guidelines": [
+      "Do not add redirects to netlify.toml or _redirects unless requested",
+      "Do not add custom headers unless requested"
+    ]
+  },
+  "netlify_db": {
+    "title": "Netlify DB (Neon Integration)",
+    "description": "Managed PostgreSQL database with automatic provisioning",
+    "npm_module": "@netlify/neon",
+    "use_cases": [
+      "Prefer when data layer is relational",
+      "When search capabilities needed",
+      "Alternative to flat files for complex data"
+    ],
+    "requirements": [
+      "User logged into Netlify CLI",
+      "Site must be linked with Netlify CLI",
+      "Anonymous Postgres database auto-provisioned"
+    ],
+    "setup_process": [
+      "Install @netlify/neon npm module",
+      "Run netlify dev or netlify build",
+      "Database automatically created"
+    ],
+    "connection": {
+      "environment_variable": "NETLIFY_DATABASE_URL",
+      "get_command": "netlify env:get NETLIFY_DATABASE_URL"
+    },
+    "api_wrapper": "@netlify/neon wraps @neondatabase/serverless - no connection string needed",
+    "examples": {
+      "basic_usage": "import { neon } from \"@netlify/neon\";\n\nconst sql = neon();\n\n// query\nconst users = await sql(\"SELECT * FROM users\");\n\n// insert\nawait sql(\"INSERT INTO users (name) VALUES ('John Doe')\");\n\n// update\nawait sql(\"UPDATE users SET name = 'John Doe' WHERE id = 1\");\n\n// delete\nawait sql(\"DELETE FROM users WHERE id = 1\");"
+    },
+    "migrations": "Create migration scripts using connection string from NETLIFY_DATABASE_URL"
+  },
+  "best_practices": {
+    "title": "Development Best Practices",
+    "function_development": [
+      "Use TypeScript when possible for better type safety",
+      "Prefer in-code configuration over netlify.toml when possible",
+      "Use friendly paths in config instead of default function paths",
+      "Keep functions focused and single-purpose"
+    ],
+    "environment_management": [
+      "Never commit sensitive values to repository",
+      "Use environment variables for all external configuration",
+      "Use context-specific variables for different deployment stages"
+    ],
+    "storage_decisions": [
+      "Use Netlify Blobs for simple key-value storage",
+      "Use Netlify DB for relational data and complex queries",
+      "Consider data scope (deploy-specific vs global) carefully"
+    ],
+    "performance": [
+      "Use edge functions for request modification and personalization",
+      "Use background functions for long-running tasks",
+      "Cache transformed images appropriately",
+      "Consider strong vs eventual consistency for blobs"
+    ]
+  }
+}

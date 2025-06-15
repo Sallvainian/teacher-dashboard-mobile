@@ -119,6 +119,12 @@ export default defineConfig({
 			scss: {
 				// Add SCSS optimizations if using SCSS
 			}
+		},
+		// Optimize CSS output for production
+		devSourcemap: dev,
+		// Enable CSS code splitting
+		postcss: {
+			plugins: []
 		}
 	},
 

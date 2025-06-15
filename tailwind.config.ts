@@ -1,7 +1,6 @@
 import type { Config } from 'tailwindcss';
 import typographyPlugin from '@tailwindcss/typography';
 import formsPlugin from '@tailwindcss/forms';
-import daisyuiPlugin from 'daisyui';
 
 const config: Config = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
@@ -67,17 +66,7 @@ const config: Config = {
 			}
 		}
 	},
-	plugins: [daisyuiPlugin, typographyPlugin, formsPlugin],
-	daisyui: {
-		themes: false, // Disable DaisyUI themes since we're using CSS variables
-		darkTheme: 'dark',
-		base: false,
-		styled: false, // Disable DaisyUI styling
-		utils: false,
-		logs: false,
-		rtl: false,
-		prefix: 'd-'
-	},
+	plugins: [typographyPlugin, formsPlugin],
 	future: {
 		// Enable future features for better CSS output
 		hoverOnlyWhenSupported: true

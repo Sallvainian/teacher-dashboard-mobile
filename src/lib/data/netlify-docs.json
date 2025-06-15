@@ -1,0 +1,321 @@
+{
+  "metadata": {
+    "title": "Netlify Documentation Knowledge Base",
+    "description": "Comprehensive Netlify platform documentation organized by categories",
+    "created": "2025-01-15",
+    "version": "1.0.0",
+    "platform": "netlify",
+    "total_docs": 47
+  },
+  "overview": {
+    "title": "Netlify Platform Overview",
+    "description": "Netlify is a web platform for building highly performant, secure, and reliable websites and web apps. This documentation covers all major areas: Development & Functions, Framework Integration, Build & Configuration, Data & Storage, Forms & User Input, Domain & HTTPS Management, Team & Account Management, and Billing & Usage.",
+    "key_areas": [
+      "Development & Functions",
+      "Framework Integration", 
+      "Build & Configuration",
+      "Data & Storage",
+      "Forms & User Input",
+      "Domain & HTTPS Management",
+      "Team & Account Management",
+      "Billing & Usage"
+    ]
+  },
+  "categories": {
+    "development_functions": {
+      "title": "Development & Functions",
+      "description": "Tools and services for developing and deploying functions on Netlify",
+      "tags": ["cli", "functions", "edge-functions", "api", "local-development"],
+      "docs": [
+        {
+          "title": "Netlify CLI: Manage Functions",
+          "url": "https://docs.netlify.com/cli/manage-functions/",
+          "description": "Create, test, and serve Netlify functions locally using the Netlify CLI. Invoke functions, debug, and deploy with ease.",
+          "tags": ["cli", "functions", "local-development", "debugging"],
+          "use_cases": ["local function testing", "debugging", "deployment"]
+        },
+        {
+          "title": "Netlify Edge Functions Overview",
+          "url": "https://docs.netlify.com/edge-functions/overview/",
+          "description": "Fast, personalized web experiences using TypeScript/JavaScript at the edge with Netlify; modify requests, localize content, serve ads, authenticate users, and more.",
+          "tags": ["edge-functions", "typescript", "javascript", "personalization"],
+          "use_cases": ["request modification", "content localization", "authentication", "ad serving"]
+        },
+        {
+          "title": "Netlify Edge Functions API",
+          "url": "https://docs.netlify.com/edge-functions/api/",
+          "description": "Netlify Edge Functions API reference guide: request handling, response types, context object, supported Web APIs, and more.",
+          "tags": ["edge-functions", "api", "reference", "web-apis"],
+          "use_cases": ["api development", "request handling", "response manipulation"]
+        },
+        {
+          "title": "Netlify Edge Functions: Get Started",
+          "url": "https://docs.netlify.com/edge-functions/get-started/",
+          "description": "Learn to create, test, deploy, invoke, and monitor Netlify Edge Functions.",
+          "tags": ["edge-functions", "getting-started", "deployment", "monitoring"],
+          "use_cases": ["beginner setup", "function creation", "monitoring"]
+        },
+        {
+          "title": "Netlify Dev: Local Development",
+          "url": "https://docs.netlify.com/cli/local-development/",
+          "description": "Develop and share Netlify sites locally; use Netlify Dev for local development environments, including custom configurations and HTTPS.",
+          "tags": ["cli", "local-development", "https", "configuration"],
+          "use_cases": ["local testing", "https setup", "development environment"]
+        },
+        {
+          "title": "VS Code Netlify CLI Debugging",
+          "url": "https://docs.netlify.com/cli/debug-with-vscode/",
+          "description": "Configure VS Code to debug Netlify CLI functions and development server.",
+          "tags": ["vscode", "debugging", "cli", "development"],
+          "use_cases": ["ide debugging", "development workflow", "troubleshooting"]
+        },
+        {
+          "title": "Netlify CLI: Get Started",
+          "url": "https://docs.netlify.com/cli/get-started/",
+          "description": "Use Netlify's command-line interface for local development, builds, and deployment.",
+          "tags": ["cli", "getting-started", "deployment", "builds"],
+          "use_cases": ["cli setup", "build automation", "deployment workflow"]
+        },
+        {
+          "title": "Netlify API Quickstart",
+          "url": "https://docs.netlify.com/api/get-started/",
+          "description": "Netlify API basics, deployment, common endpoints, and authentication using OAuth2.",
+          "tags": ["api", "oauth2", "authentication", "deployment"],
+          "use_cases": ["api integration", "automated deployment", "authentication setup"]
+        },
+        {
+          "title": "Netlify Async Workloads",
+          "url": "https://docs.netlify.com/async-workloads/writing-workloads/",
+          "description": "Develop Async Workload functions with Netlify; includes installation, function writing, event handling, retries, error handling, and type safety.",
+          "tags": ["async-workloads", "functions", "event-handling", "error-handling"],
+          "use_cases": ["background processing", "event-driven architecture", "async operations"]
+        }
+      ]
+    },
+    "framework_integration": {
+      "title": "Framework Integration",
+      "description": "Deploy and optimize popular frameworks on Netlify",
+      "tags": ["nextjs", "angular", "astro", "gatsby", "hugo", "eleventy", "express"],
+      "docs": [
+        {
+          "title": "Next.js Advanced API Routes",
+          "url": "https://docs.netlify.com/frameworks/next-js/runtime-v4/advanced-api-routes/",
+          "description": "Advanced API routes for Next.js on Netlify Runtime v4, including background and scheduled API routes.",
+          "tags": ["nextjs", "api-routes", "runtime-v4", "scheduling"],
+          "use_cases": ["advanced routing", "scheduled tasks", "background jobs"]
+        },
+        {
+          "title": "Next.js Adapter v5",
+          "url": "https://docs.netlify.com/frameworks/next-js/overview/",
+          "description": "Netlify's Next.js adapter v5 configures Netlify sites for optimal performance, including caching, on-demand revalidation, and image optimization.",
+          "tags": ["nextjs", "adapter", "performance", "caching", "image-optimization"],
+          "use_cases": ["performance optimization", "caching strategies", "image handling"]
+        },
+        {
+          "title": "Angular on Netlify",
+          "url": "https://docs.netlify.com/frameworks/angular/",
+          "description": "Deploy and optimize Angular apps on Netlify; leverage Netlify Image CDN, serverless functions, and more.",
+          "tags": ["angular", "deployment", "image-cdn", "serverless"],
+          "use_cases": ["angular deployment", "image optimization", "serverless integration"]
+        },
+        {
+          "title": "Deploy Express on Netlify",
+          "url": "https://docs.netlify.com/frameworks/express/",
+          "description": "Deploy Express apps on Netlify using Netlify Functions; integrate with frontend or standalone.",
+          "tags": ["express", "functions", "backend", "nodejs"],
+          "use_cases": ["backend deployment", "api hosting", "express migration"]
+        },
+        {
+          "title": "Astro on Netlify",
+          "url": "https://docs.netlify.com/frameworks/astro/",
+          "description": "Deploy high-performance Astro sites on Netlify; leverage features like partial hydration, Netlify Image CDN, and server-side rendering.",
+          "tags": ["astro", "ssr", "hydration", "performance"],
+          "use_cases": ["static site generation", "partial hydration", "performance optimization"]
+        },
+        {
+          "title": "Gatsby on Netlify",
+          "url": "https://docs.netlify.com/frameworks/gatsby/?gatsby-version=adapters",
+          "description": "Gatsby and Netlify integration: features, adapters, build processes, and performance optimization. Covers Gatsby versions, Netlify plugins, and configuration.",
+          "tags": ["gatsby", "adapters", "build-process", "performance", "plugins"],
+          "use_cases": ["gatsby deployment", "build optimization", "plugin integration"]
+        },
+        {
+          "title": "Hugo framework on Netlify",
+          "url": "https://docs.netlify.com/frameworks/hugo/",
+          "description": "Fast static site generator; build speed, themes, Netlify integration, and version control.",
+          "tags": ["hugo", "static-site-generator", "themes", "build-speed"],
+          "use_cases": ["static sites", "fast builds", "theme customization"]
+        },
+        {
+          "title": "Eleventy Static Site Generator on Netlify",
+          "url": "https://docs.netlify.com/frameworks/eleventy/",
+          "description": "Flexible, JavaScript-based SSG; Netlify integration, Edge Functions, build configurations.",
+          "tags": ["eleventy", "javascript", "ssg", "edge-functions"],
+          "use_cases": ["flexible static sites", "javascript templating", "edge integration"]
+        }
+      ]
+    },
+    "build_configuration": {
+      "title": "Build & Configuration",
+      "description": "Configure builds, environment variables, and deployment settings",
+      "tags": ["build", "configuration", "environment-variables", "plugins", "toml"],
+      "docs": [
+        {
+          "title": "Netlify Build Configuration",
+          "url": "https://docs.netlify.com/configure-builds/overview/",
+          "description": "Configure Netlify's build settings, including build commands, publish directories, and more.",
+          "tags": ["build", "configuration", "commands", "directories"],
+          "use_cases": ["build setup", "deployment configuration", "directory management"]
+        },
+        {
+          "title": "Netlify File-Based Configuration",
+          "url": "https://docs.netlify.com/configure-builds/file-based-configuration/",
+          "description": "Configure Netlify builds, deploys, and settings using the netlify.toml file; learn best practices.",
+          "tags": ["netlify-toml", "configuration", "best-practices"],
+          "use_cases": ["toml configuration", "build customization", "deployment settings"]
+        },
+        {
+          "title": "Netlify Build Environment Variables",
+          "url": "https://docs.netlify.com/configure-builds/environment-variables/",
+          "description": "Configure Netlify environment variables for builds; access and use them in your build process.",
+          "tags": ["environment-variables", "build", "configuration"],
+          "use_cases": ["environment setup", "secrets management", "build configuration"]
+        },
+        {
+          "title": "Netlify Build Software",
+          "url": "https://docs.netlify.com/configure-builds/available-software-at-build-time/",
+          "description": "Netlify build's available software, including languages (Node.js, Python, Ruby, etc.) and tools (npm, yarn, hugo etc.), versions, and configuration.",
+          "tags": ["build-software", "nodejs", "python", "ruby", "tools"],
+          "use_cases": ["language versions", "tool availability", "build environment"]
+        },
+        {
+          "title": "Netlify Build Plugins",
+          "url": "https://docs.netlify.com/build-plugins/",
+          "description": "Extend Netlify build functionality with plugins; install, create, share, and manage plugins for enhanced build processes.",
+          "tags": ["plugins", "build", "extensibility"],
+          "use_cases": ["build enhancement", "custom plugins", "workflow automation"]
+        },
+        {
+          "title": "Netlify Dependency Management",
+          "url": "https://docs.netlify.com/configure-builds/manage-dependencies/",
+          "description": "Manage dependencies for Netlify builds, specifying Node.js, Go, PHP, Python, Ruby, Rust, and Swift versions and dependencies.",
+          "tags": ["dependencies", "nodejs", "python", "ruby", "php", "go", "rust", "swift"],
+          "use_cases": ["dependency management", "version control", "multi-language builds"]
+        },
+        {
+          "title": "Netlify Monorepo Builds",
+          "url": "https://docs.netlify.com/configure-builds/monorepos/",
+          "description": "Configure Netlify builds for monorepo projects; automated and manual configuration options; base, package, build, and publish directory settings; commit status control.",
+          "tags": ["monorepo", "build-configuration", "commit-status"],
+          "use_cases": ["monorepo deployment", "multi-project builds", "workspace management"]
+        }
+      ]
+    },
+    "data_storage": {
+      "title": "Data & Storage",
+      "description": "Store and manage data using Netlify Blobs and Connect",
+      "tags": ["blobs", "storage", "connect", "graphql", "data-sources"],
+      "docs": [
+        {
+          "title": "Netlify Blobs Overview",
+          "url": "https://docs.netlify.com/blobs/overview/",
+          "description": "Netlify Blobs: Store and retrieve blobs and unstructured data; use as a key/value store or database; offers CRUD operations via functions, edge functions, build plugins, and CLI.",
+          "tags": ["blobs", "storage", "key-value", "crud", "database"],
+          "use_cases": ["data storage", "key-value operations", "unstructured data", "blob management"]
+        },
+        {
+          "title": "Netlify Connect Overview",
+          "url": "https://docs.netlify.com/connect/overview/",
+          "description": "Unify content sources, access data through GraphQL API, improve web architecture, and boost performance with Netlify Connect.",
+          "tags": ["connect", "graphql", "content", "data-sources"],
+          "use_cases": ["content unification", "data integration", "graphql apis", "multi-source content"]
+        },
+        {
+          "title": "Netlify Connect Data Access",
+          "url": "https://docs.netlify.com/connect/access-data/",
+          "description": "Access and query Netlify Connect data using GraphQL APIs, sandboxes, and clients; includes schema review, query optimization, and caching details.",
+          "tags": ["connect", "graphql", "data-access", "optimization", "caching"],
+          "use_cases": ["data querying", "graphql optimization", "schema management", "performance tuning"]
+        }
+      ]
+    },
+    "forms_user_input": {
+      "title": "Forms & User Input",
+      "description": "Handle form submissions and user input with Netlify Forms",
+      "tags": ["forms", "submissions", "notifications", "spam-prevention"],
+      "docs": [
+        {
+          "title": "Netlify Form Setup",
+          "url": "https://docs.netlify.com/forms/setup/",
+          "description": "Enable Netlify Forms, configure HTML or JavaScript forms, handle submissions, and set up notifications.",
+          "tags": ["forms", "setup", "html", "javascript", "notifications"],
+          "use_cases": ["form creation", "submission handling", "notification setup"]
+        },
+        {
+          "title": "Netlify Forms Notifications",
+          "url": "https://docs.netlify.com/forms/notifications/",
+          "description": "Configure email notifications for form submissions using Netlify Forms.",
+          "tags": ["forms", "notifications", "email"],
+          "use_cases": ["email notifications", "form alerts", "submission tracking"]
+        },
+        {
+          "title": "Netlify Form Spam Filters",
+          "url": "https://docs.netlify.com/forms/spam-filters/",
+          "description": "Prevent spam submissions with Akismet, honeypot fields, and reCAPTCHA; manage spam and verified submissions.",
+          "tags": ["forms", "spam-prevention", "akismet", "recaptcha", "honeypot"],
+          "use_cases": ["spam prevention", "form security", "captcha integration", "honeypot protection"]
+        }
+      ]
+    },
+    "domain_https": {
+      "title": "Domain & HTTPS Management",
+      "description": "Configure custom domains, DNS, and SSL certificates",
+      "tags": ["domains", "https", "ssl", "dns", "certificates"],
+      "docs": [
+        {
+          "title": "Netlify Custom Domains",
+          "url": "https://docs.netlify.com/domains/domains-fundamentals/domains-glossary/#custom-domain",
+          "description": "Configure custom domains for Netlify sites, including production, previews, and branches.",
+          "tags": ["domains", "custom-domains", "production", "previews"],
+          "use_cases": ["domain setup", "custom domains", "branch domains", "production domains"]
+        },
+        {
+          "title": "Netlify HTTPS Setup Guide",
+          "url": "https://docs.netlify.com/domains/secure-domains-with-https/https-ssl/",
+          "description": "Configure Netlify for HTTPS, using automatic certificates or your own custom certificates.",
+          "tags": ["https", "ssl", "certificates", "security"],
+          "use_cases": ["ssl setup", "https configuration", "certificate management", "security implementation"]
+        },
+        {
+          "title": "External DNS Configuration",
+          "url": "https://docs.netlify.com/domains/configure-domains/configure-external-dns/",
+          "description": "Configure external DNS to point your domain to Netlify; instructions for apex and subdomains.",
+          "tags": ["dns", "external-dns", "apex", "subdomains"],
+          "use_cases": ["dns configuration", "external dns", "domain pointing", "subdomain setup"]
+        }
+      ]
+    }
+  },
+  "search_index": {
+    "by_tag": {
+      "cli": ["Netlify CLI: Manage Functions", "Netlify Dev: Local Development", "VS Code Netlify CLI Debugging", "Netlify CLI: Get Started"],
+      "functions": ["Netlify CLI: Manage Functions", "Deploy Express on Netlify", "Netlify Async Workloads"],
+      "edge-functions": ["Netlify Edge Functions Overview", "Netlify Edge Functions API", "Netlify Edge Functions: Get Started", "Eleventy Static Site Generator on Netlify"],
+      "nextjs": ["Next.js Advanced API Routes", "Next.js Adapter v5"],
+      "build": ["Netlify Build Configuration", "Netlify Build Environment Variables", "Netlify Build Software", "Netlify Build Plugins"],
+      "forms": ["Netlify Form Setup", "Netlify Forms Notifications", "Netlify Form Spam Filters"],
+      "domains": ["Netlify Custom Domains"],
+      "https": ["Netlify HTTPS Setup Guide", "Netlify Dev: Local Development"],
+      "api": ["Netlify Edge Functions API", "Netlify API Quickstart", "Next.js Advanced API Routes"],
+      "performance": ["Next.js Adapter v5", "Astro on Netlify", "Gatsby on Netlify"]
+    },
+    "by_use_case": {
+      "local_development": ["Netlify CLI: Manage Functions", "Netlify Dev: Local Development", "VS Code Netlify CLI Debugging"],
+      "deployment": ["Netlify CLI: Get Started", "Angular on Netlify", "Deploy Express on Netlify", "Astro on Netlify"],
+      "authentication": ["Netlify Edge Functions Overview", "Netlify API Quickstart"],
+      "performance_optimization": ["Next.js Adapter v5", "Astro on Netlify", "Gatsby on Netlify"],
+      "security": ["Netlify HTTPS Setup Guide", "Netlify Form Spam Filters"],
+      "data_management": ["Netlify Blobs Overview", "Netlify Connect Overview", "Netlify Connect Data Access"]
+    }
+  }
+}
