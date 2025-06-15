@@ -4,7 +4,8 @@
 	"version": "0.0.1",
 	"type": "module",
 	"engines": {
-		"node": ">=18.x"
+		"node": ">=20.18.0",
+		"npm": ">=10.0.0"
 	},
 	"scripts": {
 		"dev": "npx vite dev",
