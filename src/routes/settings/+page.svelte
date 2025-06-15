@@ -62,22 +62,6 @@
 		</p>
 	</div>
 
-	<div class="bg-dark-card border border-dark-border p-6 rounded-xl shadow-dark-card">
-		<h2 class="text-xl font-semibold text-highlight mb-4">Data Management</h2>
-
-		<div class="space-y-4">
-			<button
-				onclick={settingsStore.clearAllData}
-				class="py-2 px-4 bg-error text-highlight font-medium rounded-lg hover:bg-error-hover transition focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-			>
-				Clear All Data
-			</button>
-		</div>
-
-		<div class="mt-6 text-xs text-dark-muted">
-			<p>Warning: Clearing data will remove all your data. This action cannot be undone.</p>
-		</div>
-	</div>
 
 	<div class="bg-dark-card border border-dark-border p-6 rounded-xl shadow-dark-card mt-8">
 		<h2 class="text-xl font-semibold text-highlight mb-4">About</h2>

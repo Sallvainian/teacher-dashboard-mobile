@@ -15,42 +15,6 @@ import {
 } from './core';
 import { loadAllData } from './database';
 
-// Clear all data
-export async function clearAllData(): Promise<void> {
-	try {
-		// Clear tables with id field
-		const tablesWithId = ['grades', 'assignments', 'classes', 'students'] as const;
-
-		for (const table of tablesWithId) {
-			const items = await gradebookService.getItems(table);
-			for (const item of items) {
-				await gradebookService.deleteItem(table, item.id);
-			}
-		}
-
-		// Handle class_students with composite key
-		const classStudents = await gradebookService.getItems('class_students');
-		for (const item of classStudents) {
-			// Pass composite key as an object
-			await gradebookService.deleteItem('class_students', {
-				class_id: item.class_id,
-				student_id: item.student_id
-			});
-		}
-
-		// Clear local stores
-		students.set([]);
-		classes.set([]);
-		selectedClassId.set(null);
-		assignments.set([]);
-		grades.set([]);
-
-		// Clear localStorage
-		gradebookService.removeFromStorage('selectedClassId');
-	} catch (err: unknown) {
-		error.set(err instanceof Error ? err.message : 'Failed to clear data');
-	}
-}
 
 // Toggle storage mode between Supabase and localStorage
 export function setUseSupabase(value: boolean): void {

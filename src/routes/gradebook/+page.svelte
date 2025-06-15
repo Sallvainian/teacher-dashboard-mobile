@@ -14,8 +14,19 @@
 	// State variables
 	let newStudentName = $state('');
 	let newClassName = $state('');
+	let newClassGradeLevel = $state('');
+	let newClassSubject = $state('');
+	let newClassSchoolYear = $state('');
+	let newClassJoinCode = $state('');
+	// Edit class state variables
+	let editClassName = $state('');
+	let editClassGradeLevel = $state('');
+	let editClassSubject = $state('');
+	let editClassSchoolYear = $state('');
+	let editClassJoinCode = $state('');
+	let editingClassId = $state<string | null>(null);
 	// Consolidated modal system
-	let activeModal = $state<'newClass' | 'newAssignment' | 'student' | 'import' | 'editAssignment' | null>(null);
+	let activeModal = $state<'newClass' | 'newAssignment' | 'student' | 'import' | 'editAssignment' | 'editClass' | null>(null);
 	let assignmentCreationResult = $state<{ created: number; failed: number } | null>(null);
 	let editingAssignmentId = $state<string | null>(null);
 	let editAssignmentName = $state('');
@@ -201,13 +212,71 @@
 	async function createNewClass() {
 		if (newClassName.trim()) {
 			try {
-				await gradebookStore.addClass(newClassName.trim(), $authStore.user?.id);
+				await gradebookStore.addClass(
+					newClassName.trim(), 
+					$authStore.user?.id,
+					{
+						grade_level: newClassGradeLevel.trim() || null,
+						subject: newClassSubject.trim() || null,
+						school_year: newClassSchoolYear.trim() || null,
+						join_code: newClassJoinCode.trim() || null
+					}
+				);
 				newClassName = '';
+				newClassGradeLevel = '';
+				newClassSubject = '';
+				newClassSchoolYear = '';
+				newClassJoinCode = '';
 				activeModal = null;
 			} catch (error: UnknownError) {
 				console.error('Failed to create class:', error);
 			}
 		}
+	}
+
+	// Edit class functions
+	async function openEditClassModal() {
+		if (!selectedClass) return;
+		
+		editingClassId = selectedClass.id;
+		editClassName = selectedClass.name;
+		
+		// For now, use empty defaults since we don't have a way to fetch the additional fields
+		// In a full implementation, you would fetch the complete class data from the database
+		editClassGradeLevel = '';
+		editClassSubject = '';
+		editClassSchoolYear = '';
+		editClassJoinCode = '';
+		
+		activeModal = 'editClass';
+	}
+
+	async function saveEditClass() {
+		if (!editingClassId || !editClassName.trim()) return;
+		
+		try {
+			await gradebookStore.updateClass(editingClassId, {
+				name: editClassName.trim(),
+				grade_level: editClassGradeLevel.trim() || null,
+				subject: editClassSubject.trim() || null,
+				school_year: editClassSchoolYear.trim() || null,
+				join_code: editClassJoinCode.trim() || null
+			});
+			
+			cancelEditClass();
+		} catch (error: UnknownError) {
+			console.error('Failed to update class:', error);
+		}
+	}
+
+	function cancelEditClass() {
+		editingClassId = null;
+		editClassName = '';
+		editClassGradeLevel = '';
+		editClassSubject = '';
+		editClassSchoolYear = '';
+		editClassJoinCode = '';
+		activeModal = null;
 	}
 
 	async function addStudent() {
@@ -828,6 +897,54 @@
 						{/if}
 					</div>
 				
+				<!-- Quick Actions -->
+				<div class="flex flex-wrap gap-2">
+					<button
+						onclick={() => activeModal = 'newClass'}
+						class="btn btn-primary text-sm"
+						title="Create a new class"
+					>
+						<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+						</svg>
+						New Class
+					</button>
+					
+					{#if selectedClass}
+						<button
+							onclick={openEditClassModal}
+							class="btn btn-outline text-sm"
+							title="Edit the current class settings"
+						>
+							<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+							</svg>
+							Edit Class
+						</button>
+						
+						<button
+							onclick={() => activeModal = 'student'}
+							class="btn btn-secondary text-sm"
+							title="Add a new student to this class"
+						>
+							<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+							</svg>
+							Add Student
+						</button>
+						
+						<button
+							onclick={() => activeModal = 'import'}
+							class="btn btn-outline text-sm"
+							title="Import students from a file"
+						>
+							<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+							</svg>
+							Import
+						</button>
+					{/if}
+				</div>
 
 			{#if $gradebookStore.selectedClassId && selectedClass}
 				<!-- Success Notification -->
@@ -1546,14 +1663,41 @@
 <!-- Modals -->
 {#if activeModal === 'newClass'}
 	<div class="fixed inset-0 bg-bg-base/80 backdrop-blur-sm flex items-center justify-center z-50">
-		<div class="bg-card border border-border rounded-lg p-6 w-full max-w-md">
+		<div class="bg-card border border-border rounded-lg p-6 w-full max-w-lg">
 			<h3 class="text-xl font-bold text-highlight mb-4">Create New Class</h3>
-			<input
-				bind:value={newClassName}
-				placeholder="Class name"
-				class="input w-full mb-4"
-			/>
-			<div class="flex justify-end gap-2">
+			<div class="space-y-4">
+				<input
+					bind:value={newClassName}
+					placeholder="Class name (required)"
+					class="input w-full"
+					required
+				/>
+				<div class="grid grid-cols-2 gap-4">
+					<input
+						bind:value={newClassGradeLevel}
+						placeholder="Grade level (e.g., 5th, K-2)"
+						class="input w-full"
+					/>
+					<input
+						bind:value={newClassSubject}
+						placeholder="Subject (e.g., Math, ELA)"
+						class="input w-full"
+					/>
+				</div>
+				<div class="grid grid-cols-2 gap-4">
+					<input
+						bind:value={newClassSchoolYear}
+						placeholder="School year (e.g., 2024-25)"
+						class="input w-full"
+					/>
+					<input
+						bind:value={newClassJoinCode}
+						placeholder="Join code (optional)"
+						class="input w-full"
+					/>
+				</div>
+			</div>
+			<div class="flex justify-end gap-2 mt-6">
 				<button
 					onclick={() => activeModal = null}
 					class="btn btn-outline"
@@ -1563,8 +1707,64 @@
 				<button
 					onclick={createNewClass}
 					class="btn btn-primary"
+					disabled={!newClassName.trim()}
 				>
 					Create
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
+{#if activeModal === 'editClass'}
+	<div class="fixed inset-0 bg-bg-base/80 backdrop-blur-sm flex items-center justify-center z-50">
+		<div class="bg-card border border-border rounded-lg p-6 w-full max-w-lg">
+			<h3 class="text-xl font-bold text-highlight mb-4">Edit Class</h3>
+			<div class="space-y-4">
+				<input
+					bind:value={editClassName}
+					placeholder="Class name (required)"
+					class="input w-full"
+					required
+				/>
+				<div class="grid grid-cols-2 gap-4">
+					<input
+						bind:value={editClassGradeLevel}
+						placeholder="Grade level (e.g., 5th, K-2)"
+						class="input w-full"
+					/>
+					<input
+						bind:value={editClassSubject}
+						placeholder="Subject (e.g., Math, ELA)"
+						class="input w-full"
+					/>
+				</div>
+				<div class="grid grid-cols-2 gap-4">
+					<input
+						bind:value={editClassSchoolYear}
+						placeholder="School year (e.g., 2024-25)"
+						class="input w-full"
+					/>
+					<input
+						bind:value={editClassJoinCode}
+						placeholder="Join code (optional)"
+						class="input w-full"
+					/>
+				</div>
+			</div>
+			<div class="flex justify-end gap-2 mt-6">
+				<button
+					onclick={cancelEditClass}
+					class="btn btn-outline"
+				>
+					Cancel
+				</button>
+				<button
+					onclick={saveEditClass}
+					class="btn btn-primary"
+					disabled={!editClassName.trim()}
+				>
+					Save Changes
 				</button>
 			</div>
 		</div>

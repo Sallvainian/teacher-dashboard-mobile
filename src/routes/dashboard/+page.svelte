@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 	import { goto } from '$app/navigation';
 	import ErrorBoundary from '$lib/components/ErrorBoundary.svelte';
 	import SkeletonLoader from '$lib/components/SkeletonLoader.svelte';
@@ -8,7 +9,7 @@
 	import { jeopardyStore } from '$lib/stores/jeopardy';
 	import { fileService } from '$lib/services/fileService';
 	import { chatStore } from '$lib/stores/chat';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore, isAuthenticated } from '$lib/stores/auth';
 	import type { UnknownError } from '$lib/types/ai-enforcement';
 	import type { ConversationWithDetails } from '$lib/types/chat';
 
@@ -54,6 +55,16 @@
 	let storageUsed = $state('0 GB');
 	let storagePercentage = $state(0);
 	let recentFiles = $state<Array<{name: string; size: string; date: string}>>([]);
+	
+	// Calculate average students per class
+	let avgStudentsPerClass = $derived(
+		$gradebookStore.classes.length === 0 
+			? 0 
+			: Math.round(
+				$gradebookStore.classes.reduce((total, cls) => total + cls.studentIds.length, 0) / 
+				$gradebookStore.classes.length
+			)
+	);
 
 	let recentMessages = $state<Array<{from: string; message: string; time: string}>>([]);
 
@@ -104,41 +115,66 @@
 				storagePercentage = Math.round((stats.total_size_bytes / (10 * 1024 * 1024 * 1024)) * 100); // Assume 10GB limit
 			}
 
-			// Load recent messages from chat store with timeout
+			// Load recent messages from chat store - wait for auth first
 			try {
-				const chatTimeout = new Promise((_, reject) => {
-					setTimeout(() => reject(new Error('Chat load timeout')), 3000);
-				});
-				
-				await Promise.race([chatStore.loadConversations(), chatTimeout]);
-				
-				// Get current user ID to filter out own messages
-				let currentUserId: string | null = null;
-				const authUnsubscribe = authStore.subscribe((auth) => {
-					currentUserId = auth.user?.id || null;
-				});
-				authUnsubscribe();
-				
-				// Use subscription to get conversations data
-				let conversations: ConversationWithDetails[] = [];
-				const unsubscribe = chatStore.conversations.subscribe((convs) => {
-					conversations = convs as ConversationWithDetails[];
-				});
-				unsubscribe(); // Immediately unsubscribe after getting the value
-				
-				recentMessages = conversations
-					.filter((conv): conv is ConversationWithDetails & { last_message: NonNullable<ConversationWithDetails['last_message']> } => 
-						conv.last_message !== undefined && conv.last_message !== null)
-					.filter(conv => conv.last_message.sender_id !== currentUserId) // Filter out own messages
-					.sort((a, b) => new Date(b.last_message.created_at).getTime() - new Date(a.last_message.created_at).getTime())
-					.slice(0, 3)
-					.map(conv => ({
-						from: conv.last_message.sender?.full_name || conv.last_message.sender?.email || 'Unknown',
-						message: conv.last_message.content,
-						time: formatRelativeDate(conv.last_message.created_at)
-					}));
+				// Wait for auth to be ready
+				if (!$isAuthenticated) {
+					recentMessages = [];
+				} else {
+					// Get current user ID and conversations (they should already be loaded by chat store initialization)
+					const currentUserId = $authStore.user?.id;
+					let conversations = get(chatStore.conversations) as ConversationWithDetails[];
+					
+					// Only load if not already loaded
+					if (conversations.length === 0) {
+						const chatTimeout = new Promise((_, reject) => {
+							setTimeout(() => reject(new Error('Chat load timeout')), 8000);
+						});
+						
+						await Promise.race([chatStore.loadConversations(), chatTimeout]);
+						await new Promise(resolve => setTimeout(resolve, 100));
+						conversations = get(chatStore.conversations) as ConversationWithDetails[];
+					}
+					
+					if (conversations.length > 0) {
+						// Process each conversation to find recent messages from others
+						const conversationPromises = conversations.map(async (conv) => {
+							chatStore.setActiveConversation(conv.id);
+							await new Promise(resolve => setTimeout(resolve, 50));
+							
+							const activeMessages = get(chatStore.activeMessages) || [];
+							const filteredMessages = activeMessages
+								.filter(msg => msg.sender_id !== currentUserId)
+								.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+							const lastMessageFromOther = filteredMessages.length > 0 ? filteredMessages[0] : null;
+							
+							if (lastMessageFromOther) {
+								const sender = conv.participants?.find(p => p.user_id === lastMessageFromOther.sender_id)?.user;
+								return {
+									conversation_id: conv.id,
+									from: sender?.full_name || sender?.email || 'Unknown',
+									message: lastMessageFromOther.content,
+									time: formatRelativeDate(lastMessageFromOther.created_at),
+									created_at: lastMessageFromOther.created_at
+								};
+							}
+							return null;
+						});
+						
+						const results = await Promise.all(conversationPromises);
+						chatStore.setActiveConversation(null);
+						
+						recentMessages = results
+							.filter((msg): msg is NonNullable<typeof msg> => msg !== null)
+							.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+							.slice(0, 3);
+						
+						console.log('Success: Displaying Recent Messages');
+					} else {
+						recentMessages = [];
+					}
+				}
 			} catch (chatError) {
-				console.log('Chat load timed out or failed:', chatError);
 				recentMessages = [];
 			}
 
@@ -236,9 +272,11 @@
 							</div>
 							<div class="text-3xl font-bold text-highlight mb-1">{totalStudents}</div>
 							<p class="text-sm text-muted">Total enrolled</p>
-							{#if totalStudents > 0}
+							{#if totalClasses > 0}
 								<div class="mt-3 pt-3 border-t border-border">
-									<p class="text-xs text-purple">+{Math.max(0, totalStudents - Math.floor(totalStudents * 0.8))} this week</p>
+									<p class="text-xs text-muted">
+										{avgStudentsPerClass} avg per class
+									</p>
 								</div>
 							{/if}
 						</a>

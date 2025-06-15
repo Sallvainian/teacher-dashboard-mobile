@@ -18,6 +18,7 @@ import {
 // Class operations
 import { 
 	addClass, 
+	updateClass,
 	deleteClass, 
 	selectClass, 
 	importClassesFromJSON 
@@ -41,7 +42,6 @@ import {
 
 // Utility operations
 import { 
-	clearAllData, 
 	setUseSupabase, 
 	ensureDataLoaded as ensureDataLoadedFull 
 } from './utilityActions';
@@ -63,6 +63,7 @@ function createGradebookStore() {
 		
 		// Class operations
 		addClass,
+		updateClass,
 		deleteClass,
 		selectClass,
 		importClassesFromJSON,
@@ -80,7 +81,6 @@ function createGradebookStore() {
 		studentAverageInClass,
 		
 		// Utility operations
-		clearAllData,
 		setUseSupabase
 	};
 }

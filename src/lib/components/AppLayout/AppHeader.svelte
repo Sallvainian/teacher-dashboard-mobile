@@ -80,6 +80,7 @@
 			<a href="/dashboard" class="nav-button">Dashboard</a>
 			<a href="/files" class="nav-button">Files</a>
 			<a href="/chat" class="nav-button">Chat</a>
+			<a href="/seating-chart" class="nav-button">Seating Chart</a>
 
 			<!-- Classes dropdown - shown only if authenticated -->
 			<div class="relative classes-dropdown">
@@ -232,6 +233,28 @@
 										</svg>
 										<span class="text-text-hover group-hover:text-highlight transition-colors">
 											Scattergories
+										</span>
+									</a>
+									<a
+										href="/snake"
+										onclick={() => (gamesDropdownOpen = false)}
+										class="w-full text-left p-3 hover:bg-accent rounded-lg transition-all duration-200 flex items-center gap-3 group"
+									>
+										<svg
+											class="w-4 h-4 text-muted group-hover:text-highlight transition-colors"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+										>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												stroke-width="2"
+												d="M4 8V6a2 2 0 012-2h2M4 16v2a2 2 0 002 2h2m8-16h2a2 2 0 012 2v2m-4 12h2a2 2 0 002-2v-2M9 12l2 2 4-4"
+											/>
+										</svg>
+										<span class="text-text-hover group-hover:text-highlight transition-colors">
+											Snake
 										</span>
 									</a>
 								</div>

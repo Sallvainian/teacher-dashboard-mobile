@@ -86,6 +86,7 @@
 		"date-fns": "^4.1.0",
 		"handsontable": "^15.3.0",
 		"idb": "^8.0.3",
+		"pdfjs-dist": "^5.3.31",
 		"uuid": "^11.1.0",
 		"web-vitals": "^5.0.2",
 		"zod": "^3.25.46"
@@ -95,5 +96,8 @@
 		"glob": "^10.3.10",
 		"sourcemap-codec": "npm:@jridgewell/sourcemap-codec@^1.5.0",
 		"@rollup/rollup-win32-x64-msvc": "npm:@rollup/rollup-linux-x64-gnu@4.43.0"
+	},
+	"optionalDependencies": {
+		"@rollup/rollup-linux-x64-gnu": "^4.43.0"
 	}
 }

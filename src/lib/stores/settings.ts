@@ -95,39 +95,6 @@ function toggleDataStorage(): void {
 	}
 }
 
-function clearAllData(): void {
-	if (!browser) return;
-	
-	const confirmed = confirm(
-		'Are you sure you want to clear all local data? This action cannot be undone.'
-	);
-	
-	if (confirmed) {
-		try {
-			// Clear localStorage except settings
-			const keysToKeep = ['darkMode', 'useSupabase'];
-			const allKeys = Object.keys(localStorage);
-			
-			allKeys.forEach(key => {
-				if (!keysToKeep.includes(key)) {
-					localStorage.removeItem(key);
-				}
-			});
-			
-			// Clear sessionStorage
-			sessionStorage.clear();
-			
-			// Reset stores to default state
-			gradebookStore.clearAllData();
-			
-			alert('All data cleared successfully. Page will reload.');
-			window.location.reload();
-		} catch (error: UnknownError) {
-			console.error('Error clearing data:', error);
-			alert('Error clearing data. Please try again.');
-		}
-	}
-}
 
 // Derived store for theme class
 const themeClass = derived(darkMode, ($darkMode) => 
@@ -146,7 +113,6 @@ export const settingsStore = {
 	initialize,
 	toggleDarkMode,
 	toggleDataStorage,
-	clearAllData,
 	
 	// Direct setters (for programmatic updates)
 	setDarkMode: (value: boolean) => {

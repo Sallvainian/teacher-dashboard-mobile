@@ -11,8 +11,8 @@
 	import AppSidebar from './AppSidebar.svelte';
 	import ImportWizard from '$components/ImportWizard.svelte';
 
-	// Get children prop
-	let { children } = $props();
+	// Get children snippet
+	let { children }: { children?: import('svelte').Snippet } = $props();
 
 	// Define public routes that don't require authentication
 	const PUBLIC_ROUTES = ['/auth/login', '/auth/signup', '/auth/reset-password'];
@@ -147,4 +147,5 @@
 			<p class="text-muted mt-4">Redirecting...</p>
 		</div>
 	</div>
+	{@render children?.()}
 {/if}

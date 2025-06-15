@@ -134,18 +134,18 @@
 			e.preventDefault();
 			handleSubmit();
 		}}
-		class="bg-base-200 rounded-lg px-8 pt-6 pb-8 mb-4 shadow-md"
+		class="bg-card border border-border rounded-lg px-8 pt-6 pb-8 mb-4"
 	>
-		<h2 class="text-2xl font-bold mb-6 text-center">Profile</h2>
+		<h2 class="text-2xl font-bold mb-6 text-center text-highlight">Profile</h2>
 
 		{#if error}
-			<div class="bg-error/20 text-error px-4 py-3 rounded mb-4" role="alert">
+			<div class="bg-red-500/10 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg mb-4" role="alert">
 				<p>{error}</p>
 			</div>
 		{/if}
 
 		{#if success}
-			<div class="bg-success/20 text-success px-4 py-3 rounded mb-4" role="alert">
+			<div class="bg-green-500/10 text-green-600 dark:text-green-400 px-4 py-3 rounded-lg mb-4" role="alert">
 				<p>Profile updated successfully!</p>
 			</div>
 		{/if}
@@ -170,7 +170,10 @@
 					
 					{#if uploadingAvatar}
 						<div class="absolute inset-0 bg-bg-base/80 rounded-full flex items-center justify-center">
-							<div class="loading loading-spinner loading-sm"></div>
+							<svg class="animate-spin h-5 w-5 text-purple" viewBox="0 0 24 24" fill="none">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
 						</div>
 					{/if}
 				</div>
@@ -190,7 +193,7 @@
 							type="button"
 							onclick={() => fileInput.click()}
 							disabled={uploadingAvatar}
-							class="btn btn-outline btn-sm"
+							class="px-4 py-2 bg-transparent border border-border text-text-base rounded-lg hover:bg-surface transition-colors text-sm"
 						>
 							{uploadingAvatar ? 'Uploading...' : 'Choose Photo'}
 						</button>
@@ -199,7 +202,7 @@
 								type="button"
 								onclick={removeAvatar}
 								disabled={uploadingAvatar}
-								class="btn btn-ghost btn-sm text-error"
+								class="px-4 py-2 bg-transparent text-red-600 dark:text-red-400 rounded-lg hover:bg-red-500/10 transition-colors text-sm"
 							>
 								Remove
 							</button>
@@ -211,22 +214,22 @@
 		</div>
 
 		<div class="mb-4">
-			<label class="block text-sm font-medium mb-2" for="email"> Email </label>
+			<label class="block text-sm font-medium mb-2 text-text-base" for="email"> Email </label>
 			<input
 				value={($user as User | null)?.email || ''}
-				class="input input-bordered w-full"
+				class="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text-base focus:ring-2 focus:ring-purple focus:border-transparent transition-all"
 				id="email"
 				type="email"
 				disabled
 			/>
-			<p class="text-sm text-base-content/60 mt-1">Email cannot be changed</p>
+			<p class="text-sm text-muted mt-1">Email cannot be changed</p>
 		</div>
 
 		<div class="mb-6">
-			<label class="block text-sm font-medium mb-2" for="fullName"> Full Name </label>
+			<label class="block text-sm font-medium mb-2 text-text-base" for="fullName"> Full Name </label>
 			<input
 				bind:value={fullName}
-				class="input input-bordered w-full"
+				class="w-full px-4 py-3 bg-bg-base border border-border rounded-lg text-text-base focus:ring-2 focus:ring-purple focus:border-transparent transition-all"
 				id="fullName"
 				type="text"
 				placeholder="Full Name"
@@ -236,12 +239,15 @@
 
 		<div class="flex items-center justify-between">
 			<button
-				class="btn btn-primary w-full"
+				class="w-full px-6 py-3 bg-purple text-highlight rounded-lg hover:bg-purple-hover focus:ring-2 focus:ring-purple focus:ring-offset-2 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
 				type="submit"
 				disabled={loading || uploadingAvatar}
 			>
 				{#if loading}
-					<span class="loading loading-spinner loading-sm mr-2"></span>
+					<svg class="animate-spin h-5 w-5 text-highlight inline mr-2" viewBox="0 0 24 24" fill="none">
+						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+						<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+					</svg>
 					Updating...
 				{:else}
 					Update Profile

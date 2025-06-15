@@ -15,7 +15,9 @@
 	let { children } = $props();
 </script>
 
-<AppLayout {children} />
+<AppLayout>
+	{@render children?.()}
+</AppLayout>
 
 <!-- Global loading overlay -->
 <GlobalLoader />
