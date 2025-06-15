@@ -37,7 +37,7 @@
 	);
 
 	onMount(async () => {
-		await gradebookStore.ensureDataLoaded();
+		// Data is already loaded by AppLayout, just initialize
 		if (classes.length > 0 && classes[0]) {
 			selectedClassId = classes[0].id;
 		}
@@ -559,6 +559,7 @@
 												ondragleave={handleDragLeave}
 												ondrop={(e) => handleDrop(e, row, col)}
 												role="gridcell"
+												tabindex="0"
 												aria-label={`Grid position row ${row + 1}, column ${col + 1}`}
 											>
 												{#if row === teacherDesk.row && col === teacherDesk.col}

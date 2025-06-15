@@ -2,7 +2,7 @@
 	import type { Class } from '$lib/types/gradebook';
 	
 	interface Props {
-		selectedClass: Class | null;
+		selectedClass: Class | null | undefined;
 		classStudents: any[];
 		allClassAssignments: any[];
 		totalGrades: number;

@@ -1,0 +1,86 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.prettierignore</file>
+  <line>3</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.prettierignore" />
+  <problem_class id="IgnoreCoverEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cover entry</problem_class>
+  <description>&lt;code&gt;pnpm-lock.yaml&lt;/code&gt; is covered by &lt;a href=&quot;file://Z:/home/frank/projects/teacher-dashboard/.prettierignore#149&quot;&gt;node_modules&lt;/a&gt; #loc</description>
+  <highlighted_element>pnpm-lock.yaml</highlighted_element>
+  <language>Ignore</language>
+  <offset>0</offset>
+  <length>14</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.prettierignore</file>
+  <line>4</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.prettierignore" />
+  <problem_class id="IgnoreCoverEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cover entry</problem_class>
+  <description>&lt;code&gt;yarn.lock&lt;/code&gt; is covered by &lt;a href=&quot;file://Z:/home/frank/projects/teacher-dashboard/.prettierignore#149&quot;&gt;node_modules&lt;/a&gt; #loc</description>
+  <highlighted_element>yarn.lock</highlighted_element>
+  <language>Ignore</language>
+  <offset>0</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.prettierignore</file>
+  <line>10</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.prettierignore" />
+  <problem_class id="IgnoreCoverEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cover entry</problem_class>
+  <description>&lt;code&gt;build&lt;/code&gt; is covered by &lt;a href=&quot;file://Z:/home/frank/projects/teacher-dashboard/.prettierignore#149&quot;&gt;node_modules&lt;/a&gt; #loc</description>
+  <highlighted_element>build</highlighted_element>
+  <language>Ignore</language>
+  <offset>0</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.prettierignore</file>
+  <line>11</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.prettierignore" />
+  <problem_class id="IgnoreCoverEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cover entry</problem_class>
+  <description>&lt;code&gt;dist&lt;/code&gt; is covered by &lt;a href=&quot;file://Z:/home/frank/projects/teacher-dashboard/.prettierignore#149&quot;&gt;node_modules&lt;/a&gt; #loc</description>
+  <highlighted_element>dist</highlighted_element>
+  <language>Ignore</language>
+  <offset>0</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.prettierignore</file>
+  <line>21</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.prettierignore" />
+  <problem_class id="IgnoreCoverEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cover entry</problem_class>
+  <description>&lt;code&gt;**/*.min.js&lt;/code&gt; is covered by &lt;a href=&quot;file://Z:/home/frank/projects/teacher-dashboard/.prettierignore#149&quot;&gt;node_modules&lt;/a&gt; #loc</description>
+  <highlighted_element>**/*.min.js</highlighted_element>
+  <language>Ignore</language>
+  <offset>0</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.prettierignore</file>
+  <line>22</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.prettierignore" />
+  <problem_class id="IgnoreCoverEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cover entry</problem_class>
+  <description>&lt;code&gt;**/*.min.css&lt;/code&gt; is covered by &lt;a href=&quot;file://Z:/home/frank/projects/teacher-dashboard/.prettierignore#149&quot;&gt;node_modules&lt;/a&gt; #loc</description>
+  <highlighted_element>**/*.min.css</highlighted_element>
+  <language>Ignore</language>
+  <offset>0</offset>
+  <length>12</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.prettierignore</file>
+  <line>25</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.prettierignore" />
+  <problem_class id="IgnoreCoverEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Cover entry</problem_class>
+  <description>&lt;code&gt;**/vendor/**&lt;/code&gt; is covered by &lt;a href=&quot;file://Z:/home/frank/projects/teacher-dashboard/.prettierignore#149&quot;&gt;node_modules&lt;/a&gt; #loc</description>
+  <highlighted_element>**/vendor/**</highlighted_element>
+  <language>Ignore</language>
+  <offset>0</offset>
+  <length>12</length>
+</problem>
+</problems>

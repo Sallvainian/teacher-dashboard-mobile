@@ -1,0 +1,50 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/README.md</file>
+  <line>59</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/README.md" />
+  <problem_class id="GrazieInspection" severity="GRAMMAR_ERROR" attribute_key="GRAMMAR_ERROR">Grammar</problem_class>
+  <description>Subject-verb agreement seems to be violated</description>
+  <highlighted_element>system scan</highlighted_element>
+  <language>Markdown</language>
+  <offset>20</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>71</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="GrazieInspection" severity="GRAMMAR_ERROR" attribute_key="GRAMMAR_ERROR">Grammar</problem_class>
+  <description>Phrasal verbs are spelled with a space</description>
+  <highlighted_element>login</highlighted_element>
+  <language>JavaScript</language>
+  <offset>19</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/index.ts</file>
+  <line>84</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/index.ts" />
+  <problem_class id="GrazieInspection" severity="GRAMMAR_ERROR" attribute_key="GRAMMAR_ERROR">Grammar</problem_class>
+  <description>Use a no-space hyphen in compound words</description>
+  <highlighted_element>OLD -</highlighted_element>
+  <language>JavaScript</language>
+  <offset>3</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/index.ts</file>
+  <line>88</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/index.ts" />
+  <problem_class id="GrazieInspection" severity="GRAMMAR_ERROR" attribute_key="GRAMMAR_ERROR">Grammar</problem_class>
+  <description>'component' usually goes with an article</description>
+  <highlighted_element>component</highlighted_element>
+  <language>JavaScript</language>
+  <offset>39</offset>
+  <length>9</length>
+</problem>
+</problems>

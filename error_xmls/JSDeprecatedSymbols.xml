@@ -1,0 +1,530 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.svelte-kit/generated/root.js</file>
+  <line>1</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.svelte-kit/generated/root.js" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>asClassComponent</highlighted_element>
+  <language>JavaScript</language>
+  <offset>9</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.svelte-kit/generated/root.js</file>
+  <line>3</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.svelte-kit/generated/root.js" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>asClassComponent</highlighted_element>
+  <language>JavaScript</language>
+  <offset>15</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte</file>
+  <line>3</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte</file>
+  <line>3</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>_page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>18</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>21</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>53</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>21</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>53</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>21</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>53</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>21</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>53</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>24</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>24</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>24</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>24</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>92</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>7</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>92</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>7</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>92</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>7</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>92</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>7</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>113</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>9</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>113</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>9</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>113</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>9</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte</file>
+  <line>113</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppLayout.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$navigating</highlighted_element>
+  <language>JavaScript</language>
+  <offset>9</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppSidebar.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppSidebar.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppSidebar.svelte</file>
+  <line>57</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppSidebar.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>9</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppSidebar.svelte</file>
+  <line>57</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppSidebar.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>40</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/services/errorService.ts</file>
+  <line>63</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/services/errorService.ts" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>substr</highlighted_element>
+  <language>JavaScript</language>
+  <offset>59</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/auth/login/+page.svelte</file>
+  <line>5</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/auth/login/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/auth/login/+page.svelte</file>
+  <line>19</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/auth/login/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>6</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/auth/login/+page.svelte</file>
+  <line>20</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/auth/login/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>17</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/auth/login/+page.svelte</file>
+  <line>21</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/auth/login/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>29</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/auth/signup/+page.svelte</file>
+  <line>5</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/auth/signup/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/auth/signup/+page.svelte</file>
+  <line>10</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/auth/signup/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>40</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/jeopardy/editor/[gameId]/+page.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/jeopardy/editor/[gameId]/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/jeopardy/editor/[gameId]/+page.svelte</file>
+  <line>26</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/jeopardy/editor/[gameId]/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>14</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/jeopardy/play/[gameId]/+page.svelte</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/jeopardy/play/[gameId]/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/jeopardy/play/[gameId]/+page.svelte</file>
+  <line>23</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/jeopardy/play/[gameId]/+page.svelte" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>$page</highlighted_element>
+  <language>JavaScript</language>
+  <offset>14</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/types.d.ts</file>
+  <line>10</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/types.d.ts" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>ComponentType</highlighted_element>
+  <language>JavaScript</language>
+  <offset>16</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/types.d.ts</file>
+  <line>11</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/types.d.ts" />
+  <problem_class id="JSDeprecatedSymbols" severity="WEAK WARNING" attribute_key="DEPRECATED_ATTRIBUTES">Deprecated symbol used</problem_class>
+  <description>Deprecated symbol used, consult docs for better alternative #loc</description>
+  <highlighted_element>ComponentType</highlighted_element>
+  <language>JavaScript</language>
+  <offset>19</offset>
+  <length>13</length>
+</problem>
+</problems>

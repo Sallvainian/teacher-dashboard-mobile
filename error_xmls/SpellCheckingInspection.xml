@@ -1,0 +1,74 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/README.md</file>
+  <line>23</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/README.md" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Typo</problem_class>
+  <description>Typo: In word 'Trivy'</description>
+  <highlighted_element>Trivy</highlighted_element>
+  <language>Markdown</language>
+  <offset>27</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/app.d.ts</file>
+  <line>10</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/app.d.ts" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Typo</problem_class>
+  <description>Typo: In word 'supabase'</description>
+  <highlighted_element>supabase</highlighted_element>
+  <language>TypeScript</language>
+  <offset>3</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/app.d.ts</file>
+  <line>23</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/app.d.ts" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Typo</problem_class>
+  <description>Typo: In word 'SUPABASE'</description>
+  <highlighted_element>SUPABASE</highlighted_element>
+  <language>TypeScript</language>
+  <offset>21</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/app.d.ts</file>
+  <line>24</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/app.d.ts" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Typo</problem_class>
+  <description>Typo: In word 'SUPABASE'</description>
+  <highlighted_element>SUPABASE</highlighted_element>
+  <language>TypeScript</language>
+  <offset>21</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/types/gradebook.ts</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/types/gradebook.ts" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Typo</problem_class>
+  <description>Typo: In word 'GRADEBOOK'</description>
+  <highlighted_element>GRADEBOOK</highlighted_element>
+  <language>JavaScript</language>
+  <offset>15</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/types/gradebook.ts</file>
+  <line>2</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/types/gradebook.ts" />
+  <problem_class id="SpellCheckingInspection" severity="TYPO" attribute_key="TYPO">Typo</problem_class>
+  <description>Typo: In word 'gradebook'</description>
+  <highlighted_element>gradebook</highlighted_element>
+  <language>JavaScript</language>
+  <offset>54</offset>
+  <length>9</length>
+</problem>
+</problems>

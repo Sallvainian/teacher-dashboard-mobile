@@ -5,15 +5,24 @@ import { get } from 'svelte/store';
 import { gradebookService } from '$lib/services/supabaseService';
 import { grades, assignments, error } from './core';
 import type { Grade, Assignment } from '$lib/types/gradebook';
-import { createStudentId, createAssignmentId } from '$lib/types/ai-optimized';
+import type { ActionResult, StudentId, AssignmentId, ClassId } from '$lib/types/ai-enforcement';
+import { createStudentId, createAssignmentId, createClassId } from '$lib/types/ai-enforcement';
 
 // Record a grade for a student
 export async function recordGrade(
-	studentId: string,
-	assignmentId: string,
+	studentId: StudentId,
+	assignmentId: AssignmentId,
 	points: number
-): Promise<void> {
+): Promise<ActionResult<void>> {
 	const pts = Math.max(0, points);
+
+	if (pts < 0) {
+		return {
+			success: false,
+			error: 'Grade points cannot be negative',
+			recoverable: true
+		};
+	}
 
 	try {
 		// Check if grade already exists
@@ -24,11 +33,13 @@ export async function recordGrade(
 			}
 		});
 
+		let isUpdate = false;
 		if (existingGrades.length > 0) {
 			// Update existing grade
 			await gradebookService.updateItem('grades', existingGrades[0].id, {
 				points: pts
 			});
+			isUpdate = true;
 		} else {
 			// Insert new grade
 			await gradebookService.insertItem('grades', {
@@ -41,18 +52,35 @@ export async function recordGrade(
 		// Update local store
 		grades.update((arr: Grade[]) => {
 			const idx = arr.findIndex(
-				(g: Grade) => g.studentId === createStudentId(studentId) && g.assignmentId === createAssignmentId(assignmentId)
+				(g: Grade) => g.studentId === studentId && g.assignmentId === assignmentId
 			);
 			if (idx > -1) {
 				const newArr = [...arr];
 				newArr[idx].points = pts;
 				return newArr;
 			}
-			return [...arr, { studentId: createStudentId(studentId), assignmentId: createAssignmentId(assignmentId), points: pts }];
+			return [...arr, { studentId, assignmentId, points: pts }];
 		});
+
+		return {
+			success: true,
+			data: undefined,
+			sideEffects: [
+				isUpdate ? 'Updated existing grade' : 'Created new grade',
+				'Updated grades store',
+				'Updated database'
+			]
+		};
 	} catch (err: unknown) {
+		const errorMessage = err instanceof Error ? err.message : 'Failed to record grade';
 		console.error('Error recording grade:', err);
-		error.set(err instanceof Error ? err.message : 'Failed to record grade');
+		error.set(errorMessage);
+		
+		return {
+			success: false,
+			error: errorMessage,
+			recoverable: true
+		};
 	}
 }
 

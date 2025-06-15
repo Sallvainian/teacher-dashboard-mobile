@@ -145,3 +145,74 @@ export function createFileId(id: string): FileId {
 export function createFolderId(id: string): FolderId {
   return id as FolderId;
 }
+
+// ============= DATABASE OPERATION BRANDED TYPES =============
+
+// Force type safety for database table operations
+export type DatabaseTable = string & { readonly __brand: 'DatabaseTable' };
+export type DatabaseOperation = string & { readonly __brand: 'DatabaseOperation' };
+export type QueryId = string & { readonly __brand: 'QueryId' };
+
+// Specific table type safety
+export type StudentsTable = DatabaseTable & { readonly __tableType: 'students' };
+export type ClassesTable = DatabaseTable & { readonly __tableType: 'classes' };
+export type AssignmentsTable = DatabaseTable & { readonly __tableType: 'assignments' };
+export type GradesTable = DatabaseTable & { readonly __tableType: 'grades' };
+export type FileMetadataTable = DatabaseTable & { readonly __tableType: 'file_metadata' };
+
+// Database operation result type (extends ActionResult)
+export type DatabaseResult<T = void> = {
+  success: true;
+  data: T;
+  sideEffects: string[];
+  metadata: {
+    executionTime: number;
+    fromCache: boolean;
+    rowsAffected?: number;
+    fromFallback: boolean;
+  };
+} | {
+  success: false;
+  error: string;
+  details?: string;
+  recoverable: boolean;
+  fallbackUsed: boolean;
+};
+
+// Helper to create database table types
+export function createDatabaseTable<T extends string>(tableName: T): DatabaseTable & { readonly __tableType: T } {
+  return tableName as DatabaseTable & { readonly __tableType: T };
+}
+
+// Helper to create database operations
+export function createDatabaseOperation(operation: string): DatabaseOperation {
+  return operation as DatabaseOperation;
+}
+
+// Database operation types for compile-time safety
+export type DatabaseOperationType = 
+  | 'SELECT'
+  | 'INSERT' 
+  | 'UPDATE'
+  | 'DELETE'
+  | 'UPSERT';
+
+// Type-safe database operation descriptor
+export type DatabaseOpDescriptor<T extends string> = {
+  readonly table: DatabaseTable & { readonly __tableType: T };
+  readonly operation: DatabaseOperation;
+  readonly queryId?: QueryId;
+};
+
+// Helper to create database operation descriptors
+export function createDatabaseOp<T extends string>(
+  table: DatabaseTable & { readonly __tableType: T },
+  operation: DatabaseOperationType,
+  queryId?: string
+): DatabaseOpDescriptor<T> {
+  return {
+    table,
+    operation: createDatabaseOperation(operation),
+    queryId: queryId ? (queryId as QueryId) : undefined
+  };
+}

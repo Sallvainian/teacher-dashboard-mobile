@@ -1,0 +1,338 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/PDFViewer.svelte</file>
+  <line>184</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/PDFViewer.svelte" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>4</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/auth/ProfileForm.svelte</file>
+  <line>49</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/auth/ProfileForm.svelte" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>16</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/auth/ProfileForm.svelte</file>
+  <line>62</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/auth/ProfileForm.svelte" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>20</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/services/supabaseService.ts</file>
+  <line>132</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/services/supabaseService.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>15</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/services/supabaseService.ts</file>
+  <line>178</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/services/supabaseService.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>15</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/services/supabaseService.ts</file>
+  <line>209</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/services/supabaseService.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>15</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/services/supabaseService.ts</file>
+  <line>259</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/services/supabaseService.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>5</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/services/supabaseService.ts</file>
+  <line>329</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/services/supabaseService.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>15</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/services/supabaseService.ts</file>
+  <line>384</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/services/supabaseService.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>15</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/services/supabaseService.ts</file>
+  <line>408</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/services/supabaseService.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>14</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts</file>
+  <line>82</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>19</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts</file>
+  <line>129</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>19</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts</file>
+  <line>140</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>21</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts</file>
+  <line>148</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>21</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts</file>
+  <line>189</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>19</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts</file>
+  <line>200</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>21</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts</file>
+  <line>284</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/auth/authActions.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>18</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/files.ts</file>
+  <line>278</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/files.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>3</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/files.ts</file>
+  <line>324</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/files.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>3</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/files.ts</file>
+  <line>348</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/files.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>3</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/files.ts</file>
+  <line>382</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/files.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>3</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/files.ts</file>
+  <line>411</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/files.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>3</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/files.ts</file>
+  <line>478</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/files.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>3</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/files.ts</file>
+  <line>503</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/files.ts" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>3</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/student/games/+page.svelte</file>
+  <line>37</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/student/games/+page.svelte" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>19</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/student/games/+page.svelte</file>
+  <line>51</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/student/games/+page.svelte" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>20</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/student/games/+page.svelte</file>
+  <line>79</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/student/games/+page.svelte" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>14</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/student/games/+page.svelte</file>
+  <line>96</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/student/games/+page.svelte" />
+  <problem_class id="ExceptionCaughtLocallyJS" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Exception used for local control-flow</problem_class>
+  <description>'throw' of exception caught locally #loc</description>
+  <highlighted_element>throw</highlighted_element>
+  <language>JavaScript</language>
+  <offset>14</offset>
+  <length>5</length>
+</problem>
+</problems>

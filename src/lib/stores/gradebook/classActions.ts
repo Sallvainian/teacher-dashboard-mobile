@@ -6,7 +6,8 @@ import { gradebookService } from '$lib/services/supabaseService';
 import { classes, selectedClassId, error } from './core';
 import { addGlobalStudent, assignStudentToClass } from './studentActions';
 import type { Class } from '$lib/types/gradebook';
-import { createClassId } from '$lib/types/ai-optimized';
+import type { ActionResult, ClassId, StudentId } from '$lib/types/ai-enforcement';
+import { createClassId, createStudentId } from '$lib/types/ai-enforcement';
 
 // Add a new class
 export async function addClass(name: string, userId?: string, additionalFields?: {
@@ -14,17 +15,26 @@ export async function addClass(name: string, userId?: string, additionalFields?:
 	subject?: string | null;
 	school_year?: string | null;
 	join_code?: string | null;
-}): Promise<void> {
+}): Promise<ActionResult<ClassId>> {
 	const trimmed = name.trim();
-	if (!trimmed) return;
+	if (!trimmed) {
+		return {
+			success: false,
+			error: 'Class name cannot be empty',
+			recoverable: true
+		};
+	}
 
 	try {
 		// Check if class already exists
 		const currentClasses = get(classes);
 		const existingClass = currentClasses.find(cls => cls.name === trimmed);
 		if (existingClass) {
-			console.warn(`Class "${trimmed}" already exists`);
-			return;
+			return {
+				success: false,
+				error: `Class "${trimmed}" already exists`,
+				recoverable: true
+			};
 		}
 
 		// Prepare class data
@@ -47,8 +57,9 @@ export async function addClass(name: string, userId?: string, additionalFields?:
 		if (!result) throw new Error('Failed to add class');
 
 		// Update local store
+		const classId = createClassId(result.id);
 		const newClass: Class = {
-			id: createClassId(result.id),
+			id: classId,
 			name: result.name,
 			studentIds: []
 		};
@@ -58,20 +69,33 @@ export async function addClass(name: string, userId?: string, additionalFields?:
 
 		// Save selected class ID
 		gradebookService.saveToStorage('selectedClassId', get(selectedClassId));
+
+		return {
+			success: true,
+			data: classId,
+			sideEffects: ['Updated classes store', 'Updated selectedClassId', 'Saved to localStorage']
+		};
 	} catch (err: unknown) {
+		const errorMessage = err instanceof Error ? err.message : 'Failed to add class';
 		console.error('Error adding class:', err);
-		error.set(err instanceof Error ? err.message : 'Failed to add class');
+		error.set(errorMessage);
+		
+		return {
+			success: false,
+			error: errorMessage,
+			recoverable: true
+		};
 	}
 }
 
 // Update a class
-export async function updateClass(classId: string, updates: {
+export async function updateClass(classId: ClassId, updates: {
 	name?: string;
 	grade_level?: string | null;
 	subject?: string | null;
 	school_year?: string | null;
 	join_code?: string | null;
-}): Promise<void> {
+}): Promise<ActionResult<void>> {
 	try {
 		// Prepare update data
 		const updateData: any = {};
@@ -95,9 +119,22 @@ export async function updateClass(classId: string, updates: {
 					: cls
 			)
 		);
+
+		return {
+			success: true,
+			data: undefined,
+			sideEffects: ['Updated classes store', 'Updated database']
+		};
 	} catch (err: unknown) {
+		const errorMessage = err instanceof Error ? err.message : 'Failed to update class';
 		console.error('Error updating class:', err);
-		error.set(err instanceof Error ? err.message : 'Failed to update class');
+		error.set(errorMessage);
+		
+		return {
+			success: false,
+			error: errorMessage,
+			recoverable: true
+		};
 	}
 }
 

@@ -19,17 +19,8 @@
 	);
 
 	$effect(() => {
-		const initializeData = async () => {
-			try {
-				await gradebookStore.ensureDataLoaded();
-				isLoading = false;
-			} catch (e: unknown) {
-				error = e instanceof Error ? e.message : 'An error occurred';
-				isLoading = false;
-			}
-		};
-
-		initializeData();
+		// Data is already loaded by AppLayout, just set loading to false
+		isLoading = false;
 	});
 
 	function handleClassSelect(classId: string | null) {

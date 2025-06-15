@@ -1,0 +1,986 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.svelte-kit/generated/client/app.js</file>
+  <line>60</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.svelte-kit/generated/client/app.js" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable init #loc</description>
+  <highlighted_element>init</highlighted_element>
+  <language>JavaScript</language>
+  <offset>20</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.svelte-kit/generated/root.svelte</file>
+  <line>15</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.svelte-kit/generated/root.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>&lt;html&gt;Unresolved function or method &lt;code&gt;&lt;span style=&quot;&quot;&gt;pre&lt;/span&gt;&lt;span style=&quot;&quot;&gt;()&lt;/span&gt;&lt;/code&gt; #loc&lt;/html&gt;</description>
+  <highlighted_element>pre</highlighted_element>
+  <language>JavaScript</language>
+  <offset>10</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte</file>
+  <line>119</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable classes #loc</description>
+  <highlighted_element>classes</highlighted_element>
+  <language>JavaScript</language>
+  <offset>29</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte</file>
+  <line>121</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable classes #loc</description>
+  <highlighted_element>classes</highlighted_element>
+  <language>JavaScript</language>
+  <offset>33</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte</file>
+  <line>277</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable user #loc</description>
+  <highlighted_element>user</highlighted_element>
+  <language>JavaScript</language>
+  <offset>40</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AssignmentCreationModal.svelte</file>
+  <line>241</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AssignmentCreationModal.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable classes #loc</description>
+  <highlighted_element>classes</highlighted_element>
+  <language>JavaScript</language>
+  <offset>25</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AssignmentCreationModal.svelte</file>
+  <line>350</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AssignmentCreationModal.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable classes #loc</description>
+  <highlighted_element>classes</highlighted_element>
+  <language>JavaScript</language>
+  <offset>30</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte</file>
+  <line>10</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable isLoading #loc</description>
+  <highlighted_element>isLoading</highlighted_element>
+  <language>JavaScript</language>
+  <offset>19</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte</file>
+  <line>13</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable animation #loc</description>
+  <highlighted_element>animation</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte</file>
+  <line>16</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable animation #loc</description>
+  <highlighted_element>animation</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte</file>
+  <line>27</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable animation #loc</description>
+  <highlighted_element>animation</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte</file>
+  <line>34</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable animation #loc</description>
+  <highlighted_element>animation</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte</file>
+  <line>41</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/GlobalLoader.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable animation #loc</description>
+  <highlighted_element>animation</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/classes/+page.svelte</file>
+  <line>59</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/classes/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable user #loc</description>
+  <highlighted_element>user</highlighted_element>
+  <language>JavaScript</language>
+  <offset>17</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/classes/+page.svelte</file>
+  <line>131</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/classes/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable classes #loc</description>
+  <highlighted_element>classes</highlighted_element>
+  <language>JavaScript</language>
+  <offset>25</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/classes/+page.svelte</file>
+  <line>133</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/classes/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable classes #loc</description>
+  <highlighted_element>classes</highlighted_element>
+  <language>JavaScript</language>
+  <offset>31</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/dashboard/+page.svelte</file>
+  <line>298</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/dashboard/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable assignments #loc</description>
+  <highlighted_element>assignments</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/dashboard/+page.svelte</file>
+  <line>317</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/dashboard/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>&lt;html&gt;Unresolved function or method &lt;code&gt;&lt;span style=&quot;&quot;&gt;reduce&lt;/span&gt;&lt;span style=&quot;&quot;&gt;()&lt;/span&gt;&lt;/code&gt; #loc&lt;/html&gt;</description>
+  <highlighted_element>reduce</highlighted_element>
+  <language>JavaScript</language>
+  <offset>26</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/dashboard/+page.svelte</file>
+  <line>317</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/dashboard/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="ERROR" attribute_key="WRONG_REFERENCES_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved type number #loc</description>
+  <highlighted_element>number</highlighted_element>
+  <language>JavaScript</language>
+  <offset>41</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/dashboard/+page.svelte</file>
+  <line>317</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/dashboard/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="ERROR" attribute_key="WRONG_REFERENCES_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved type unknown #loc</description>
+  <highlighted_element>unknown</highlighted_element>
+  <language>JavaScript</language>
+  <offset>55</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>375</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable isInitialized #loc</description>
+  <highlighted_element>isInitialized</highlighted_element>
+  <language>JavaScript</language>
+  <offset>17</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>375</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable user #loc</description>
+  <highlighted_element>user</highlighted_element>
+  <language>JavaScript</language>
+  <offset>46</offset>
+  <length>4</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>392</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable isLoading #loc</description>
+  <highlighted_element>isLoading</highlighted_element>
+  <language>JavaScript</language>
+  <offset>26</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>414</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable selectedClassId #loc</description>
+  <highlighted_element>selectedClassId</highlighted_element>
+  <language>JavaScript</language>
+  <offset>38</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>416</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable classes #loc</description>
+  <highlighted_element>classes</highlighted_element>
+  <language>JavaScript</language>
+  <offset>30</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>417</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable students #loc</description>
+  <highlighted_element>students</highlighted_element>
+  <language>JavaScript</language>
+  <offset>31</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>418</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable assignments #loc</description>
+  <highlighted_element>assignments</highlighted_element>
+  <language>JavaScript</language>
+  <offset>34</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>497</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable selectedClassId #loc</description>
+  <highlighted_element>selectedClassId</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte</file>
+  <line>69</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable numberOfWords #loc</description>
+  <highlighted_element>numberOfWords</highlighted_element>
+  <language>JavaScript</language>
+  <offset>59</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte</file>
+  <line>70</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable numberOfWords #loc</description>
+  <highlighted_element>numberOfWords</highlighted_element>
+  <language>JavaScript</language>
+  <offset>37</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte</file>
+  <line>75</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable numberOfWords #loc</description>
+  <highlighted_element>numberOfWords</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte</file>
+  <line>80</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable numberOfWords #loc</description>
+  <highlighted_element>numberOfWords</highlighted_element>
+  <language>JavaScript</language>
+  <offset>59</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte</file>
+  <line>81</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable numberOfWords #loc</description>
+  <highlighted_element>numberOfWords</highlighted_element>
+  <language>JavaScript</language>
+  <offset>37</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte</file>
+  <line>92</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable isKidFriendly #loc</description>
+  <highlighted_element>isKidFriendly</highlighted_element>
+  <language>JavaScript</language>
+  <offset>26</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte</file>
+  <line>137</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>21</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte</file>
+  <line>143</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/+page.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable currentLetter #loc</description>
+  <highlighted_element>currentLetter</highlighted_element>
+  <language>JavaScript</language>
+  <offset>23</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>9</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>23</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>9</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>65</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>9</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>106</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>11</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable currentCategories #loc</description>
+  <highlighted_element>currentCategories</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>17</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>21</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>20</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable categories #loc</description>
+  <highlighted_element>categories</highlighted_element>
+  <language>JavaScript</language>
+  <offset>23</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>27</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable categories #loc</description>
+  <highlighted_element>categories</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>62</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable numberOfWords #loc</description>
+  <highlighted_element>numberOfWords</highlighted_element>
+  <language>JavaScript</language>
+  <offset>21</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>69</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable currentCategories #loc</description>
+  <highlighted_element>currentCategories</highlighted_element>
+  <language>JavaScript</language>
+  <offset>25</offset>
+  <length>17</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>74</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>44</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>92</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>25</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>102</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>105</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable currentLetter #loc</description>
+  <highlighted_element>currentLetter</highlighted_element>
+  <language>JavaScript</language>
+  <offset>29</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte</file>
+  <line>109</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryList.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable currentLetter #loc</description>
+  <highlighted_element>currentLetter</highlighted_element>
+  <language>JavaScript</language>
+  <offset>23</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte</file>
+  <line>41</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable isKidFriendly #loc</description>
+  <highlighted_element>isKidFriendly</highlighted_element>
+  <language>JavaScript</language>
+  <offset>26</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte</file>
+  <line>71</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable categories #loc</description>
+  <highlighted_element>categories</highlighted_element>
+  <language>JavaScript</language>
+  <offset>20</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte</file>
+  <line>71</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable customCategories #loc</description>
+  <highlighted_element>customCategories</highlighted_element>
+  <language>JavaScript</language>
+  <offset>62</offset>
+  <length>16</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte</file>
+  <line>75</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable categories #loc</description>
+  <highlighted_element>categories</highlighted_element>
+  <language>JavaScript</language>
+  <offset>24</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte</file>
+  <line>81</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/CategoryManager.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable categories #loc</description>
+  <highlighted_element>categories</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>39</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>23</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>41</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>43</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>45</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>56</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>28</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>58</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>23</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>72</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>89</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>91</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>93</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>95</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte</file>
+  <line>100</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameControls.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable categories #loc</description>
+  <highlighted_element>categories</highlighted_element>
+  <language>JavaScript</language>
+  <offset>35</offset>
+  <length>10</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>31</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>66</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable timeRemaining #loc</description>
+  <highlighted_element>timeRemaining</highlighted_element>
+  <language>JavaScript</language>
+  <offset>35</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>67</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>20</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>70</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable timeRemaining #loc</description>
+  <highlighted_element>timeRemaining</highlighted_element>
+  <language>JavaScript</language>
+  <offset>41</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>71</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>21</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>77</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>23</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>77</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable timeRemaining #loc</description>
+  <highlighted_element>timeRemaining</highlighted_element>
+  <language>JavaScript</language>
+  <offset>65</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>86</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable gameState #loc</description>
+  <highlighted_element>gameState</highlighted_element>
+  <language>JavaScript</language>
+  <offset>21</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>91</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable timeRemaining #loc</description>
+  <highlighted_element>timeRemaining</highlighted_element>
+  <language>JavaScript</language>
+  <offset>36</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>91</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable timeLimit #loc</description>
+  <highlighted_element>timeLimit</highlighted_element>
+  <language>JavaScript</language>
+  <offset>67</offset>
+  <length>9</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte</file>
+  <line>92</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/GameTimer.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable timeRemaining #loc</description>
+  <highlighted_element>timeRemaining</highlighted_element>
+  <language>JavaScript</language>
+  <offset>47</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/LetterDisplay.svelte</file>
+  <line>15</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/LetterDisplay.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable currentLetter #loc</description>
+  <highlighted_element>currentLetter</highlighted_element>
+  <language>JavaScript</language>
+  <offset>23</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/LetterDisplay.svelte</file>
+  <line>22</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/LetterDisplay.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable currentLetter #loc</description>
+  <highlighted_element>currentLetter</highlighted_element>
+  <language>JavaScript</language>
+  <offset>52</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/LetterDisplay.svelte</file>
+  <line>30</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/LetterDisplay.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable currentLetter #loc</description>
+  <highlighted_element>currentLetter</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>13</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/scattergories/components/LetterDisplay.svelte</file>
+  <line>33</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/scattergories/components/LetterDisplay.svelte" />
+  <problem_class id="JSUnresolvedReference" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Unresolved reference</problem_class>
+  <description>Unresolved variable currentLetter #loc</description>
+  <highlighted_element>currentLetter</highlighted_element>
+  <language>JavaScript</language>
+  <offset>22</offset>
+  <length>13</length>
+</problem>
+</problems>

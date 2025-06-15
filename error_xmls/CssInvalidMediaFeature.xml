@@ -1,0 +1,14 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/src/app.css</file>
+  <line>15</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/app.css" />
+  <problem_class id="CssInvalidMediaFeature" severity="ERROR" attribute_key="ERRORS_ATTRIBUTES">Invalid media feature</problem_class>
+  <description>Mismatched value (no-preference | less | more | custom)</description>
+  <highlighted_element>high</highlighted_element>
+  <language>CSS</language>
+  <offset>27</offset>
+  <length>4</length>
+</problem>
+</problems>

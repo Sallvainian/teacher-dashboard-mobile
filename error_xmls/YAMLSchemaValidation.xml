@@ -1,0 +1,123 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/ci.yml</file>
+  <line>32</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/ci.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: One of the following property sets is required: property 'uses' or property 'run'</description>
+  <highlighted_element>name: Install dependencies</highlighted_element>
+  <language>yaml</language>
+  <offset>8</offset>
+  <length>26</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/ci.yml</file>
+  <line>34</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/ci.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: Property 'run' is not allowed</description>
+  <highlighted_element>run</highlighted_element>
+  <language>yaml</language>
+  <offset>8</offset>
+  <length>3</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/ci.yml</file>
+  <line>68</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/ci.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: Property 'build' is not allowed</description>
+  <highlighted_element>build</highlighted_element>
+  <language>yaml</language>
+  <offset>2</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/ci.yml</file>
+  <line>163</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/ci.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: Property 'analyze-bundle' is not allowed</description>
+  <highlighted_element>analyze-bundle</highlighted_element>
+  <language>yaml</language>
+  <offset>2</offset>
+  <length>14</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/claude.yml</file>
+  <line>17</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/claude.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: Incompatible types.
+ Required: object. Actual: null.</description>
+  <highlighted_element>:</highlighted_element>
+  <language>yaml</language>
+  <offset>4</offset>
+  <length>1</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/claude.yml</file>
+  <line>19</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/claude.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: Property 'claude' is not allowed</description>
+  <highlighted_element>claude</highlighted_element>
+  <language>yaml</language>
+  <offset>2</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/claude.yml</file>
+  <line>31</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/claude.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: Property 'claude-response' is not allowed</description>
+  <highlighted_element>claude-response</highlighted_element>
+  <language>yaml</language>
+  <offset>2</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/claude.yml</file>
+  <line>38</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/claude.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: Property 'id-token' is not allowed</description>
+  <highlighted_element>id-token</highlighted_element>
+  <language>yaml</language>
+  <offset>6</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/claude.yml</file>
+  <line>39</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/claude.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: Property 'steps' is not allowed</description>
+  <highlighted_element>steps</highlighted_element>
+  <language>yaml</language>
+  <offset>4</offset>
+  <length>5</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.github/workflows/claude.yml</file>
+  <line>44</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.github/workflows/claude.yml" />
+  <problem_class id="YAMLSchemaValidation" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Validation by JSON Schema</problem_class>
+  <description>Schema validation: Property 'fetch-depth' is not allowed</description>
+  <highlighted_element>fetch-depth</highlighted_element>
+  <language>yaml</language>
+  <offset>10</offset>
+  <length>11</length>
+</problem>
+</problems>

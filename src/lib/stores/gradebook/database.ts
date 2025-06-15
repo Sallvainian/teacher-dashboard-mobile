@@ -1,5 +1,9 @@
-// src/lib/stores/gradebook/database.ts
-// Database operations for gradebook
+/**
+ * @ai-context GRADEBOOK_DATABASE - Enhanced database operations with parallel loading
+ * @ai-dependencies enhanced database service, gradebook stores, model converters
+ * @ai-sideEffects Updates gradebook stores, modifies localStorage cache
+ * @ai-exports loadAllData, ensureDataLoaded functions with performance optimization
+ */
 
 import { get } from 'svelte/store';
 import { gradebookService } from '$lib/services/supabaseService';
@@ -20,26 +24,33 @@ import {
 	dataLoaded
 } from './core';
 
-// Load all data from Supabase or localStorage
+// Load all data from Supabase or localStorage with parallel optimization
 export async function loadAllData(): Promise<void> {
 	isLoading.set(true);
 	error.set(null);
 
 	try {
-		// Load students
-		const studentsData = await gradebookService.getItems('students');
+		// ====== PERFORMANCE OPTIMIZATION: PARALLEL LOADING ======
+		// Instead of 5 sequential database calls, execute all in parallel
+		console.log('🚀 Loading gradebook data in parallel...');
+		const startTime = performance.now();
 
-		// Load classes
-		const classesData = await gradebookService.getItems('classes');
+		const [
+			studentsData,
+			classesData,
+			classStudentsData,
+			assignmentsData,
+			gradesData
+		] = await Promise.all([
+			gradebookService.getItems('students'),
+			gradebookService.getItems('classes'),
+			gradebookService.getItems('class_students'),
+			gradebookService.getItems('assignments'),
+			gradebookService.getItems('grades')
+		]);
 
-		// Load class_students relations
-		const classStudentsData = await gradebookService.getItems('class_students');
-
-		// Load assignments with direct class relationships
-		const assignmentsData = await gradebookService.getItems('assignments');
-
-		// Load grades
-		const gradesData = await gradebookService.getItems('grades');
+		const loadTime = performance.now() - startTime;
+		console.log(`✅ Parallel loading completed in ${loadTime.toFixed(2)}ms`);
 
 		// Transform data to match our store format
 		const transformedStudents = studentsData.map(dbStudentToAppStudent);

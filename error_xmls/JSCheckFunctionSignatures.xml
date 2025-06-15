@@ -1,0 +1,14 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.svelte-kit/generated/root.js</file>
+  <line>3</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.svelte-kit/generated/root.js" />
+  <problem_class id="JSCheckFunctionSignatures" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Signature mismatch</problem_class>
+  <description>&lt;html&gt;Argument type &lt;code&gt;&lt;span style=&quot;&quot;&gt;{}&lt;/span&gt;&lt;/code&gt; is not assignable to parameter type &lt;pre&gt;&lt;code&gt;&lt;span style=&quot;&quot;&gt;SvelteComponent&lt;/span&gt;&lt;span style=&quot;&quot;&gt;&amp;lt;Record&amp;lt;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;string&lt;/span&gt;&lt;span style=&quot;&quot;&gt;,&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;any&lt;/span&gt;&lt;span style=&quot;&quot;&gt;&amp;gt;,&amp;#32;Record&amp;lt;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;string&lt;/span&gt;&lt;span style=&quot;&quot;&gt;,&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;any&lt;/span&gt;&lt;span style=&quot;&quot;&gt;&amp;gt;,&amp;#32;Record&amp;lt;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;string&lt;/span&gt;&lt;span style=&quot;&quot;&gt;,&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;any&lt;/span&gt;&lt;span style=&quot;&quot;&gt;&amp;gt;&amp;gt;&amp;#32;|&amp;#32;Component&amp;lt;Record&amp;lt;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;string&lt;/span&gt;&lt;span style=&quot;&quot;&gt;,&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;any&lt;/span&gt;&lt;span style=&quot;&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;br/&gt;&amp;nbsp;&amp;nbsp;Assigned type doesn't contain call signatures&lt;/html&gt;</description>
+  <highlighted_element>Root</highlighted_element>
+  <language>ECMAScript 6</language>
+  <offset>32</offset>
+  <length>4</length>
+</problem>
+</problems>

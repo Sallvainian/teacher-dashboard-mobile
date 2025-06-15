@@ -3,7 +3,7 @@
 	
 	interface Props {
 		isOpen: boolean;
-		editingClass: Class | null;
+		editingClass: Class | null | undefined;
 		className: string;
 		gradeLevel: string;
 		subject: string;

@@ -1,0 +1,38 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.svelte-kit/generated/server/internal.js</file>
+  <line>3</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.svelte-kit/generated/server/internal.js" />
+  <problem_class id="NpmUsedModulesInstalled" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Missing module dependency</problem_class>
+  <description>Module is not listed in package.json dependencies</description>
+  <highlighted_element>'__sveltekit/environment'</highlighted_element>
+  <language>JavaScript</language>
+  <offset>47</offset>
+  <length>25</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.svelte-kit/generated/server/internal.js</file>
+  <line>4</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.svelte-kit/generated/server/internal.js" />
+  <problem_class id="NpmUsedModulesInstalled" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Missing module dependency</problem_class>
+  <description>Module is not listed in package.json dependencies</description>
+  <highlighted_element>'__sveltekit/paths'</highlighted_element>
+  <language>JavaScript</language>
+  <offset>27</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.svelte-kit/generated/server/internal.js</file>
+  <line>5</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.svelte-kit/generated/server/internal.js" />
+  <problem_class id="NpmUsedModulesInstalled" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Missing module dependency</problem_class>
+  <description>Module is not listed in package.json dependencies</description>
+  <highlighted_element>'__sveltekit/server'</highlighted_element>
+  <language>JavaScript</language>
+  <offset>54</offset>
+  <length>20</length>
+</problem>
+</problems>

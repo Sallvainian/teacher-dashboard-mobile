@@ -1,0 +1,38 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.gitignore</file>
+  <line>39</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.gitignore" />
+  <problem_class id="IgnoreFileDuplicateEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Ignore file duplicates</problem_class>
+  <description>&lt;code&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream&lt;/code&gt; pattern is defined more than once #loc</description>
+  <highlighted_element>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream</highlighted_element>
+  <language>IgnoreLang</language>
+  <offset>0</offset>
+  <length>24</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.gitignore</file>
+  <line>40</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.gitignore" />
+  <problem_class id="IgnoreFileDuplicateEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Ignore file duplicates</problem_class>
+  <description>&lt;code&gt;=======&lt;/code&gt; pattern is defined more than once #loc</description>
+  <highlighted_element>=======</highlighted_element>
+  <language>IgnoreLang</language>
+  <offset>0</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/.gitignore</file>
+  <line>43</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.gitignore" />
+  <problem_class id="IgnoreFileDuplicateEntry" severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Ignore file duplicates</problem_class>
+  <description>&lt;code&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes&lt;/code&gt; pattern is defined more than once #loc</description>
+  <highlighted_element>&gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes</highlighted_element>
+  <language>IgnoreLang</language>
+  <offset>0</offset>
+  <length>23</length>
+</problem>
+</problems>

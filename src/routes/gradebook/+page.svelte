@@ -32,7 +32,7 @@
 	
 	import type { Assignment } from '$lib/types/gradebook';
 	import { isHTMLInputElement, getEventTargetValue } from '$lib/utils/domHelpers';
-	import type { UnknownError } from '$lib/types/ai-enforcement';
+	import type { UnknownError, StudentId, AssignmentId, ClassId } from '$lib/types/ai-enforcement';
 
 	// Core state variables
 	let newStudentName = $state('');
@@ -152,25 +152,26 @@
 	async function createNewClass(event?: Event) {
 		event?.preventDefault();
 		if (newClassName.trim()) {
-			try {
-				await gradebookStore.addClass(
-					newClassName.trim(), 
-					$authStore.user?.id,
-					{
-						grade_level: newClassGradeLevel.trim() || null,
-						subject: newClassSubject.trim() || null,
-						school_year: newClassSchoolYear.trim() || null,
-						join_code: newClassJoinCode.trim() || null
-					}
-				);
+			const result = await gradebookStore.addClass(
+				newClassName.trim(), 
+				$authStore.user?.id,
+				{
+					grade_level: newClassGradeLevel.trim() || null,
+					subject: newClassSubject.trim() || null,
+					school_year: newClassSchoolYear.trim() || null,
+					join_code: newClassJoinCode.trim() || null
+				}
+			);
+			
+			if (result.success) {
 				newClassName = '';
 				newClassGradeLevel = '';
 				newClassSubject = '';
 				newClassSchoolYear = '';
 				newClassJoinCode = '';
 				activeModal = null;
-			} catch (error: UnknownError) {
-				console.error('Failed to create class:', error);
+			} else {
+				console.error('Failed to create class:', result.error);
 			}
 		}
 	}
@@ -192,18 +193,18 @@
 		event?.preventDefault();
 		if (!editingClassId || !editClassName.trim()) return;
 		
-		try {
-			await gradebookStore.updateClass(editingClassId, {
-				name: editClassName.trim(),
-				grade_level: editClassGradeLevel.trim() || null,
-				subject: editClassSubject.trim() || null,
-				school_year: editClassSchoolYear.trim() || null,
-				join_code: editClassJoinCode.trim() || null
-			});
-			
+		const result = await gradebookStore.updateClass(editingClassId as ClassId, {
+			name: editClassName.trim(),
+			grade_level: editClassGradeLevel.trim() || null,
+			subject: editClassSubject.trim() || null,
+			school_year: editClassSchoolYear.trim() || null,
+			join_code: editClassJoinCode.trim() || null
+		});
+		
+		if (result.success) {
 			cancelEditClass();
-		} catch (error: UnknownError) {
-			console.error('Failed to update class:', error);
+		} else {
+			console.error('Failed to update class:', result.error);
 		}
 	}
 	
@@ -281,10 +282,9 @@
 		const points = parseFloat(value) || 0;
 		if (points < 0 || points > maxPoints) return;
 		
-		try {
-			await gradebookStore.recordGrade(studentId, assignmentId, points);
-		} catch (error: UnknownError) {
-			console.error('Failed to record grade:', error);
+		const result = await gradebookStore.recordGrade(studentId as StudentId, assignmentId as AssignmentId, points);
+		if (!result.success) {
+			console.error('Failed to record grade:', result.error);
 		}
 	}
 	
@@ -366,10 +366,8 @@
 		gradebookStore.exportToJSON();
 	}
 	
-	// Initialize store
-	$effect(() => {
-		gradebookStore.ensureDataLoaded();
-	});
+	// Data loading is handled by AppLayout.svelte globally
+	// No need to call ensureDataLoaded() here to avoid double-loading
 </script>
 
 {#if !$authStore.isInitialized || ($authStore.user && !hasPermission)}

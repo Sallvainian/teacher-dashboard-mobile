@@ -1,0 +1,158 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte</file>
+  <line>3</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>&lt;html&gt;Unused &lt;code&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;import&amp;#32;&lt;/span&gt;&lt;span style=&quot;&quot;&gt;{&amp;#32;page&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;as&amp;#32;&lt;/span&gt;&lt;span style=&quot;&quot;&gt;_page&amp;#32;}&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;from&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#6aab73;&quot;&gt;'$app/stores'&lt;/span&gt;&lt;span style=&quot;&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>import { page as _page } from '$app/stores';</highlighted_element>
+  <language>SvelteTS</language>
+  <offset>1</offset>
+  <length>44</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte</file>
+  <line>9</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/components/AppLayout/AppHeader.svelte" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>&lt;html&gt;Unused &lt;pre&gt;&lt;code&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;import&amp;#32;&lt;/span&gt;&lt;span style=&quot;&quot;&gt;type&amp;#32;{&amp;#32;User&amp;#32;}&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;from&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#6aab73;&quot;&gt;'@supabase/supabase-js'&lt;/span&gt;&lt;span style=&quot;&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/html&gt;</description>
+  <highlighted_element>import type { User } from '@supabase/supabase-js';</highlighted_element>
+  <language>SvelteTS</language>
+  <offset>1</offset>
+  <length>50</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts</file>
+  <line>7</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>Unused import specifier students</description>
+  <highlighted_element>students</highlighted_element>
+  <language>TypeScript</language>
+  <offset>1</offset>
+  <length>8</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts</file>
+  <line>8</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>Unused import specifier classes</description>
+  <highlighted_element>classes</highlighted_element>
+  <language>TypeScript</language>
+  <offset>1</offset>
+  <length>7</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts</file>
+  <line>9</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>Unused import specifier selectedClassId</description>
+  <highlighted_element>selectedClassId</highlighted_element>
+  <language>TypeScript</language>
+  <offset>1</offset>
+  <length>15</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts</file>
+  <line>10</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>Unused import specifier assignments</description>
+  <highlighted_element>assignments</highlighted_element>
+  <language>TypeScript</language>
+  <offset>1</offset>
+  <length>11</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts</file>
+  <line>11</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/stores/gradebook/utilityActions.ts" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>Unused import specifier grades</description>
+  <highlighted_element>grades</highlighted_element>
+  <language>TypeScript</language>
+  <offset>1</offset>
+  <length>6</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/lib/types/auth-types.d.ts</file>
+  <line>3</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/lib/types/auth-types.d.ts" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>&lt;html&gt;Unused &lt;pre&gt;&lt;code&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;import&amp;#32;&lt;/span&gt;&lt;span style=&quot;&quot;&gt;type&amp;#32;{&amp;#32;Readable&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;as&amp;#32;&lt;/span&gt;&lt;span style=&quot;&quot;&gt;_Readable&amp;#32;}&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;from&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#6aab73;&quot;&gt;'svelte/store'&lt;/span&gt;&lt;span style=&quot;&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/html&gt;</description>
+  <highlighted_element>import type { Readable as _Readable } from 'svelte/store';</highlighted_element>
+  <language>TypeScript</language>
+  <offset>0</offset>
+  <length>58</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/chat/+page.svelte</file>
+  <line>13</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/chat/+page.svelte" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>Unused import specifier getEventTargetValue</description>
+  <highlighted_element>getEventTargetValue</highlighted_element>
+  <language>SvelteTS</language>
+  <offset>45</offset>
+  <length>19</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>9</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>&lt;html&gt;Unused &lt;code&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;import&amp;#32;&lt;/span&gt;&lt;span style=&quot;&quot;&gt;{&amp;#32;fade&amp;#32;}&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;from&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#6aab73;&quot;&gt;'svelte/transition'&lt;/span&gt;&lt;span style=&quot;&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/html&gt;</description>
+  <highlighted_element>import { fade } from 'svelte/transition';</highlighted_element>
+  <language>SvelteTS</language>
+  <offset>1</offset>
+  <length>41</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>24</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>Unused import specifier calculateStudentAverage</description>
+  <highlighted_element>calculateStudentAverage</highlighted_element>
+  <language>SvelteTS</language>
+  <offset>2</offset>
+  <length>23</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>30</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>Unused import specifier type ColumnSummary</description>
+  <highlighted_element>type ColumnSummary</highlighted_element>
+  <language>SvelteTS</language>
+  <offset>2</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte</file>
+  <line>34</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/routes/gradebook/+page.svelte" />
+  <problem_class id="ES6UnusedImports" severity="WARNING" attribute_key="NOT_USED_ELEMENT_ATTRIBUTES">Unused import</problem_class>
+  <description>&lt;html&gt;Unused &lt;pre&gt;&lt;code&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;import&amp;#32;&lt;/span&gt;&lt;span style=&quot;&quot;&gt;{&amp;#32;isHTMLInputElement,&amp;#32;getEventTargetValue&amp;#32;}&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#cf8e6d;&quot;&gt;from&amp;#32;&lt;/span&gt;&lt;span style=&quot;color:#6aab73;&quot;&gt;'$lib/utils/domHelpers'&lt;/span&gt;&lt;span style=&quot;&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/html&gt;</description>
+  <highlighted_element>import { isHTMLInputElement, getEventTargetValue } from '$lib/utils/domHelpers';</highlighted_element>
+  <language>SvelteTS</language>
+  <offset>1</offset>
+  <length>80</length>
+</problem>
+</problems>

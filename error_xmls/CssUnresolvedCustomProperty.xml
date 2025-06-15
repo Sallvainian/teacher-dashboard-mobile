@@ -1,0 +1,26 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/src/app.css</file>
+  <line>576</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/app.css" />
+  <problem_class id="CssUnresolvedCustomProperty" severity="ERROR" attribute_key="ERRORS_ATTRIBUTES">Unresolved custom property</problem_class>
+  <description>Cannot resolve &lt;code&gt;--tw-gradient-from&lt;/code&gt; custom property #loc</description>
+  <highlighted_element>--tw-gradient-from</highlighted_element>
+  <language>CSS</language>
+  <offset>6</offset>
+  <length>18</length>
+</problem>
+<problem>
+  <file>file://$PROJECT_DIR$/src/app.css</file>
+  <line>577</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/src/app.css" />
+  <problem_class id="CssUnresolvedCustomProperty" severity="ERROR" attribute_key="ERRORS_ATTRIBUTES">Unresolved custom property</problem_class>
+  <description>Cannot resolve &lt;code&gt;--tw-gradient-to&lt;/code&gt; custom property #loc</description>
+  <highlighted_element>--tw-gradient-to</highlighted_element>
+  <language>CSS</language>
+  <offset>6</offset>
+  <length>16</length>
+</problem>
+</problems>

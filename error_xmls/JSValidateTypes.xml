@@ -1,0 +1,14 @@
+<problems>
+<problem>
+  <file>file://$PROJECT_DIR$/.svelte-kit/generated/client/app.js</file>
+  <line>69</line>
+  <module>Svelt Version</module>
+  <entry_point TYPE="file" FQNAME="file://$PROJECT_DIR$/.svelte-kit/generated/client/app.js" />
+  <problem_class id="JSValidateTypes" severity="WEAK WARNING" attribute_key="INFO_ATTRIBUTES">Type mismatch</problem_class>
+  <description>Method expression can be null or undefined</description>
+  <highlighted_element>decoders[type]</highlighted_element>
+  <language>ECMAScript 6</language>
+  <offset>39</offset>
+  <length>14</length>
+</problem>
+</problems>
