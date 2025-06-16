@@ -10,6 +10,7 @@
 	import { fileService } from '$lib/services/fileService';
 	import { chatStore } from '$lib/stores/chat';
 	import { authStore, isAuthenticated } from '$lib/stores/auth';
+	import { supabase } from '$lib/supabaseClient';
 	import type { UnknownError } from '$lib/types/ai-enforcement';
 	import type { ConversationWithDetails } from '$lib/types/chat';
 
@@ -136,10 +137,15 @@
 					if (conversations.length > 0) {
 						// Process each conversation to find recent messages from others
 						const conversationPromises = conversations.map(async (conv) => {
-							chatStore.setActiveConversation(conv.id);
-							await new Promise(resolve => setTimeout(resolve, 50));
+							// Load messages directly without setting active conversation
+							const { data: messagesData } = await supabase
+								.from('messages')
+								.select('*')
+								.eq('conversation_id', conv.id)
+								.order('created_at', { ascending: false })
+								.limit(10);
 							
-							const activeMessages = get(chatStore.activeMessages) || [];
+							const activeMessages = messagesData || [];
 							const filteredMessages = activeMessages
 								.filter(msg => msg.sender_id !== currentUserId)
 								.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -159,7 +165,6 @@
 						});
 						
 						const results = await Promise.all(conversationPromises);
-						chatStore.setActiveConversation(null);
 						
 						recentMessages = results
 							.filter((msg): msg is NonNullable<typeof msg> => msg !== null)

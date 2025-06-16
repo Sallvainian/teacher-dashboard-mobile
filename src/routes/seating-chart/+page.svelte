@@ -309,7 +309,7 @@
 
 	function getStudentInitials(student: any) {
 		if (!student || !student.name) return '?';
-		const parts = student.name.split(' ').filter(part => part.length > 0);
+		const parts = student.name.split(' ').filter((part: string) => part.length > 0);
 		if (parts.length >= 2 && parts[0] && parts[parts.length - 1]) {
 			return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 		}

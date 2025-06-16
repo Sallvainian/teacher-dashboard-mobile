@@ -3,9 +3,9 @@
 @layer reset, base, tokens, components, patterns, utilities, overrides;
 
 /* Import Tailwind base styles */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Cache bust - v4 - Modern CSS Features with Accessibility */
 

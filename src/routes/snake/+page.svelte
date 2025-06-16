@@ -34,7 +34,7 @@
 	let direction = $state({ x: 1, y: 0 });
 	let nextDirection = $state({ x: 1, y: 0 });
 
-	let gameInterval: number;
+	let gameInterval: NodeJS.Timeout;
 
 	onMount(() => {
 		if (canvas) {
@@ -172,7 +172,7 @@
 	}
 
 	function generateFood() {
-		let newFood;
+		let newFood: { x: number; y: number };
 		do {
 			newFood = {
 				x: Math.floor(Math.random() * (CANVAS_WIDTH / GRID_SIZE)),
@@ -297,6 +297,7 @@
 					onclick={() => goto('/dashboard')}
 					class="p-2 bg-card border border-border rounded-lg hover:bg-surface transition-colors"
 					title="Back to Dashboard"
+					aria-label="Back to Dashboard"
 				>
 					<svg class="w-5 h-5 text-text-base" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M19 12H5M12 19l-7-7 7-7"/>

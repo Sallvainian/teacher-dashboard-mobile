@@ -5,22 +5,11 @@ import Icons from 'unplugin-icons/vite';
 import compression from 'vite-plugin-compression';
 import { visualizer } from 'rollup-plugin-visualizer';
 
-export default defineConfig({
+export default defineConfig(({ command, mode }) => {
+	const dev = command === 'serve';
+	
+	return {
 	plugins: [
-		// Image Optimization - TEMPORARILY DISABLED for Netlify deployment
-		// TODO: Re-enable when Sharp linux-x64 platform issue is resolved
-		// imagetools({
-		// 	defaultDirectives: (url) => {
-		// 		if (url.searchParams.has('enhanced')) {
-		// 			return new URLSearchParams({
-		// 				format: 'avif;webp;jpg',
-		// 				quality: '80',
-		// 				as: 'picture'
-		// 			});
-		// 		}
-		// 		return new URLSearchParams();
-		// 	}
-		// }),
 
 		// Icon Management - Access thousands of icons as components
 		Icons({
@@ -115,17 +104,7 @@ export default defineConfig({
 
 	// CSS Processing optimizations
 	css: {
-		preprocessorOptions: {
-			scss: {
-				// Add SCSS optimizations if using SCSS
-			}
-		},
-		// Optimize CSS output for production
-		devSourcemap: dev,
-		// Enable CSS code splitting
-		postcss: {
-			plugins: []
-		}
+		devSourcemap: dev
 	},
 
 	// Test configuration for Vitest
@@ -142,4 +121,5 @@ export default defineConfig({
 			]
 		}
 	}
+	};
 });

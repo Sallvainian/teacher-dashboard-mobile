@@ -1,0 +1,3 @@
+name,entityType,observations
+"Teacher Dashboard Project",Project,"SvelteKit 5 application for educators; Uses Supabase for backend database; Has gradebook, chat, file management features; Recently upgraded @types/node to v24 and unplugin-icons to v22"
+Frank,Developer,"Working on teacher dashboard application; Uses npm package manager; Prefers conservative upgrade approach for dependencies"

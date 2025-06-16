@@ -35,7 +35,6 @@
 							placeholder="Enter student's full name"
 							class="input w-full"
 							required
-							autofocus
 						/>
 						<p class="text-xs text-muted mt-1">
 							The student will be added to the currently selected class.
