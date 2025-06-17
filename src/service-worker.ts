@@ -27,27 +27,9 @@ const API_ROUTES = [
 
 // Install event - cache core assets
 self.addEventListener('install', (event: ExtendableEvent) => {
-	event.waitUntil(
-		(async () => {
-			try {
-				const cache = await caches.open(STATIC_CACHE);
-				// Cache assets individually to avoid failing if one fails
-				await Promise.allSettled(
-					CORE_ASSETS.map(async (asset) => {
-						try {
-							await cache.add(asset);
-						} catch (error) {
-							console.warn(`Failed to cache ${asset}:`, error);
-						}
-					})
-				);
-				await self.skipWaiting();
-			} catch (error) {
-				console.error('Service worker install failed:', error);
-				await self.skipWaiting();
-			}
-		})()
-	);
+	console.log('Service worker installing - v1.1.0 - NO CACHING');
+	// Skip all caching to avoid errors - just take control immediately
+	event.waitUntil(self.skipWaiting());
 });
 
 // Activate event - clean up old caches
@@ -68,18 +50,11 @@ self.addEventListener('activate', (event: ExtendableEvent) => {
 	);
 });
 
-// Fetch event - implement caching strategies
+// Fetch event - DISABLED temporarily to fix caching errors
 self.addEventListener('fetch', (event: FetchEvent) => {
-	const { request } = event;
-	const url = new URL(request.url);
-	
-	// Skip non-HTTP requests
-	if (!url.protocol.startsWith('http')) return;
-	
-	// Skip Chrome extension requests
-	if (url.protocol === 'chrome-extension:') return;
-	
-	event.respondWith(handleRequest(request));
+	// Just pass through all requests without caching
+	// This prevents any cache-related errors
+	return;
 });
 
 async function handleRequest(request: Request): Promise<Response> {
