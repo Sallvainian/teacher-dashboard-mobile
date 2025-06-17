@@ -5,7 +5,7 @@
 	
 	// Get reactive settings from store
 	const { darkMode, useSupabase } = settingsStore;
-	const $theme = $derived($themeStore);
+	const theme = $derived($themeStore);
 	
 	let showThemeSettings = $state(false);
 </script>
@@ -26,23 +26,23 @@
 					<div>
 						<div class="font-medium text-text-hover">Current Theme</div>
 						<div class="text-sm text-text-base">
-							{$theme.mode === 'auto' ? 'Auto (follows system)' : $theme.mode === 'dark' ? 'Dark Mode' : 'Light Mode'} 
-							• {ACCENT_COLORS[$theme.accentColor].name}
+							{theme.mode === 'auto' ? 'Auto (follows system)' : theme.mode === 'dark' ? 'Dark Mode' : 'Light Mode'} 
+							• {ACCENT_COLORS[theme.accentColor].name}
 						</div>
 					</div>
 					<div class="flex items-center gap-3">
 						<!-- Accent color preview -->
 						<div 
 							class="w-8 h-8 rounded-full border-2 border-border"
-							style="background-color: {ACCENT_COLORS[$theme.accentColor].primary}"
-							title="{ACCENT_COLORS[$theme.accentColor].name} accent"
+							style="background-color: {ACCENT_COLORS[theme.accentColor].primary}"
+							title="{ACCENT_COLORS[theme.accentColor].name} accent"
 						></div>
 						
 						<!-- Theme mode icon -->
 						<div class="text-purple">
-							{#if $theme.mode === 'dark'}
+							{#if theme.mode === 'dark'}
 								🌙
-							{:else if $theme.mode === 'light'}
+							{:else if theme.mode === 'light'}
 								☀️
 							{:else}
 								⚡

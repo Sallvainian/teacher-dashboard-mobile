@@ -2,14 +2,14 @@
   import { themeStore, themeActions } from '$lib/stores/theme';
   import ThemeSettings from '$lib/components/ThemeSettings.svelte';
 
-  const $theme = $derived($themeStore);
+  const theme = $derived($themeStore);
   let showThemeSettings = $state(false);
 
   function quickToggle() {
     // Quick toggle between light/dark, open settings on third click
-    if ($theme.mode === 'light') {
+    if (theme.mode === 'light') {
       themeActions.setMode('dark');
-    } else if ($theme.mode === 'dark') {
+    } else if (theme.mode === 'dark') {
       themeActions.setMode('auto');
     } else {
       showThemeSettings = true;
@@ -28,11 +28,11 @@
     aria-label="Theme settings"
     title="Left click: cycle themes | Right click: settings"
   >
-    {#if $theme.mode === 'dark'}
+    {#if theme.mode === 'dark'}
       <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
       </svg>
-    {:else if $theme.mode === 'light'}
+    {:else if theme.mode === 'light'}
       <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="5"></circle>
         <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -56,7 +56,7 @@
   <div 
     class="absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-bg-base"
     style="background-color: var(--purple)"
-    title="Current accent: {$theme.accentColor}"
+    title="Current accent: {theme.accentColor}"
   ></div>
 </div>
 

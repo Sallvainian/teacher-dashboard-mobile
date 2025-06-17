@@ -10,7 +10,7 @@
 
 	let { open = $bindable(false) } = $props();
 
-	const $theme = $derived($themeStore);
+	const theme = $derived($themeStore);
 
 	const themeModes: { key: ThemeMode; label: string; icon: string }[] = [
 		{ key: 'light', label: 'Light', icon: '☀️' },
@@ -48,13 +48,13 @@
 							<button
 								onclick={() => themeActions.setMode(mode.key)}
 								class="p-3 text-sm font-medium rounded-lg border transition-all duration-200"
-								class:bg-purple={$theme.mode === mode.key}
-								class:text-white={$theme.mode === mode.key}
-								class:border-purple={$theme.mode === mode.key}
-								class:bg-surface={$theme.mode !== mode.key}
-								class:text-text-base={$theme.mode !== mode.key}
-								class:border-border={$theme.mode !== mode.key}
-								class:hover:bg-accent={$theme.mode !== mode.key}
+								class:bg-purple={theme.mode === mode.key}
+								class:text-white={theme.mode === mode.key}
+								class:border-purple={theme.mode === mode.key}
+								class:bg-surface={theme.mode !== mode.key}
+								class:text-text-base={theme.mode !== mode.key}
+								class:border-border={theme.mode !== mode.key}
+								class:hover:bg-accent={theme.mode !== mode.key}
 							>
 								<div class="flex flex-col items-center gap-1">
 									<span class="text-lg">{mode.icon}</span>
@@ -73,9 +73,9 @@
 							<button
 								onclick={() => themeActions.setAccentColor(key as AccentColorKey)}
 								class="relative group p-3 rounded-lg border-2 transition-all duration-200"
-								class:border-gray-300={$theme.accentColor !== key}
-								class:border-gray-600={$theme.accentColor !== key}
-								style="border-color: {$theme.accentColor === key ? color.primary : 'var(--border)'}"
+								class:border-gray-300={theme.accentColor !== key}
+								class:border-gray-600={theme.accentColor !== key}
+								style="border-color: {theme.accentColor === key ? color.primary : 'var(--border)'}"
 								title={color.name}
 							>
 								<!-- Color circle -->
@@ -88,7 +88,7 @@
 								<div class="text-xs text-center mt-2 text-text-base">{color.name}</div>
 								
 								<!-- Selected indicator -->
-								{#if $theme.accentColor === key}
+								{#if theme.accentColor === key}
 									<div class="absolute top-1 right-1 w-3 h-3 rounded-full bg-white shadow-sm flex items-center justify-center">
 						 				<svg class="w-2 h-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
 											<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
