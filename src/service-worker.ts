@@ -5,7 +5,6 @@
  * @ai-exports Self-installing service worker
  */
 
-import { dev } from '$app/environment';
 import { version } from '$lib/version';
 
 const CACHE_NAME = `teacher-dashboard-v${version}`;
@@ -31,8 +30,6 @@ const API_ROUTES = [
 
 // Install event - cache core assets
 self.addEventListener('install', (event: ExtendableEvent) => {
-	if (dev) return;
-	
 	event.waitUntil(
 		(async () => {
 			const cache = await caches.open(STATIC_CACHE);
@@ -44,8 +41,6 @@ self.addEventListener('install', (event: ExtendableEvent) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event: ExtendableEvent) => {
-	if (dev) return;
-	
 	event.waitUntil(
 		(async () => {
 			const cacheNames = await caches.keys();
@@ -64,8 +59,6 @@ self.addEventListener('activate', (event: ExtendableEvent) => {
 
 // Fetch event - implement caching strategies
 self.addEventListener('fetch', (event: FetchEvent) => {
-	if (dev) return;
-	
 	const { request } = event;
 	const url = new URL(request.url);
 	
