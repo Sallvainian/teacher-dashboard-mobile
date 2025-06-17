@@ -175,7 +175,6 @@ function setUserTyping(conversationId: string, userId: string, userName: string)
 			}
 		});
 	} else {
-		console.log('❌ TYPING: No typing channel available for broadcast');
 	}
 }
 
@@ -201,7 +200,6 @@ function setUserNotTyping(conversationId: string, userId: string): void {
 			}
 		});
 	} else {
-		console.log('❌ TYPING: No typing channel available for stop typing broadcast');
 	}
 }
 
@@ -354,8 +352,7 @@ async function loadConversations(): Promise<void> {
 					unread_count: unreadCount
 				};
 				
-				console.log('🔄 CONVERSATION: Processed conversation:', processedConversation);
-				
+					
 				return processedConversation;
 			})
 		);
@@ -371,7 +368,6 @@ async function loadConversations(): Promise<void> {
 
 async function loadMessages(conversationId: string): Promise<void> {
 	try {
-		console.log('📖 MESSAGES: Loading messages for conversation:', conversationId);
 		
 		const { data: messagesData, error: messagesError } = await supabase
 			.from('messages')
@@ -385,23 +381,58 @@ async function loadMessages(conversationId: string): Promise<void> {
 			.eq('conversation_id', conversationId)
 			.order('created_at', { ascending: true });
 
-		if (messagesError) throw messagesError;
+		if (messagesError) {
+			console.error('📖 MESSAGES: Database error:', messagesError);
+			throw messagesError;
+		}
 
-		console.log('📖 MESSAGES: Loaded', messagesData?.length || 0, 'messages');
+
+		// Debug sender information and enhance missing data
+		if (messagesData && messagesData.length > 0) {
+			// Find messages with missing sender data
+			const messagesWithMissingSender = messagesData.filter(msg => 
+				msg.sender_id && (!msg.sender || (!msg.sender.full_name && !msg.sender.email))
+			);
+			
+			if (messagesWithMissingSender.length > 0) {
+				console.warn('📖 MESSAGES: Found messages with missing sender data, fetching manually:', 
+					messagesWithMissingSender.map(m => ({ id: m.id, sender_id: m.sender_id }))
+				);
+				
+				// Fetch missing user data manually
+				const missingUserIds = [...new Set(messagesWithMissingSender.map(m => m.sender_id))];
+				const { data: missingUsers } = await supabase
+					.from('app_users')
+					.select('id, full_name, email, avatar_url')
+					.in('id', missingUserIds);
+				
+				if (missingUsers) {
+					// Patch the missing sender data
+					messagesData.forEach(msg => {
+						if (msg.sender_id && (!msg.sender || (!msg.sender.full_name && !msg.sender.email))) {
+							const userData = missingUsers.find(u => u.id === msg.sender_id);
+							if (userData) {
+								msg.sender = userData;
+							}
+						}
+					});
+				}
+			}
+			
+		}
 
 		messages.update((current) => {
 			const updated = {
 				...current,
 				[conversationId]: messagesData ?? []
 			};
-			console.log('📖 MESSAGES: Updated messages store for conversation');
-			return updated;
+				return updated;
 		});
 
 		// Mark messages as read
 		await markConversationAsRead(conversationId);
 	} catch (err: UnknownError) {
-		console.error('Error loading messages:', err);
+		console.error('📖 MESSAGES: Error loading messages:', err);
 		error.set(err instanceof Error ? err.message : 'Failed to load messages');
 	}
 }
@@ -411,8 +442,7 @@ async function sendMessage(conversationId: string, content: string): Promise<voi
 		const user = getUser(get(authStore));
 		if (!user) throw new Error('User not authenticated');
 
-		console.log('📤 SEND: Sending message to conversation:', conversationId);
-
+	
 		const { data: message, error: messageError } = await supabase
 			.from('messages')
 			.insert({
@@ -431,7 +461,6 @@ async function sendMessage(conversationId: string, content: string): Promise<voi
 
 		if (messageError) throw messageError;
 
-		console.log('📤 SEND: Message sent successfully:', message.id);
 
 		// Add message to local state
 		messages.update((current) => {
@@ -439,8 +468,7 @@ async function sendMessage(conversationId: string, content: string): Promise<voi
 				...current,
 				[conversationId]: [...(current[conversationId] ?? []), message]
 			};
-			console.log('📤 SEND: Updated local messages store, new count:', updated[conversationId].length);
-			return updated;
+				return updated;
 		});
 
 		// Update conversation's last message and move to top
@@ -606,7 +634,6 @@ function setupRealtimeSubscriptions(): void {
 	const user = getUser(get(authStore));
 	if (!user || subscriptionsActive || setupInProgress) return;
 
-	console.log('🔌 CHAT: Setting up realtime subscriptions');
 
 	// Prevent multiple simultaneous setup calls
 	setupInProgress = true;
@@ -625,7 +652,6 @@ function setupRealtimeSubscriptions(): void {
 				table: 'conversations'
 			},
 			(payload) => {
-				console.log('🔄 REALTIME: Conversations table change:', payload.eventType, payload);
 				// Only reload conversations if it's a conversation creation/deletion, not updates
 				if (payload.eventType === 'INSERT' || payload.eventType === 'DELETE') {
 					loadConversations();
@@ -656,9 +682,7 @@ function setupRealtimeSubscriptions(): void {
 					.eq('user_id', user.id)
 					.single();
 
-				console.log('🔍 REALTIME: User participation check:', participation, 'Error:', participationError);
 				if (!participation) {
-					console.log('❌ REALTIME: User not participant in this conversation, IGNORING MESSAGE');
 					return;
 				}
 
@@ -669,14 +693,24 @@ function setupRealtimeSubscriptions(): void {
 					.eq('id', newMessage.id)
 					.single();
 
-				console.log('📥 REALTIME: Loaded full message:', fullMessage, 'Error:', messageError);
 
 				if (fullMessage) {
-					console.log('✅ REALTIME: Processing message - sender:', fullMessage.sender?.full_name || 'Unknown', 'content:', fullMessage.content.substring(0, 50));
+					// Check if sender data is missing and fetch manually if needed
+					if (fullMessage.sender_id && (!fullMessage.sender || (!fullMessage.sender.full_name && !fullMessage.sender.email))) {
+						const { data: senderData } = await supabase
+							.from('app_users')
+							.select('id, full_name, email, avatar_url')
+							.eq('id', fullMessage.sender_id)
+							.single();
+						
+						if (senderData) {
+							fullMessage.sender = senderData;
+						}
+					}
+					
 					
 					// Create notification for new messages from other users
 					if (fullMessage.sender_id !== user.id) {
-						console.log('🔔 REALTIME: Creating notification for message from other user');
 						const senderName = fullMessage.sender?.full_name ?? fullMessage.sender?.email ?? 'Someone';
 						
 						addPrivateMessageNotification(
@@ -699,36 +733,29 @@ function setupRealtimeSubscriptions(): void {
 							5000
 						);
 					} else {
-						console.log('📝 REALTIME: Message from current user, no notification needed');
 					}
 					
 					// Add to messages if we have this conversation loaded
 					messages.update((current) => {
-						console.log('💾 REALTIME: Current messages state before update:', Object.keys(current));
-						console.log('💾 REALTIME: Looking for conversation:', fullMessage.conversation_id);
 						
 						if (current[fullMessage.conversation_id]) {
 							const existingMessages = current[fullMessage.conversation_id];
 							const isDuplicate = existingMessages.some(msg => msg.id === fullMessage.id);
 							
-							console.log('🔄 REALTIME: Adding message to conversation, existingCount:', existingMessages.length, 'isDuplicate:', isDuplicate);
 							
 							if (!isDuplicate) {
 								const updated = {
 									...current,
 									[fullMessage.conversation_id]: [...current[fullMessage.conversation_id], fullMessage]
 								};
-								console.log('✅ REALTIME: Updated messages state - new count:', updated[fullMessage.conversation_id].length);
 								return updated;
 							}
 						} else {
-							console.log('⚠️ REALTIME: Conversation not loaded in messages store, creating new array');
 							// Create the conversation in messages store if it doesn't exist
 							const updated = {
 								...current,
 								[fullMessage.conversation_id]: [fullMessage]
 							};
-							console.log('✅ REALTIME: Created new conversation in messages store');
 							return updated;
 						}
 						return current;
@@ -845,7 +872,6 @@ function initializeAuthSubscription() {
 		
 		// For logging purposes, only log meaningful changes
 		if (shouldProcess) {
-			console.log('🔌 CHAT: Auth change, setting up subscriptions');
 		}
 		
 		// Update our tracking state
@@ -883,7 +909,6 @@ function initializeAuthSubscription() {
 			}
 		} else if (isInitialSubscription && typedAuth.user && typedAuth.isInitialized && !subscriptionsActive) {
 			// Handle the case where auth is already ready on first subscription
-			console.log('🔌 CHAT: Initial auth ready, setting up subscriptions');
 			cleanupRealtimeSubscriptions();
 			await loadConversations();
 			setupRealtimeSubscriptions();

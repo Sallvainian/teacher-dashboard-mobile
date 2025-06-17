@@ -13,6 +13,7 @@
 
 	// Get children prop for Svelte 5
 	let { children } = $props();
+	
 </script>
 
 <AppLayout>

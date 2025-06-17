@@ -65,7 +65,7 @@
 				id: conv.id,
 				name: conv.name ?? getConversationDisplayName(conv as ConversationWithDetails),
 				displayName: getConversationDisplayName(conv as ConversationWithDetails),
-				avatar: conv.avatar,
+				avatar: conv.avatar ?? getConversationInitials(conv as ConversationWithDetails, user.id),
 				displayAvatar: getConversationAvatarUrl(conv as ConversationWithDetails, user.id),
 				is_group: conv.is_group ?? false,
 				last_message_text: getLastMessageText(conv as ConversationWithDetails),
@@ -103,11 +103,23 @@
 			messages = msgs.map((msg, index) => {
 				// Better fallback for sender name
 				let senderName = 'Unknown User';
-				if (msg.sender) {
+				
+				if (msg.sender && (msg.sender.full_name || msg.sender.email)) {
 					senderName = msg.sender.full_name || msg.sender.email || 'Unknown User';
 				} else if (msg.sender_id === user.id) {
 					// If it's the current user but sender is missing
 					senderName = user.full_name || user.email || 'You';
+				} else {
+					// Enhanced fallback: try to find sender in conversation participants
+					// Try to get sender name from conversations data
+					const currentConv = conversations.find(c => c.id === activeConversation?.id);
+					if (currentConv && msg.sender_id) {
+						// Use the sender_id to create a more informative fallback name
+						senderName = `User ${msg.sender_id.slice(0, 8)}`;
+					} else {
+						// Final fallback
+						senderName = 'Unknown User';
+					}
 				}
 				
 				return {
@@ -153,32 +165,27 @@
 			return 'Group Chat';
 		}
 
-		// For direct messages, show the other participant's name
+		// For direct messages, use last_message sender info if available
+		if (conversation.last_message?.sender && conversation.last_message.sender_id !== getUser($authStore)?.id) {
+			return conversation.last_message.sender.full_name || conversation.last_message.sender.email || 'Unknown User';
+		}
+
+		// Otherwise check participants
 		const user = getUser($authStore);
-		
 		const otherParticipant = conversation.participants?.find(
 			(p: ConversationParticipant) => p.user_id !== user?.id
 		);
 
-		// Check multiple places for user data
-		if (otherParticipant) {
-			// First check if user data is directly on the participant
-			if (otherParticipant.user) {
-				const fullName = otherParticipant.user.full_name?.trim();
-				const email = otherParticipant.user.email?.trim();
-				
-				if (fullName && fullName.length > 0) {
-					return fullName;
-				}
-				if (email && email.length > 0) {
-					return email;
-				}
-			}
-			// If no user data, try to use participant user_id as fallback
-			return `User ${otherParticipant.user_id}`;
+		if (otherParticipant?.user) {
+			return otherParticipant.user.full_name || otherParticipant.user.email || 'Unknown User';
 		}
 
 		return 'Unknown User';
+	}
+
+	function getConversationInitials(conversation: ConversationWithDetails, currentUserId: string): string {
+		const displayName = getConversationDisplayName(conversation);
+		return chatStore.getInitials(displayName);
 	}
 
 	// Reactive statement to update active conversation when route changes
@@ -277,17 +284,21 @@
 
 	function getConversationAvatarUrl(conv: ConversationWithDetails, currentUserId: string): string | null {
 		if (conv.is_group) {
-			return conv.avatar ?? null; // Group conversations can have their own avatar, ensure null is returned if undefined
+			return conv.avatar ?? null;
 		}
 
-		const otherParticipant = conv.participants?.find((p: ConversationParticipant) => p.user_id !== currentUserId);
+		// Use last_message sender avatar if available
+		if (conv.last_message?.sender && conv.last_message.sender_id !== currentUserId) {
+			return conv.last_message.sender.avatar_url || null;
+		}
 
-		// Return the other participant's avatar URL if available
-		if (otherParticipant && otherParticipant.user?.avatar_url) {
+		// Otherwise check participants
+		const otherParticipant = conv.participants?.find((p: ConversationParticipant) => p.user_id !== currentUserId);
+		if (otherParticipant?.user?.avatar_url) {
 			return otherParticipant.user.avatar_url;
 		}
 
-		return null; // No avatar URL available
+		return null;
 	}
 
  function getLastMessageText(conv: ConversationWithDetails): string {
@@ -921,7 +932,9 @@
 										class={`${message.is_own_message ? 'bg-purple text-highlight' : 'bg-surface text-text-hover'} rounded-lg px-4 py-2 shadow-sm`}
 									>
 										{#if !message.is_own_message}
-											<div class="text-xs font-medium text-purple mb-1">{message.sender_name}</div>
+											<div class="text-xs font-medium text-purple mb-1">
+												{message.sender_name}
+											</div>
 										{/if}
 						{#if message.content.startsWith('[GIF]')}
 							<button

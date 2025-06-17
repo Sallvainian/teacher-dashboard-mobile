@@ -1,3 +1,8 @@
+# @ai-context CI_WORKFLOW - Continuous Integration pipeline for code quality
+# @ai-dependencies GitHub Actions, Node.js, npm, Vite, TypeScript, ESLint, Svelte
+# @ai-sideEffects Runs tests, linting, type checking, and builds on pull requests
+# @ai-exports CI workflow status, test results, build artifacts, bundle analysis
+
 name: Continuous Integration
 
 on:
@@ -30,11 +35,7 @@ jobs:
             ${{ runner.os }}-node-
             
       - name: Install dependencies
-<<<<<<< Updated upstream
-        run: npm install
-=======
         run: npm ci
->>>>>>> Stashed changes
         
       - name: Run ESLint
         run: npm run lint
@@ -87,11 +88,7 @@ jobs:
             ${{ runner.os }}-node-
             
       - name: Install dependencies
-<<<<<<< Updated upstream
-        run: npm install
-=======
         run: npm ci
->>>>>>> Stashed changes
         
       - name: Validate TypeScript config files
         run: |
@@ -183,11 +180,7 @@ jobs:
             ${{ runner.os }}-node-
             
       - name: Install dependencies
-<<<<<<< Updated upstream
-        run: npm install
-=======
         run: npm ci
->>>>>>> Stashed changes
         
       - name: Analyze bundle
         run: |

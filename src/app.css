@@ -1,3 +1,10 @@
+/**
+ * @ai-context GLOBAL_STYLES - Application-wide CSS styles and themes
+ * @ai-dependencies Tailwind CSS, CSS Custom Properties
+ * @ai-sideEffects Applies global styles, theme variables, and accessibility features
+ * @ai-exports CSS layers, custom properties, component styles
+ */
+
 /* ===== ENHANCED CASCADE LAYERS ===== */
 /* Define layer order for predictable specificity */
 @layer reset, base, tokens, components, patterns, utilities, overrides;

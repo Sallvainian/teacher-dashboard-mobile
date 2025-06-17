@@ -6,6 +6,7 @@
  */
 
 import netlifyContext from '../data/netlify-coding-context.json';
+import type { ActionResult, AIFunction } from '../types/ai-enforcement';
 
 export interface NetlifyRule {
 	rule: string;
@@ -30,23 +31,47 @@ export interface NetlifyContextResult {
 
 /**
  * Search Netlify coding context by query
+ * @ai-flow INPUT: query -> TOKENIZE -> SEARCH_SECTIONS -> SORT_BY_RELEVANCE -> OUTPUT: results
+ * @ai-sideEffects None - read-only operation
  */
-export function searchNetlifyContext(query: string): NetlifyContextResult[] {
-	const results: NetlifyContextResult[] = [];
-	const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 2);
-	
-	if (searchTerms.length === 0) return results;
+export const searchNetlifyContext: AIFunction<[string], NetlifyContextResult[]> = 
+	async (query: string): Promise<ActionResult<NetlifyContextResult[]>> => {
+		try {
+			const results: NetlifyContextResult[] = [];
+			const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 2);
+			
+			if (searchTerms.length === 0) {
+				return { 
+					success: true, 
+					data: [], 
+					sideEffects: [] 
+				};
+			}
 
-	// Search through all sections
-	Object.entries(netlifyContext).forEach(([sectionKey, sectionData]) => {
-		if (sectionKey === 'metadata') return; // Skip metadata
-		
-		searchSection(sectionKey, sectionData, searchTerms, results);
-	});
+			// Search through all sections
+			Object.entries(netlifyContext).forEach(([sectionKey, sectionData]) => {
+				if (sectionKey === 'metadata') return; // Skip metadata
+				
+				searchSection(sectionKey, sectionData, searchTerms, results);
+			});
 
-	// Sort by relevance score
-	return results.sort((a, b) => b.relevanceScore - a.relevanceScore);
-}
+			// Sort by relevance score
+			const sortedResults = results.sort((a, b) => b.relevanceScore - a.relevanceScore);
+			
+			return {
+				success: true,
+				data: sortedResults,
+				sideEffects: []
+			};
+		} catch (error: any) {
+			return {
+				success: false,
+				error: 'Failed to search Netlify context',
+				details: error?.message || 'Unknown error',
+				recoverable: true
+			};
+		}
+	};
 
 /**
  * Recursively search through section data
@@ -203,74 +228,140 @@ function getContext(content: any): string {
 
 /**
  * Search by function type
+ * @ai-flow INPUT: type -> MAP_TO_SECTION -> FETCH_DATA -> OUTPUT: results
+ * @ai-sideEffects None - read-only operation
  */
-export function searchByFunctionType(type: 'serverless' | 'edge' | 'background' | 'scheduled'): NetlifyContextResult[] {
-	const typeMap = {
-		'serverless': 'serverless_functions',
-		'edge': 'edge_functions', 
-		'background': 'background_functions',
-		'scheduled': 'scheduled_functions'
+export const searchByFunctionType: AIFunction<['serverless' | 'edge' | 'background' | 'scheduled'], NetlifyContextResult[]> =
+	async (type: 'serverless' | 'edge' | 'background' | 'scheduled'): Promise<ActionResult<NetlifyContextResult[]>> => {
+		try {
+			const typeMap = {
+				'serverless': 'serverless_functions',
+				'edge': 'edge_functions', 
+				'background': 'background_functions',
+				'scheduled': 'scheduled_functions'
+			};
+			
+			const sectionKey = typeMap[type];
+			const sectionData = netlifyContext[sectionKey as keyof typeof netlifyContext];
+			
+			if (!sectionData) {
+				return {
+					success: true,
+					data: [],
+					sideEffects: []
+				};
+			}
+			
+			return {
+				success: true,
+				data: [{
+					section: sectionKey,
+					content: sectionData,
+					relevanceScore: 10,
+					matchType: 'title'
+				}],
+				sideEffects: []
+			};
+		} catch (error: any) {
+			return {
+				success: false,
+				error: 'Failed to search by function type',
+				details: error?.message || 'Unknown error',
+				recoverable: true
+			};
+		}
 	};
-	
-	const sectionKey = typeMap[type];
-	const sectionData = netlifyContext[sectionKey as keyof typeof netlifyContext];
-	
-	if (!sectionData) return [];
-	
-	return [{
-		section: sectionKey,
-		content: sectionData,
-		relevanceScore: 10,
-		matchType: 'title'
-	}];
-}
 
 /**
  * Search by capability
+ * @ai-flow INPUT: capability -> MAP_TO_SECTION -> FETCH_DATA -> OUTPUT: results
+ * @ai-sideEffects None - read-only operation
  */
-export function searchByCapability(capability: string): NetlifyContextResult[] {
-	const capabilityMap: Record<string, string> = {
-		'blobs': 'netlify_blobs',
-		'storage': 'netlify_blobs',
-		'images': 'image_cdn',
-		'cdn': 'image_cdn',
-		'environment': 'environment_variables',
-		'env': 'environment_variables',
-		'forms': 'netlify_forms',
-		'database': 'netlify_db',
-		'db': 'netlify_db',
-		'neon': 'netlify_db'
+export const searchByCapability: AIFunction<[string], NetlifyContextResult[]> =
+	async (capability: string): Promise<ActionResult<NetlifyContextResult[]>> => {
+		try {
+			const capabilityMap: Record<string, string> = {
+				'blobs': 'netlify_blobs',
+				'storage': 'netlify_blobs',
+				'images': 'image_cdn',
+				'cdn': 'image_cdn',
+				'environment': 'environment_variables',
+				'env': 'environment_variables',
+				'forms': 'netlify_forms',
+				'database': 'netlify_db',
+				'db': 'netlify_db',
+				'neon': 'netlify_db'
+			};
+			
+			const sectionKey = capabilityMap[capability.toLowerCase()];
+			if (!sectionKey) {
+				return {
+					success: true,
+					data: [],
+					sideEffects: []
+				};
+			}
+			
+			const sectionData = netlifyContext[sectionKey as keyof typeof netlifyContext];
+			if (!sectionData) {
+				return {
+					success: true,
+					data: [],
+					sideEffects: []
+				};
+			}
+			
+			return {
+				success: true,
+				data: [{
+					section: sectionKey,
+					content: sectionData,
+					relevanceScore: 10,
+					matchType: 'title'
+				}],
+				sideEffects: []
+			};
+		} catch (error: any) {
+			return {
+				success: false,
+				error: 'Failed to search by capability',
+				details: error?.message || 'Unknown error',
+				recoverable: true
+			};
+		}
 	};
-	
-	const sectionKey = capabilityMap[capability.toLowerCase()];
-	if (!sectionKey) return [];
-	
-	const sectionData = netlifyContext[sectionKey as keyof typeof netlifyContext];
-	if (!sectionData) return [];
-	
-	return [{
-		section: sectionKey,
-		content: sectionData,
-		relevanceScore: 10,
-		matchType: 'title'
-	}];
-}
 
 /**
  * Get examples by type
+ * @ai-flow INPUT: type -> SEARCH_SECTIONS -> COLLECT_EXAMPLES -> OUTPUT: examples
+ * @ai-sideEffects None - read-only operation
  */
-export function getExamplesByType(type: 'typescript' | 'javascript' | 'toml' | 'bash'): NetlifyExample[] {
-	const examples: NetlifyExample[] = [];
-	
-	// Search through all sections for examples
-	Object.values(netlifyContext).forEach(section => {
-		if (typeof section === 'object' && section !== null) {
-			findExamples(section, type, examples);
+export const getExamplesByType: AIFunction<['typescript' | 'javascript' | 'toml' | 'bash'], NetlifyExample[]> =
+	async (type: 'typescript' | 'javascript' | 'toml' | 'bash'): Promise<ActionResult<NetlifyExample[]>> => {
+		try {
+			const examples: NetlifyExample[] = [];
+			
+			// Search through all sections for examples
+			Object.values(netlifyContext).forEach(section => {
+				if (typeof section === 'object' && section !== null) {
+					findExamples(section, type, examples);
+				}
+			});
+			
+			return {
+				success: true,
+				data: examples,
+				sideEffects: []
+			};
+		} catch (error: any) {
+			return {
+				success: false,
+				error: 'Failed to get examples by type',
+				details: error?.message || 'Unknown error',
+				recoverable: true
+			};
 		}
-	});
-	
-	return examples;
-}
+	};
 
 /**
  * Recursively find examples of specific type
@@ -312,84 +403,146 @@ function findExamples(obj: any, type: string, examples: NetlifyExample[]): void 
 
 /**
  * Get all rules by importance
+ * @ai-flow INPUT: importance -> FILTER_RULES -> SORT_BY_IMPORTANCE -> OUTPUT: rules
+ * @ai-sideEffects None - read-only operation
  */
-export function getRulesByImportance(importance?: 'critical' | 'high' | 'medium' | 'low'): NetlifyRule[] {
-	const rules: NetlifyRule[] = [];
-	
-	// Extract rules from general_rules section
-	const generalRules = netlifyContext.general_rules;
-	if (generalRules && generalRules.rules) {
-		generalRules.rules.forEach((rule: any) => {
-			if (!importance || rule.importance === importance) {
-				rules.push(rule);
+export const getRulesByImportance: AIFunction<[('critical' | 'high' | 'medium' | 'low' | undefined)], NetlifyRule[]> =
+	async (importance?: 'critical' | 'high' | 'medium' | 'low'): Promise<ActionResult<NetlifyRule[]>> => {
+		try {
+			const rules: NetlifyRule[] = [];
+			
+			// Extract rules from general_rules section
+			const generalRules = netlifyContext.general_rules;
+			if (generalRules && generalRules.rules) {
+				generalRules.rules.forEach((rule: any) => {
+					if (!importance || rule.importance === importance) {
+						rules.push(rule);
+					}
+				});
 			}
-		});
-	}
-	
-	return rules.sort((a, b) => {
-		const importanceOrder = { critical: 4, high: 3, medium: 2, low: 1 };
-		return importanceOrder[b.importance] - importanceOrder[a.importance];
-	});
-}
+			
+			const sortedRules = rules.sort((a, b) => {
+				const importanceOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+				return importanceOrder[b.importance] - importanceOrder[a.importance];
+			});
+			
+			return {
+				success: true,
+				data: sortedRules,
+				sideEffects: []
+			};
+		} catch (error: any) {
+			return {
+				success: false,
+				error: 'Failed to get rules by importance',
+				details: error?.message || 'Unknown error',
+				recoverable: true
+			};
+		}
+	};
 
 /**
  * Get quick reference for specific topic
+ * @ai-flow INPUT: topic -> MAP_TO_SECTION -> FETCH_DATA -> OUTPUT: reference
+ * @ai-sideEffects None - read-only operation
  */
-export function getQuickReference(topic: string): NetlifyContextResult | null {
-	const topicMap: Record<string, string> = {
-		'functions': 'serverless_functions',
-		'edge': 'edge_functions',
-		'blobs': 'netlify_blobs',
-		'images': 'image_cdn',
-		'env': 'environment_variables',
-		'forms': 'netlify_forms',
-		'db': 'netlify_db',
-		'database': 'netlify_db'
+export const getQuickReference: AIFunction<[string], NetlifyContextResult | null> =
+	async (topic: string): Promise<ActionResult<NetlifyContextResult | null>> => {
+		try {
+			const topicMap: Record<string, string> = {
+				'functions': 'serverless_functions',
+				'edge': 'edge_functions',
+				'blobs': 'netlify_blobs',
+				'images': 'image_cdn',
+				'env': 'environment_variables',
+				'forms': 'netlify_forms',
+				'db': 'netlify_db',
+				'database': 'netlify_db'
+			};
+			
+			const sectionKey = topicMap[topic.toLowerCase()];
+			if (!sectionKey) {
+				return {
+					success: true,
+					data: null,
+					sideEffects: []
+				};
+			}
+			
+			const sectionData = netlifyContext[sectionKey as keyof typeof netlifyContext];
+			if (!sectionData) {
+				return {
+					success: true,
+					data: null,
+					sideEffects: []
+				};
+			}
+			
+			return {
+				success: true,
+				data: {
+					section: sectionKey,
+					content: sectionData,
+					relevanceScore: 10,
+					matchType: 'title'
+				},
+				sideEffects: []
+			};
+		} catch (error: any) {
+			return {
+				success: false,
+				error: 'Failed to get quick reference',
+				details: error?.message || 'Unknown error',
+				recoverable: true
+			};
+		}
 	};
-	
-	const sectionKey = topicMap[topic.toLowerCase()];
-	if (!sectionKey) return null;
-	
-	const sectionData = netlifyContext[sectionKey as keyof typeof netlifyContext];
-	if (!sectionData) return null;
-	
-	return {
-		section: sectionKey,
-		content: sectionData,
-		relevanceScore: 10,
-		matchType: 'title'
-	};
-}
 
 /**
  * Get development statistics
+ * @ai-flow INPUT: none -> COUNT_SECTIONS -> COUNT_ITEMS -> OUTPUT: stats
+ * @ai-sideEffects None - read-only operation
  */
-export function getContextStats() {
-	const sections = Object.keys(netlifyContext).filter(key => key !== 'metadata').length;
-	const capabilities = netlifyContext.metadata?.capabilities?.length || 0;
-	const fileTypes = netlifyContext.metadata?.file_types?.length || 0;
-	
-	// Count examples
-	let exampleCount = 0;
-	let ruleCount = 0;
-	
-	Object.values(netlifyContext).forEach(section => {
-		if (typeof section === 'object' && section !== null) {
-			countItems(section, 'examples', (count) => { exampleCount += count; });
-			countItems(section, 'rules', (count) => { ruleCount += count; });
+export const getContextStats: AIFunction<[], { sections: number; capabilities: number; fileTypes: number; examples: number; rules: number; version?: string; lastUpdated?: string }> =
+	async (): Promise<ActionResult<{ sections: number; capabilities: number; fileTypes: number; examples: number; rules: number; version?: string; lastUpdated?: string }>> => {
+		try {
+			const sections = Object.keys(netlifyContext).filter(key => key !== 'metadata').length;
+			const capabilities = netlifyContext.metadata?.capabilities?.length || 0;
+			const fileTypes = netlifyContext.metadata?.file_types?.length || 0;
+			
+			// Count examples
+			let exampleCount = 0;
+			let ruleCount = 0;
+			
+			Object.values(netlifyContext).forEach(section => {
+				if (typeof section === 'object' && section !== null) {
+					countItems(section, 'examples', (count) => { exampleCount += count; });
+					countItems(section, 'rules', (count) => { ruleCount += count; });
+				}
+			});
+			
+			return {
+				success: true,
+				data: {
+					sections,
+					capabilities,
+					fileTypes,
+					examples: exampleCount,
+					rules: ruleCount,
+					version: netlifyContext.metadata?.version,
+					lastUpdated: netlifyContext.metadata?.created
+				},
+				sideEffects: []
+			};
+		} catch (error: any) {
+			return {
+				success: false,
+				error: 'Failed to get context statistics',
+				details: error?.message || 'Unknown error',
+				recoverable: true
+			};
 		}
-	});
-	
-	return {
-		sections,
-		capabilities,
-		fileTypes,
-		examples: exampleCount,
-		rules: ruleCount,
-		version: netlifyContext.metadata?.version,
-		lastUpdated: netlifyContext.metadata?.created
 	};
-}
 
 /**
  * Helper to count items recursively
