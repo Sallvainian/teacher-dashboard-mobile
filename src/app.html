@@ -17,16 +17,40 @@
 		<div class="sveltekit-body">%sveltekit.body%</div>
 		<script nonce="%sveltekit.nonce%">
 			// Initialize theme immediately to prevent flash
-			const savedTheme = localStorage.getItem('theme');
+			const savedMode = localStorage.getItem('theme-mode') || 'auto';
+			const savedAccent = localStorage.getItem('theme-accent') || 'blue';
+			
+			// Accent color presets
+			const colors = {
+				blue: { primary: '#3b82f6', light: '#93c5fd', hover: '#2563eb', bg: 'rgba(59, 130, 246, 0.1)', glow: 'rgba(59, 130, 246, 0.2)' },
+				purple: { primary: '#8b5cf6', light: '#c4b5fd', hover: '#7c3aed', bg: 'rgba(139, 92, 246, 0.1)', glow: 'rgba(139, 92, 246, 0.2)' },
+				green: { primary: '#10b981', light: '#6ee7b7', hover: '#059669', bg: 'rgba(16, 185, 129, 0.1)', glow: 'rgba(16, 185, 129, 0.2)' },
+				orange: { primary: '#f97316', light: '#fdba74', hover: '#ea580c', bg: 'rgba(249, 115, 22, 0.1)', glow: 'rgba(249, 115, 22, 0.2)' },
+				pink: { primary: '#ec4899', light: '#f9a8d4', hover: '#db2777', bg: 'rgba(236, 72, 153, 0.1)', glow: 'rgba(236, 72, 153, 0.2)' },
+				teal: { primary: '#14b8a6', light: '#5eead4', hover: '#0d9488', bg: 'rgba(20, 184, 166, 0.1)', glow: 'rgba(20, 184, 166, 0.2)' },
+				red: { primary: '#ef4444', light: '#fca5a5', hover: '#dc2626', bg: 'rgba(239, 68, 68, 0.1)', glow: 'rgba(239, 68, 68, 0.2)' },
+				indigo: { primary: '#6366f1', light: '#a5b4fc', hover: '#4f46e5', bg: 'rgba(99, 102, 241, 0.1)', glow: 'rgba(99, 102, 241, 0.2)' }
+			};
+			
+			// Apply accent color
+			const accentColor = colors[savedAccent] || colors.blue;
+			const root = document.documentElement;
+			root.style.setProperty('--purple', accentColor.primary);
+			root.style.setProperty('--purple-light', accentColor.light);
+			root.style.setProperty('--purple-hover', accentColor.hover);
+			root.style.setProperty('--purple-bg', accentColor.bg);
+			root.style.setProperty('--shadow-glow', `0 0 15px ${accentColor.glow}`);
+			
+			// Apply theme mode
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			const shouldUseDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+			const shouldUseDark = savedMode === 'dark' || (savedMode === 'auto' && prefersDark);
 			
 			if (shouldUseDark) {
-				document.documentElement.classList.add('dark');
-				document.documentElement.setAttribute('data-theme', 'dark');
+				root.classList.add('dark');
+				root.setAttribute('data-theme', 'dark');
 			} else {
-				document.documentElement.classList.remove('dark');
-				document.documentElement.setAttribute('data-theme', 'light');
+				root.classList.remove('dark');
+				root.setAttribute('data-theme', 'light');
 			}
 		</script>
 	</body>

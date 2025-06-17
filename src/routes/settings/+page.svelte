@@ -1,8 +1,13 @@
 <script lang="ts">
 	import { settingsStore } from '$lib/stores/settings';
+	import { themeStore, themeActions, ACCENT_COLORS, type AccentColorKey } from '$lib/stores/theme';
+	import ThemeSettings from '$lib/components/ThemeSettings.svelte';
 	
 	// Get reactive settings from store
 	const { darkMode, useSupabase } = settingsStore;
+	const $theme = $derived($themeStore);
+	
+	let showThemeSettings = $state(false);
 </script>
 
 <div class="max-w-4xl mx-auto">
@@ -11,8 +16,54 @@
 	<div class="bg-dark-card border border-dark-border p-6 rounded-xl shadow-dark-card mb-8">
 		<h2 class="text-xl font-semibold text-highlight mb-4">Display Settings</h2>
 
-		<div class="flex items-center mb-6">
-			<span class="mr-4 text-muted">Dark Mode:</span>
+		<!-- Theme Settings Card -->
+		<div class="bg-card border border-border p-6 rounded-lg mb-6">
+			<h3 class="text-lg font-semibold text-highlight mb-4">Theme & Appearance</h3>
+			
+			<div class="space-y-4">
+				<!-- Current theme display -->
+				<div class="flex items-center justify-between">
+					<div>
+						<div class="font-medium text-text-hover">Current Theme</div>
+						<div class="text-sm text-text-base">
+							{$theme.mode === 'auto' ? 'Auto (follows system)' : $theme.mode === 'dark' ? 'Dark Mode' : 'Light Mode'} 
+							• {ACCENT_COLORS[$theme.accentColor].name}
+						</div>
+					</div>
+					<div class="flex items-center gap-3">
+						<!-- Accent color preview -->
+						<div 
+							class="w-8 h-8 rounded-full border-2 border-border"
+							style="background-color: {ACCENT_COLORS[$theme.accentColor].primary}"
+							title="{ACCENT_COLORS[$theme.accentColor].name} accent"
+						></div>
+						
+						<!-- Theme mode icon -->
+						<div class="text-purple">
+							{#if $theme.mode === 'dark'}
+								🌙
+							{:else if $theme.mode === 'light'}
+								☀️
+							{:else}
+								⚡
+							{/if}
+						</div>
+					</div>
+				</div>
+				
+				<!-- Customize button -->
+				<button
+					onclick={() => showThemeSettings = true}
+					class="w-full btn btn-secondary"
+				>
+					Customize Theme & Colors
+				</button>
+			</div>
+		</div>
+
+		<!-- Legacy dark mode toggle (deprecated) -->
+		<div class="flex items-center mb-6 opacity-50">
+			<span class="mr-4 text-muted">Legacy Dark Mode:</span>
 			<div class="relative inline-block w-12 mr-2 align-middle select-none">
 				<input
 					type="checkbox"
@@ -20,13 +71,14 @@
 					checked={$darkMode}
 					onchange={settingsStore.toggleDarkMode}
 					class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-card border-4 appearance-none cursor-pointer"
+					disabled
 				/>
 				<label
 					for="toggle-dark-mode"
 					class="toggle-label block overflow-hidden h-6 rounded-full bg-surface cursor-pointer"
 				></label>
 			</div>
-			<span class="text-muted">{$darkMode ? 'On' : 'Off'}</span>
+			<span class="text-muted text-sm">Use "Customize Theme" above instead</span>
 		</div>
 
 		<p class="text-dark-muted mb-6">
@@ -87,6 +139,9 @@
 		</div>
 	</div>
 </div>
+
+<!-- Theme Settings Modal -->
+<ThemeSettings bind:open={showThemeSettings} />
 
 <style>
 	.toggle-checkbox:checked {
