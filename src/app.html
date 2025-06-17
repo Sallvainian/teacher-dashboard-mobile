@@ -52,6 +52,18 @@
 				root.classList.remove('dark');
 				root.setAttribute('data-theme', 'light');
 			}
+			
+			// FORCE UNREGISTER ALL SERVICE WORKERS - they're causing cache errors
+			if ('serviceWorker' in navigator) {
+				navigator.serviceWorker.getRegistrations().then(function(registrations) {
+					console.log('🔥 FOUND', registrations.length, 'service workers - UNREGISTERING ALL');
+					for(let registration of registrations) {
+						registration.unregister().then(function() {
+							console.log('🔥 UNREGISTERED service worker:', registration.scope);
+						});
+					}
+				});
+			}
 		</script>
 	</body>
 </html>
