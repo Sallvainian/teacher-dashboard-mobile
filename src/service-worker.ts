@@ -11,13 +11,10 @@ const CACHE_NAME = `teacher-dashboard-v${version}`;
 const STATIC_CACHE = `${CACHE_NAME}-static`;
 const DYNAMIC_CACHE = `${CACHE_NAME}-dynamic`;
 
-// Core app shell files to cache immediately
+// Core app shell files to cache immediately - only cache root and favicon
 const CORE_ASSETS = [
 	'/',
-	'/app.html',
-	'/favicon.png',
-	'/_app/immutable/entry/start.js',
-	'/_app/immutable/entry/app.js'
+	'/favicon.png'
 ];
 
 // API endpoints to cache with network-first strategy
@@ -32,9 +29,23 @@ const API_ROUTES = [
 self.addEventListener('install', (event: ExtendableEvent) => {
 	event.waitUntil(
 		(async () => {
-			const cache = await caches.open(STATIC_CACHE);
-			await cache.addAll(CORE_ASSETS);
-			await self.skipWaiting();
+			try {
+				const cache = await caches.open(STATIC_CACHE);
+				// Cache assets individually to avoid failing if one fails
+				await Promise.allSettled(
+					CORE_ASSETS.map(async (asset) => {
+						try {
+							await cache.add(asset);
+						} catch (error) {
+							console.warn(`Failed to cache ${asset}:`, error);
+						}
+					})
+				);
+				await self.skipWaiting();
+			} catch (error) {
+				console.error('Service worker install failed:', error);
+				await self.skipWaiting();
+			}
 		})()
 	);
 });
