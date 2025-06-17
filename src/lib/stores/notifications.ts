@@ -212,7 +212,7 @@ export function addPrivateMessageNotification(
 		'New Message',
 		`${senderName}: ${subject}`,
 		priority,
-		'/chat',
+		'/messaging',
 		{ messageId, senderId, subject }
 	);
 	

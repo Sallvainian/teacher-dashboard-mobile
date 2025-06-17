@@ -79,7 +79,7 @@
 			<!-- Main navigation -->
 			<a href="/dashboard" class="nav-button">Dashboard</a>
 			<a href="/files" class="nav-button">Files</a>
-			<a href="/chat" class="nav-button">Chat</a>
+			<a href="/messaging" class="nav-button">Messaging</a>
 			<a href="/seating-chart" class="nav-button">Seating Chart</a>
 
 			<!-- Classes dropdown - shown only if authenticated -->

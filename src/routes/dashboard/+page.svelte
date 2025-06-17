@@ -425,7 +425,7 @@
 					<div class="bg-card border border-border rounded-lg p-6 lg:col-span-2">
 						<div class="flex items-center justify-between mb-6">
 							<h2 class="text-lg font-semibold text-highlight">Recent Messages</h2>
-							<a href="/chat" class="text-sm text-purple hover:text-purple-hover">Open Chat</a>
+							<a href="/messaging" class="text-sm text-purple hover:text-purple-hover">Open Messaging</a>
 						</div>
 
 						<div class="space-y-4">
@@ -449,7 +449,7 @@
 											<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
 										</svg>
 										<span class="text-muted">No recent messages</span>
-										<a href="/chat" class="text-purple hover:text-purple-hover text-sm">Start a conversation</a>
+										<a href="/messaging" class="text-purple hover:text-purple-hover text-sm">Start a conversation</a>
 									</div>
 								</div>
 							{/each}

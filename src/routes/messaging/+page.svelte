@@ -162,7 +162,7 @@
 		}
 
 		if (conversation.is_group) {
-			return 'Group Chat';
+			return 'Group Conversation';
 		}
 
 		// For direct messages, use last_message sender info if available
@@ -205,7 +205,7 @@
 
  async function _getConversationName(conv: ConversationWithDetails, currentUserId: string): Promise<string> {
 		if (conv.is_group) {
-			return conv.name ?? `Group Chat (${conv.participants?.length ?? 0})`;
+			return conv.name ?? `Group Conversation (${conv.participants?.length ?? 0})`;
 		}
 
 		// Direct conversation - find other participant
@@ -322,18 +322,18 @@
 				if (otherParticipant) {
 					const participantName = otherParticipant?.user?.full_name ?? 
 										   otherParticipant?.user?.email ?? 
-										   'Chat Partner';
-					prefix = participantName ? `${participantName}: ` : 'Chat Partner: ';
+										   'Contact';
+					prefix = participantName ? `${participantName}: ` : 'Contact: ';
 				} else {
 					// Try to get name from participants array
 					const otherParticipantFromConv = conv.participants?.find((p: ConversationParticipant) => p.user_id !== currentUserId);
 					if (otherParticipantFromConv) {
 						const participantName = otherParticipantFromConv?.user?.full_name ?? 
 											   otherParticipantFromConv?.user?.email ?? 
-											   'Chat Partner';
-						prefix = participantName ? `${participantName}: ` : 'Chat Partner: ';
+											   'Contact';
+						prefix = participantName ? `${participantName}: ` : 'Contact: ';
 					} else {
-						prefix = 'Chat Partner: ';
+						prefix = 'Contact: ';
 					}
 				}
 			}
@@ -647,13 +647,17 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Messaging - Teacher Dashboard</title>
+</svelte:head>
+
 <svelte:window on:click={handleClickOutside} />
 
 <div class="min-h-screen">
 	<div class="container mx-auto px-4 py-8">
 		<!-- Header -->
 		<div class="mb-8">
-			<h1 class="text-3xl font-bold text-highlight mb-2">Chat</h1>
+			<h1 class="text-3xl font-bold text-highlight mb-2">Messaging</h1>
 			<p class="text-text-base">Communicate with students and classes</p>
 
 			{#if error}
@@ -664,7 +668,7 @@
 			{/if}
 		</div>
 
-		<!-- Chat Interface -->
+		<!-- Messaging Interface -->
 		<div class="card-dark p-0 overflow-hidden">
 			<div class="flex h-[calc(100vh-12rem)]">
 				<!-- Sidebar -->
@@ -708,7 +712,7 @@
 									<button
 										class="flex-1 text-left p-4 flex items-center gap-3"
 										onclick={() => selectConversation(conversation)}
-										aria-label={`Chat with ${conversation.name}`}
+										aria-label={`Message ${conversation.name}`}
 									>
 										<div class="relative">
 											{#if conversation.displayAvatar}
@@ -783,12 +787,12 @@
 						{/if}
 					</div>
 
-					<!-- New Chat Button -->
+					<!-- New Message Button -->
 					<div class="p-4 border-t border-border">
 						<button
 							class="btn btn-primary w-full"
 							onclick={() => (showUserSelectModal = true)}
-							aria-label="Start new chat"
+							aria-label="Start new conversation"
 						>
 							<svg
 								class="w-5 h-5 mr-2"
@@ -803,14 +807,14 @@
 								<line x1="12" y1="11" x2="12" y2="17"></line>
 								<line x1="9" y1="14" x2="15" y2="14"></line>
 							</svg>
-							New Chat
+							New Message
 						</button>
 					</div>
 				</div>
 
-				<!-- Chat Area -->
+				<!-- Messaging Area -->
 				<div class="flex-1 flex flex-col">
-					<!-- Chat Header -->
+					<!-- Message Header -->
 					<div class="p-4 border-b border-border flex justify-between items-center">
 						{#if activeConversation}
 							<div class="flex items-center gap-3">
@@ -840,7 +844,7 @@
 										{activeConversation?.name ?? 'Select a conversation'}
 										{#if activeConversation?.is_group}
 											<span class="text-xs text-text-base ml-1"
-												>(Group chat)</span
+												>(Group conversation)</span
 											>
 										{/if}
 									</div>
@@ -851,7 +855,7 @@
 							</div>
 						{:else}
 							<div class="flex items-center gap-3">
-								<div class="text-text-base">Select a conversation to start chatting</div>
+								<div class="text-text-base">Select a conversation to start messaging</div>
 							</div>
 						{/if}
 
@@ -889,7 +893,7 @@
 							</button>
 							<button
 								class="p-2 text-text-base hover:text-text-hover rounded-full hover:bg-surface transition-colors"
-								aria-label="View chat information"
+								aria-label="View conversation information"
 							>
 								<svg
 									class="w-5 h-5"
