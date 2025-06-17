@@ -53,7 +53,7 @@
 				root.setAttribute('data-theme', 'light');
 			}
 			
-			// FORCE UNREGISTER ALL SERVICE WORKERS - they're causing cache errors
+			// FORCE UNREGISTER ALL SERVICE WORKERS AND CLEAR CACHES
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.getRegistrations().then(function(registrations) {
 					console.log('🔥 FOUND', registrations.length, 'service workers - UNREGISTERING ALL');
@@ -63,6 +63,19 @@
 						});
 					}
 				});
+				
+				// Also clear all caches
+				if ('caches' in window) {
+					caches.keys().then(function(cacheNames) {
+						console.log('🔥 CLEARING', cacheNames.length, 'caches');
+						return Promise.all(
+							cacheNames.map(function(cacheName) {
+								console.log('🔥 DELETING cache:', cacheName);
+								return caches.delete(cacheName);
+							})
+						);
+					});
+				}
 			}
 		</script>
 	</body>
