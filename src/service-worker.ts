@@ -25,36 +25,62 @@ const API_ROUTES = [
 	'/api/categories'
 ];
 
-// Install event - cache core assets
+// Install event - cache core assets  
 self.addEventListener('install', (event: ExtendableEvent) => {
-	console.log('Service worker installing - v1.1.0 - NO CACHING');
-	// Skip all caching to avoid errors - just take control immediately
-	event.waitUntil(self.skipWaiting());
-});
-
-// Activate event - clean up old caches
-self.addEventListener('activate', (event: ExtendableEvent) => {
+	console.log('🔥 NEW SERVICE WORKER INSTALLING - v2.0.0 with GET-only caching - FORCED UPDATE');
 	event.waitUntil(
 		(async () => {
-			const cacheNames = await caches.keys();
-			const oldCaches = cacheNames.filter(
-				name => name.startsWith('teacher-dashboard-') && name !== CACHE_NAME
-			);
-			
-			await Promise.all(
-				oldCaches.map(name => caches.delete(name))
-			);
-			
-			await self.clients.claim();
+			try {
+				const cache = await caches.open(STATIC_CACHE);
+				// Cache assets individually to avoid failing if one fails
+				await Promise.allSettled(
+					CORE_ASSETS.map(async (asset) => {
+						try {
+							await cache.add(asset);
+						} catch (error) {
+							console.warn(`Failed to cache ${asset}:`, error);
+						}
+					})
+				);
+				console.log('🔥 SERVICE WORKER: Forcing immediate activation');
+				await self.skipWaiting();
+			} catch (error) {
+				console.error('Service worker install failed:', error);
+				await self.skipWaiting();
+			}
 		})()
 	);
 });
 
-// Fetch event - DISABLED temporarily to fix caching errors
+// Activate event - clean up old caches
+self.addEventListener('activate', (event: ExtendableEvent) => {
+	console.log('🔥 NEW SERVICE WORKER ACTIVATED - Taking control of all clients');
+	event.waitUntil(
+		(async () => {
+			// Delete ALL old caches to force complete refresh
+			const cacheNames = await caches.keys();
+			await Promise.all(cacheNames.map(name => caches.delete(name)));
+			console.log('🔥 SERVICE WORKER: Cleared all caches');
+			
+			// Take control of all existing clients immediately
+			await self.clients.claim();
+			console.log('🔥 SERVICE WORKER: Now controlling all clients');
+		})()
+	);
+});
+
+// Fetch event - implement caching strategies
 self.addEventListener('fetch', (event: FetchEvent) => {
-	// Just pass through all requests without caching
-	// This prevents any cache-related errors
-	return;
+	const { request } = event;
+	const url = new URL(request.url);
+	
+	// Skip non-HTTP requests
+	if (!url.protocol.startsWith('http')) return;
+	
+	// Skip Chrome extension requests
+	if (url.protocol === 'chrome-extension:') return;
+	
+	event.respondWith(handleRequest(request));
 });
 
 async function handleRequest(request: Request): Promise<Response> {
@@ -62,6 +88,7 @@ async function handleRequest(request: Request): Promise<Response> {
 	
 	// Only cache GET requests - pass through everything else
 	if (request.method !== 'GET') {
+		console.log(`🔥 SERVICE WORKER: Passing through ${request.method} request to ${url.pathname}`);
 		return fetch(request);
 	}
 	
