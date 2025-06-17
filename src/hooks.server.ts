@@ -87,11 +87,13 @@ const handleChromeDevTools: Handle = async ({ event, resolve }) => {
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'none'",
-    "upgrade-insecure-requests"
+    "frame-ancestors 'none'"
   ].join('; ');
 
-  response.headers.set('Content-Security-Policy', cspDirectives);
+  // Only set CSP in production to avoid SvelteKit dev conflicts
+  if (process.env.NODE_ENV === 'production') {
+    response.headers.set('Content-Security-Policy', cspDirectives);
+  }
   
   // Add other security headers for GoGuardian compatibility
   response.headers.set('X-Frame-Options', 'DENY');
