@@ -7,6 +7,9 @@ const config = {
 	// Remove runes setting - let Svelte auto-detect
 	kit: {
 		adapter: netlify(),
+		serviceWorker: {
+			register: false  // Disable service worker registration to stop cache errors
+		},
 		alias: {
 			$components: 'src/lib/components',
 			$stores: 'src/lib/stores',
