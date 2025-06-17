@@ -85,6 +85,11 @@ self.addEventListener('fetch', (event: FetchEvent) => {
 async function handleRequest(request: Request): Promise<Response> {
 	const url = new URL(request.url);
 	
+	// Only cache GET requests - pass through everything else
+	if (request.method !== 'GET') {
+		return fetch(request);
+	}
+	
 	// API requests - Network first, cache fallback
 	if (API_ROUTES.some(route => url.pathname.startsWith(route))) {
 		return networkFirst(request, DYNAMIC_CACHE);
