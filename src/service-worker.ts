@@ -111,7 +111,7 @@ async function cacheFirst(request: Request, cacheName: string): Promise<Response
 	
 	try {
 		const response = await fetch(request);
-		if (response.ok) {
+		if (response.ok && request.method === 'GET') {
 			const cache = await caches.open(cacheName);
 			cache.put(request, response.clone());
 		}
@@ -128,7 +128,7 @@ async function cacheFirst(request: Request, cacheName: string): Promise<Response
 async function networkFirst(request: Request, cacheName: string): Promise<Response> {
 	try {
 		const response = await fetch(request);
-		if (response.ok) {
+		if (response.ok && request.method === 'GET') {
 			const cache = await caches.open(cacheName);
 			cache.put(request, response.clone());
 		}
