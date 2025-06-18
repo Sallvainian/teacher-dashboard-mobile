@@ -1,9 +1,3 @@
-/**
- * @ai-context THEME_SETTINGS - Theme customization component
- * @ai-dependencies theme store, ACCENT_COLORS
- * @ai-sideEffects Updates theme store, applies CSS variables
- * @ai-exports Theme settings UI component
- */
 
 <script lang="ts">
 	import { themeStore, themeActions, ACCENT_COLORS, type AccentColorKey, type ThemeMode } from '$lib/stores/theme';
