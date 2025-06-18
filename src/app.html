@@ -53,6 +53,24 @@
 				root.setAttribute('data-theme', 'light');
 			}
 			
+			// Force reload if we detect cache mismatch (old JS files)
+			window.addEventListener('error', function(e) {
+				// Check if error is from missing JS files (cache mismatch)
+				if (e.filename && e.filename.includes('_app/immutable/') && e.message.includes('404')) {
+					console.log('🔄 Cache mismatch detected, forcing reload...');
+					// Clear all caches and reload
+					if ('caches' in window) {
+						caches.keys().then(function(cacheNames) {
+							return Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+						}).then(function() {
+							window.location.reload(true);
+						});
+					} else {
+						window.location.reload(true);
+					}
+				}
+			});
+			
 			// Clean up any old service workers (one-time cleanup)
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.getRegistrations().then(function(registrations) {
