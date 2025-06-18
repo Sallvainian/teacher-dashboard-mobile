@@ -53,27 +53,24 @@
 				root.setAttribute('data-theme', 'light');
 			}
 			
-			// FORCE UNREGISTER ALL SERVICE WORKERS AND CLEAR CACHES
+			// Clean up any old service workers (one-time cleanup)
 			if ('serviceWorker' in navigator) {
 				navigator.serviceWorker.getRegistrations().then(function(registrations) {
-					console.log('🔥 FOUND', registrations.length, 'service workers - UNREGISTERING ALL');
-					for(let registration of registrations) {
-						registration.unregister().then(function() {
-							console.log('🔥 UNREGISTERED service worker:', registration.scope);
-						});
+					if (registrations.length > 0) {
+						console.log('🧹 Cleaning up', registrations.length, 'old service workers');
+						for(let registration of registrations) {
+							registration.unregister();
+						}
 					}
 				});
 				
-				// Also clear all caches
+				// Clean up old caches
 				if ('caches' in window) {
 					caches.keys().then(function(cacheNames) {
-						console.log('🔥 CLEARING', cacheNames.length, 'caches');
-						return Promise.all(
-							cacheNames.map(function(cacheName) {
-								console.log('🔥 DELETING cache:', cacheName);
-								return caches.delete(cacheName);
-							})
-						);
+						if (cacheNames.length > 0) {
+							console.log('🧹 Cleaning up', cacheNames.length, 'old caches');
+							return Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+						}
 					});
 				}
 			}
