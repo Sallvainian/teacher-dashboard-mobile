@@ -207,7 +207,7 @@ function formatTime(date: string | null | undefined): string {
 	if (!date) return 'Just now';
 
 	const messageDate = new Date(date);
-	if (isNaN(messageDate.getTime())) return 'Just now';
+	if (Number.isNaN(messageDate.getTime())) return 'Just now';
 
 	const now = new Date();
 	const diffInHours = (now.getTime() - messageDate.getTime()) / (1000 * 60 * 60);

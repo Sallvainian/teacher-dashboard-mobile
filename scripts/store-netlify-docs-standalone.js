@@ -5,9 +5,16 @@
 
 import Mem0 from 'mem0ai';
 
-// Initialize Mem0 with API key
+// Check for API key
+if (!process.env.MEM0_API_KEY) {
+  console.error('Error: MEM0_API_KEY environment variable is not set');
+  console.error('Usage: MEM0_API_KEY=your-api-key node scripts/store-netlify-docs-standalone.js');
+  process.exit(1);
+}
+
+// Initialize Mem0 with API key from environment variable
 const mem0 = new Mem0({
-  apiKey: 'om-9dskxufppowhhtze1e2lbj0wovqlw3vf'
+  apiKey: process.env.MEM0_API_KEY
 });
 
 // Mock user for storing documentation

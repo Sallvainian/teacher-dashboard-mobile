@@ -18,6 +18,9 @@
 	// ESLint
 	"eslint.validate": ["javascript", "typescript", "svelte"],
 
+	// SonarQube for IDE
+	"sonarlint.nodePath": "/home/frank/.nvm/versions/node/v22.15.1/bin/node",
+
 	// Tailwind CSS
 	"tailwindCSS.experimental.classRegex": [["class:\\s*?[\"'`]([^\"'`]*).*?[\"'`]", "([^\"'`]*)"]],
 
