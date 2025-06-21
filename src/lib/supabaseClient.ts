@@ -1,10 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { browser } from '$app/environment';
-import { env } from '$env/dynamic/public';
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$lib/utils/env';
 
-// Get environment variables from .env file
-const PUBLIC_SUPABASE_URL = env.PUBLIC_SUPABASE_URL || 'https://demo.supabase.co';
-const PUBLIC_SUPABASE_ANON_KEY = env.PUBLIC_SUPABASE_ANON_KEY || 'demo-key';
+// Environment variables are imported from utility file
 
 // Create the Supabase client with SvelteKit environment variables
 export const supabaseUrl = PUBLIC_SUPABASE_URL;

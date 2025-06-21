@@ -2,6 +2,7 @@
 	// Hardcoded API key for development (declared in env.d.ts for production)
 	const PUBLIC_GIPHY_API_KEY = 'sXpGFDGZs0Dv1mmNFvYaGUvYwKX0PWIh';
 	import type { UnknownError } from '$lib/types/ai-enforcement';
+	import { browser } from '$app/environment';
 	
 	
 	interface Props {
@@ -35,10 +36,11 @@
 	
 	// Load trending GIFs
 	async function loadTrending() {
+		if (!browser) return;
 		loading = true;
 		try {
 			const url = `https://api.giphy.com/v1/gifs/trending?api_key=${PUBLIC_GIPHY_API_KEY}&limit=20&rating=g`;
-			const response = await fetch(url);
+			const response = await globalThis.fetch(url);
 			const data = await response.json();
 			gifs = data.data;
 		} catch (error: UnknownError) {
@@ -51,6 +53,7 @@
 	
 	// Search GIFs
 	async function searchGifs() {
+		if (!browser) return;
 		if (!searchTerm.trim()) {
 			await loadTrending();
 			return;
@@ -59,7 +62,7 @@
 		loading = true;
 		try {
 			const url = `https://api.giphy.com/v1/gifs/search?api_key=${PUBLIC_GIPHY_API_KEY}&q=${searchTerm}&limit=20&rating=g`;
-			const response = await fetch(url);
+			const response = await globalThis.fetch(url);
 			const data = await response.json();
 			gifs = data.data;
 		} catch (error: UnknownError) {

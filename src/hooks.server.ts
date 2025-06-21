@@ -1,6 +1,6 @@
 import { sequence } from "@sveltejs/kit/hooks";
 import { createServerClient } from '@supabase/ssr';
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$lib/utils/env';
 import type { Handle } from '@sveltejs/kit';
 import { webcrypto as crypto } from 'crypto';
 

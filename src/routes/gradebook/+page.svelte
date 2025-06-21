@@ -332,11 +332,12 @@
 		if (!editingAssignmentId || !editAssignmentName.trim()) return;
 		
 		try {
-			await gradebookStore.updateAssignment(editingAssignmentId, {
-				name: editAssignmentName.trim(),
-				maxPoints: editMaxPoints,
-				dueDate: editDueDate || null
-			});
+			await gradebookStore.updateAssignment(
+				editingAssignmentId, 
+				editAssignmentName.trim(),
+				editMaxPoints,
+				editDueDate || undefined
+			);
 			
 			cancelEditAssignment();
 		} catch (error: UnknownError) {
@@ -363,7 +364,8 @@
 	}
 	
 	function exportGrades() {
-		gradebookStore.exportToJSON();
+		// TODO: Implement export functionality
+		console.log('Export grades functionality to be implemented');
 	}
 	
 	// Data loading is handled by AppLayout.svelte globally
@@ -477,22 +479,24 @@
 		joinCode={editClassJoinCode}
 		onClose={cancelEditClass}
 		onSave={saveEditClass}
-		onClassNameChange={(value) => editClassName = value}
-		onGradeLevelChange={(value) => editClassGradeLevel = value}
-		onSubjectChange={(value) => editClassSubject = value}
-		onSchoolYearChange={(value) => editClassSchoolYear = value}
-		onJoinCodeChange={(value) => editClassJoinCode = value}
+		onClassNameChange={(value: string) => editClassName = value}
+		onGradeLevelChange={(value: string) => editClassGradeLevel = value}
+		onSubjectChange={(value: string) => editClassSubject = value}
+		onSchoolYearChange={(value: string) => editClassSchoolYear = value}
+		onJoinCodeChange={(value: string) => editClassJoinCode = value}
 	/>
 
 	<!-- Import Wizard Modal -->
 	{#if activeModal === 'import'}
-		<ImportWizard onclose={() => activeModal = null} />
+		<ImportWizard 
+			onClose={() => activeModal = null}
+			onComplete={() => activeModal = null} 
+		/>
 	{/if}
 
 	<!-- Assignment Creation Modal -->
 	{#if activeModal === 'newAssignment'}
 		<AssignmentCreationModal
-			classId={$gradebookStore.selectedClassId}
 			onclose={() => activeModal = null}
 			oncomplete={(result) => {
 				assignmentCreationResult = result;
@@ -511,11 +515,11 @@
 		joinCode={newClassJoinCode}
 		onClose={() => activeModal = null}
 		onSave={createNewClass}
-		onClassNameChange={(value) => newClassName = value}
-		onGradeLevelChange={(value) => newClassGradeLevel = value}
-		onSubjectChange={(value) => newClassSubject = value}
-		onSchoolYearChange={(value) => newClassSchoolYear = value}
-		onJoinCodeChange={(value) => newClassJoinCode = value}
+		onClassNameChange={(value: string) => newClassName = value}
+		onGradeLevelChange={(value: string) => newClassGradeLevel = value}
+		onSubjectChange={(value: string) => newClassSubject = value}
+		onSchoolYearChange={(value: string) => newClassSchoolYear = value}
+		onJoinCodeChange={(value: string) => newClassJoinCode = value}
 	/>
 
 	<!-- Add Student Modal -->

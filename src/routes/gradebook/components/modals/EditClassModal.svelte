@@ -51,7 +51,7 @@
 							id="edit-class-name"
 							type="text"
 							bind:value={className}
-							onchange={(e) => onClassNameChange(e.target.value)}
+							onchange={(e) => onClassNameChange((e.target as HTMLInputElement).value)}
 							placeholder="e.g., Math Period 1"
 							class="input w-full"
 							required
@@ -66,7 +66,7 @@
 							id="edit-grade-level"
 							type="text"
 							bind:value={gradeLevel}
-							onchange={(e) => onGradeLevelChange(e.target.value)}
+							onchange={(e) => onGradeLevelChange((e.target as HTMLInputElement).value)}
 							placeholder="e.g., 9th, 10th, K-2"
 							class="input w-full"
 						/>
@@ -80,7 +80,7 @@
 							id="edit-subject"
 							type="text"
 							bind:value={subject}
-							onchange={(e) => onSubjectChange(e.target.value)}
+							onchange={(e) => onSubjectChange((e.target as HTMLInputElement).value)}
 							placeholder="e.g., Mathematics, English"
 							class="input w-full"
 						/>
@@ -94,7 +94,7 @@
 							id="edit-school-year"
 							type="text"
 							bind:value={schoolYear}
-							onchange={(e) => onSchoolYearChange(e.target.value)}
+							onchange={(e) => onSchoolYearChange((e.target as HTMLInputElement).value)}
 							placeholder="e.g., 2023-2024"
 							class="input w-full"
 						/>
@@ -108,7 +108,7 @@
 							id="edit-join-code"
 							type="text"
 							bind:value={joinCode}
-							onchange={(e) => onJoinCodeChange(e.target.value)}
+							onchange={(e) => onJoinCodeChange((e.target as HTMLInputElement).value)}
 							placeholder="e.g., MATH2024"
 							class="input w-full"
 						/>

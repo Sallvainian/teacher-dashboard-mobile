@@ -181,7 +181,7 @@ export type DatabaseResult<T = void> = {
 
 // Helper to create database table types
 export function createDatabaseTable<T extends string>(tableName: T): DatabaseTable & { readonly __tableType: T } {
-  return tableName as DatabaseTable & { readonly __tableType: T };
+  return tableName as unknown as DatabaseTable & { readonly __tableType: T };
 }
 
 // Helper to create database operations

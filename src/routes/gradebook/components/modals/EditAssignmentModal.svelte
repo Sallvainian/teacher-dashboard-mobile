@@ -39,7 +39,7 @@
 							id="edit-assignment-name"
 							type="text"
 							bind:value={assignmentName}
-							onchange={(e) => onAssignmentNameChange(e.target.value)}
+							onchange={(e) => onAssignmentNameChange((e.target as HTMLInputElement).value)}
 							placeholder="e.g., Chapter 5 Quiz"
 							class="input w-full"
 							required
@@ -54,7 +54,7 @@
 							id="edit-max-points"
 							type="number"
 							bind:value={maxPoints}
-							onchange={(e) => onMaxPointsChange(parseFloat(e.target.value) || 0)}
+							onchange={(e) => onMaxPointsChange(parseFloat((e.target as HTMLInputElement).value) || 0)}
 							min="0.1"
 							step="0.1"
 							class="input w-full"
@@ -70,7 +70,7 @@
 							id="edit-due-date"
 							type="date"
 							bind:value={dueDate}
-							onchange={(e) => onDueDateChange(e.target.value)}
+							onchange={(e) => onDueDateChange((e.target as HTMLInputElement).value)}
 							class="input w-full"
 						/>
 					</div>

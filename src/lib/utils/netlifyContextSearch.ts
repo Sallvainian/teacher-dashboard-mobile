@@ -371,7 +371,7 @@ function findExamples(obj: any, type: string, examples: NetlifyExample[]): void 
 	
 	Object.entries(obj).forEach(([key, value]) => {
 		// Check if this is an example object
-		if (key === 'examples' && typeof value === 'object') {
+		if (key === 'examples' && typeof value === 'object' && value !== null) {
 			Object.entries(value).forEach(([exampleKey, example]) => {
 				if (typeof example === 'object' && example !== null) {
 					if (exampleKey.includes(type) || (example as any).language === type) {
@@ -553,7 +553,7 @@ function countItems(obj: any, type: string, callback: (count: number) => void): 
 	Object.entries(obj).forEach(([key, value]) => {
 		if (key === type && Array.isArray(value)) {
 			callback(value.length);
-		} else if (key === type && typeof value === 'object') {
+		} else if (key === type && typeof value === 'object' && value !== null) {
 			callback(Object.keys(value).length);
 		} else if (typeof value === 'object') {
 			countItems(value, type, callback);

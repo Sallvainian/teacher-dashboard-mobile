@@ -10,5 +10,8 @@ export const load: LayoutLoad = async () => {
 	// Initialize auth with timeout protection
 	await ensureAuthInitialized();
 
-	return {};
+	return {
+		session: null,
+		user: null
+	};
 };

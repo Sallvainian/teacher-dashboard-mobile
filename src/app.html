@@ -64,6 +64,9 @@
 							return Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
 						}).then(function() {
 							window.location.reload(true);
+						}).catch(function(error) {
+							console.error('Error clearing caches:', error);
+							window.location.reload(true);
 						});
 					} else {
 						window.location.reload(true);
@@ -80,6 +83,8 @@
 							registration.unregister();
 						}
 					}
+				}).catch(function(error) {
+					console.error('Error getting service worker registrations:', error);
 				});
 				
 				// Clean up old caches
@@ -89,6 +94,8 @@
 							console.log('🧹 Cleaning up', cacheNames.length, 'old caches');
 							return Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
 						}
+					}).catch(function(error) {
+						console.error('Error cleaning up old caches:', error);
 					});
 				}
 			}

@@ -31,7 +31,7 @@
 							id="student-name"
 							type="text"
 							bind:value={studentName}
-							onchange={(e) => onStudentNameChange(e.target.value)}
+							onchange={(e) => onStudentNameChange((e.target as HTMLInputElement).value)}
 							placeholder="Enter student's full name"
 							class="input w-full"
 							required

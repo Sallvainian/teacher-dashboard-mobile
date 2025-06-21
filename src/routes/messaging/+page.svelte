@@ -20,6 +20,7 @@
 	let typingUsers = $state<string[]>([]);
 	let loading = $state(false);
 	let error = $state<string | null>(null);
+	let rawConversations = $state<ConversationWithDetails[]>([]);
 
 	// UI state variables (initialize early to prevent reference errors)
 	let newMessage = $state('');
@@ -60,21 +61,29 @@
 	const unsubscribeConversations = chatStore.conversations.subscribe((convs) => {
 		const user = getUser($authStore);
 		if (user && convs.length > 0) {
+			// Store raw conversations for participant lookup
+			rawConversations = convs as ConversationWithDetails[];
+			
 			// Process conversations
-			const processedConversations = convs.map((conv) => ({
-				id: conv.id,
-				name: conv.name ?? getConversationDisplayName(conv as ConversationWithDetails),
-				displayName: getConversationDisplayName(conv as ConversationWithDetails),
-				avatar: conv.avatar ?? getConversationInitials(conv as ConversationWithDetails, user.id),
-				displayAvatar: getConversationAvatarUrl(conv as ConversationWithDetails, user.id),
-				is_group: conv.is_group ?? false,
-				last_message_text: getLastMessageText(conv as ConversationWithDetails),
-				last_message_time: formatTimeAgo(conv.last_message?.created_at ?? null),
-				unread_count: conv.unread_count ?? 0,
-				is_online: isConversationOnline(conv as ConversationWithDetails, user.id),
-				created_at: conv.created_at ?? new Date().toISOString(),
-				updated_at: conv.updated_at ?? new Date().toISOString()
-			}));
+			const processedConversations = convs.map((conv) => {
+				// Determine if it's a group chat: has more than 2 participants
+				const isGroupChat = conv.participants && conv.participants.length > 2;
+				
+				return {
+					id: conv.id,
+					name: conv.name ?? getConversationDisplayName(conv as ConversationWithDetails),
+					displayName: getConversationDisplayName(conv as ConversationWithDetails),
+					avatar: conv.avatar ?? getConversationInitials(conv as ConversationWithDetails, user.id),
+					displayAvatar: getConversationAvatarUrl(conv as ConversationWithDetails, user.id),
+					is_group: isGroupChat,
+					last_message_text: getLastMessageText(conv as ConversationWithDetails),
+					last_message_time: formatTimeAgo(conv.last_message?.created_at ?? null),
+					unread_count: conv.unread_count ?? 0,
+					is_online: isConversationOnline(conv as ConversationWithDetails, user.id),
+					created_at: conv.created_at ?? new Date().toISOString(),
+					updated_at: conv.updated_at ?? new Date().toISOString()
+				};
+			});
 
 			conversations = processedConversations.map(conv => ({
 				...conv,
@@ -108,7 +117,8 @@
 					senderName = msg.sender.full_name || msg.sender.email || 'Unknown User';
 				} else if (msg.sender_id === user.id) {
 					// If it's the current user but sender is missing
-					senderName = user.full_name || user.email || 'You';
+					const profile = $authStore.profile;
+					senderName = profile?.full_name || user.email || 'You';
 				} else {
 					// Enhanced fallback: try to find sender in conversation participants
 					// Try to get sender name from conversations data
@@ -299,6 +309,23 @@
 		}
 
 		return null;
+	}
+
+	function getGroupParticipants(conversationId: string): Array<{name: string, avatar?: string}> {
+		const conversation = conversations.find(c => c.id === conversationId);
+		if (!conversation?.is_group) return [];
+
+		// Use rawConversations which has the full participant data
+		const fullConv = rawConversations.find(c => c.id === conversationId);
+		
+		if (!fullConv?.participants) return [];
+
+		return fullConv.participants
+			.filter((p: any) => p.user)
+			.map((p: any) => ({
+				name: p.user.full_name || p.user.email || 'Unknown User',
+				avatar: p.user.avatar_url
+			}));
 	}
 
  function getLastMessageText(conv: ConversationWithDetails): string {
@@ -848,7 +875,32 @@
 											>
 										{/if}
 									</div>
-									{#if activeConversation?.is_online && !activeConversation?.is_group}
+									{#if activeConversation?.is_group}
+										<!-- Show participant list for group chats -->
+										{@const participants = getGroupParticipants(activeConversation.id)}
+										{#if participants.length > 0}
+											<div class="text-xs text-text-base mt-1 flex items-center gap-1">
+												<svg class="w-3 h-3 text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+													<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+													<circle cx="9" cy="7" r="4"></circle>
+													<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+													<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+												</svg>
+												<span class="text-purple font-medium">{participants.length}</span>
+												<span>
+													{participants.slice(0, 2).map(p => p.name).join(', ')}
+													{#if participants.length > 2}
+														<span 
+															class="opacity-75 cursor-help underline decoration-dotted hover:opacity-100 transition-opacity" 
+															title={participants.slice(2).map(p => p.name).join(', ')}
+														>
+															+{participants.length - 2} more
+														</span>
+													{/if}
+												</span>
+											</div>
+										{/if}
+									{:else if activeConversation?.is_online}
 										<div class="text-xs text-purple">Online</div>
 									{/if}
 								</div>
@@ -1008,11 +1060,10 @@
 							<div class="text-sm">{message.content}</div>
 						{/if}
 									</div>
-									{#if index === messages.length - 1}
-										<div class={`text-xs opacity-50 ${message.is_own_message ? 'text-right' : 'text-left'}`}>
-											{formatTimeAgo(message.created_at)}
-										</div>
-									{/if}
+									<!-- Timestamp always visible, positioned opposite to message alignment -->
+									<div class={`text-xs opacity-50 ${message.is_own_message ? 'text-left' : 'text-right'}`}>
+										{chatStore.formatTime(message.created_at)}
+									</div>
 								</div>
 							</div>
 						{/each}
