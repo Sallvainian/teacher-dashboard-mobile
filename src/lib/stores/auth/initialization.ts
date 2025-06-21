@@ -124,6 +124,8 @@ export async function initialize(): Promise<void> {
 				}
 			} catch (profileError) {
 				console.error('Error fetching profile during initialization:', profileError);
+				// Don't let profile errors prevent auth from working
+				// User is still authenticated even without a profile
 			}
 		}
 

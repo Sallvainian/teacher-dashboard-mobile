@@ -17,9 +17,14 @@ const handleSupabase: Handle = async ({ event, resolve }) => {
         return event.cookies.getAll();
       },
       setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) =>
-          event.cookies.set(name, value, { ...options, path: '/' })
-        );
+        cookiesToSet.forEach(({ name, value, options }) => {
+          try {
+            event.cookies.set(name, value, { ...options, path: '/' });
+          } catch (error) {
+            // Ignore cookie setting errors after response is generated
+            console.warn('Cookie setting failed (response already generated):', name);
+          }
+        });
       },
     },
   });

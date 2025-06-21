@@ -11,12 +11,7 @@ declare global {
   function $inspect<T>(...values: T[]): T extends unknown[] ? T : [T];
 }
 
-declare module '$env/static/public' {
-	export const PUBLIC_SUPABASE_URL: string;
-	export const PUBLIC_SUPABASE_ANON_KEY: string;
-	export const PUBLIC_ANTHROPIC_API_KEY: string;
-	export const PUBLIC_GIPHY_API_KEY: string;
-	export const VITE_MEM0_API_KEY: string;
-}
+// SvelteKit auto-generates $env/static/public module declarations
+// Additional environment variables should be added to .env files
 
 export {};

@@ -129,23 +129,37 @@ export async function signUpStudent(data: {
 		if (signUpError) throw signUpError;
 
 		if (authData?.user) {
-			// Create app_users record with student role
-			const { error: profileError } = await supabase.from('app_users').insert({
-				id: authData.user.id,
-				email: data.email,
-				full_name: data.fullName,
-				role: 'student'
-			});
+			// Wait for auth session to be established
+			if (authData.session) {
+				// Session exists, we can create the profile
+				const { error: profileError } = await supabase.from('app_users').insert({
+					id: authData.user.id,
+					email: data.email,
+					full_name: data.fullName,
+					role: 'student'
+				});
 
-			if (profileError) throw profileError;
+				if (profileError) {
+					console.error('Profile creation error:', profileError);
+					// Don't fail signup if profile creation fails - it will be created on next login
+				}
+			} else {
+				// No session yet (email confirmation required), profile will be created on first login
+				console.log('Email confirmation required - profile will be created after confirmation');
+			}
 
-			// Create student record
-			const { error: studentError } = await supabase.from('students').insert({
-				user_id: authData.user.id,
-				join_code: data.joinCode
-			});
+			// Create student record only if we have a session
+			if (authData.session) {
+				const { error: studentError } = await supabase.from('students').insert({
+					user_id: authData.user.id,
+					join_code: data.joinCode
+				});
 
-			if (studentError) throw studentError;
+				if (studentError) {
+					console.error('Student record creation error:', studentError);
+					// Don't fail signup if student record creation fails
+				}
+			}
 
 			return true;
 		}
@@ -189,15 +203,24 @@ export async function signUpTeacher(data: {
 		if (signUpError) throw signUpError;
 
 		if (authData?.user) {
-			// Create app_users record with teacher role
-			const { error: profileError } = await supabase.from('app_users').insert({
-				id: authData.user.id,
-				email: data.email,
-				full_name: data.fullName,
-				role: 'teacher'
-			});
+			// Wait for auth session to be established
+			if (authData.session) {
+				// Session exists, we can create the profile
+				const { error: profileError } = await supabase.from('app_users').insert({
+					id: authData.user.id,
+					email: data.email,
+					full_name: data.fullName,
+					role: 'teacher'
+				});
 
-			if (profileError) throw profileError;
+				if (profileError) {
+					console.error('Profile creation error:', profileError);
+					// Don't fail signup if profile creation fails - it will be created on next login
+				}
+			} else {
+				// No session yet (email confirmation required), profile will be created on first login
+				console.log('Email confirmation required - profile will be created after confirmation');
+			}
 
 			return true;
 		}
