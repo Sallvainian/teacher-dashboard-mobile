@@ -2,6 +2,7 @@
 export { authStore } from './auth';
 export { chatStore } from './chat';
 export { confirmationStore } from './confirmationModal';
+export { isMobile, isTablet, platform, isNative, deviceInfo } from './device';
 export { filesStore, fileStore } from './files';
 export { gradebookStore } from './gradebook';
 export { jeopardyStore } from './jeopardy';
