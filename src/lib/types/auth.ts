@@ -2,17 +2,11 @@
  * @ai-context AUTH_TYPES - Authentication and user management types
  * @ai-dependencies supabase, database.ts, ai-enforcement.ts
  * @ai-sideEffects None - pure type definitions
- * @ai-exports AppUser, AuthState, StudentSignupData, TeacherSignupData
+ * @ai-exports AuthState, StudentSignupData, TeacherSignupData
  */
 import type { User, AuthSession } from '@supabase/supabase-js';
 import type { UserRole } from './database';
 import type { UserId } from './ai-enforcement';
-
-export interface AppUser extends User {
-  role?: UserRole;
-  full_name?: string;
-  avatar_url?: string;
-}
 
 export interface AuthState {
   user: User | null;

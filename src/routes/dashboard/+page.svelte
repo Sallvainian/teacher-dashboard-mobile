@@ -14,6 +14,7 @@
 	import { showSuccessToast, showErrorToast, showWarningToast, showInfoToast } from '$lib/stores/notifications';
 	import type { UnknownError } from '$lib/types/ai-enforcement';
 	import type { ConversationWithDetails } from '$lib/types/chat';
+	import OnlineUsers from '$lib/components/OnlineUsers.svelte';
 
 	interface RecentMessage {
 		id: string; // Or number, depending on your data
@@ -421,8 +422,12 @@
 					</div>
 				</div>
 
-				<!-- Bottom Row -->
-				<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+				<!-- Second Row: OnlineUsers + Recent Messages + Storage -->
+				<div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-6">
+					<!-- Online Users -->
+					<div class="lg:col-span-1">
+						<OnlineUsers />
+					</div>
 					<!-- Recent Messages -->
 					<div class="bg-card border border-border rounded-lg p-6 lg:col-span-2">
 						<div class="flex items-center justify-between mb-6">
@@ -459,7 +464,7 @@
 					</div>
 
 					<!-- Storage Usage -->
-					<div class="bg-card border border-border rounded-lg p-6">
+					<div class="bg-card border border-border rounded-lg p-6 lg:col-span-1">
 						<h2 class="text-lg font-semibold text-highlight mb-6">Storage Usage</h2>
 
 						<div class="flex flex-col items-center justify-center">

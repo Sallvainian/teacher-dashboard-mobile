@@ -14,15 +14,5 @@ export {
 	isInitialized
 } from './auth/index';
 
-// Maintain backward compatibility for any direct imports
-import { storeRegistry } from './registry';
-
-// Export individual stores for legacy code that imports them directly
-export const userStore = storeRegistry.get('auth.user')!;
-export const profileStore = storeRegistry.get('auth.profile')!;
-export const sessionStore = storeRegistry.get('auth.session')!;
-export const loadingStore = storeRegistry.get('auth.loading')!;
-export const errorStore = storeRegistry.get('auth.error')!;
-export const roleStore = storeRegistry.get('auth.role')!;
-export const isAuthenticatedStore = storeRegistry.get('auth.isAuthenticated')!;
-export const isInitializedStore = storeRegistry.get('auth.isInitialized')!;
+// Note: Individual store constants were removed as they were unused
+// Use the main authStore export or import individual stores from './auth/index' instead;

@@ -1,6 +1,6 @@
 import type { Tables } from '$lib/types/database';
 import type { Student, Class, Assignment, Grade } from '$lib/types/gradebook';
-import { createStudentId, createClassId, createAssignmentId } from '$lib/types/ai-optimized';
+import { createStudentId, createClassId, createAssignmentId } from '$lib/types/ai-enforcement';
 
 // Type aliases for better readability and to fix type inference
 type DBStudent = Tables<'students'>;

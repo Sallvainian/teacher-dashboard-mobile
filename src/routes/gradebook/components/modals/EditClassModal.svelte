@@ -20,6 +20,7 @@
 	
 	let { 
 		isOpen, 
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		editingClass, 
 		className, 
 		gradeLevel, 

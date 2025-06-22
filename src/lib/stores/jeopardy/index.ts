@@ -50,6 +50,7 @@ import { importGameData, exportGameData } from './importExport';
 // Create the combined jeopardy store
 function createJeopardyStore() {
 	// Return public API - same as original but now modular
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	return {
 		// Stores
 		subscribe: games.subscribe,

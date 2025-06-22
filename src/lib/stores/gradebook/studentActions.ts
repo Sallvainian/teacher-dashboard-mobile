@@ -7,7 +7,7 @@ import { dbStudentToAppStudent } from '$lib/utils/modelConverters';
 import { authStore } from '../auth';
 import { students, classes, error } from './core';
 import type { Student, Class } from '$lib/types/gradebook';
-import { createStudentId } from '$lib/types/ai-optimized';
+import { createStudentId } from '$lib/types/ai-enforcement';
 
 // Add a global student
 export async function addGlobalStudent(name: string, userId?: string): Promise<string | null> {

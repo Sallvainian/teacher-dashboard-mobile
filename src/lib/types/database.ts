@@ -1232,6 +1232,7 @@ export type Enums<
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
@@ -1250,6 +1251,7 @@ export type CompositeTypes<
 // Export UserRole type from the database enums
 export type UserRole = Enums<'user_role'>;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const Constants = {
   public: {
     Enums: {

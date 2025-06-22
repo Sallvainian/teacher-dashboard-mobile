@@ -115,7 +115,7 @@ export const settingsStore = {
 	toggleDataStorage,
 	
 	// Direct setters (for programmatic updates)
-	setDarkMode: (value: boolean) => {
+	IsetDarkMode: (value: boolean) => {
 		darkMode.set(value);
 		setStoredValue('darkMode', value);
 		applyTheme(value);

@@ -47,6 +47,7 @@ import {
 } from './utilityActions';
 
 function createGradebookStore() {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	return {
 		// Main store subscription
 		subscribe: store.subscribe,

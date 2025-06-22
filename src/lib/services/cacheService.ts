@@ -230,6 +230,7 @@ export class CacheService {
    * Invalidate cache entries by tags
    * @param tags Tags to invalidate
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async invalidateByTags(tags: string[]): Promise<void> {
     if (tags.length === 0) {
       return;
@@ -302,6 +303,7 @@ export class CacheService {
    * @param key Cache key
    * @returns Cache entry metadata or null if not found
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getMetadata(key: string): Promise<Omit<CacheEntry<unknown>, 'value'> | null> {
     try {
       const db = await this.getDb();
@@ -370,6 +372,7 @@ export const cacheService = new CacheService();
 /**
  * Initialize the cache service
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function initializeCache(): Promise<void> {
   return cacheService.initialize();
 }
@@ -381,6 +384,7 @@ export function initializeCache(): Promise<void> {
  * @param options Cache options
  * @returns Fetched or cached data
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function fetchWithCache<T>(
   key: string,
   fetcher: () => Promise<T>,
@@ -413,6 +417,7 @@ export async function fetchWithCache<T>(
  * @param options Cache options
  * @returns Fetched or cached data
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function fetchWithSWR<T>(
   key: string,
   fetcher: () => Promise<T>,
@@ -454,6 +459,7 @@ export async function fetchWithSWR<T>(
  * @param fetcher Function to fetch data
  * @param options Cache options
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function prefetch<T>(
   key: string,
   fetcher: () => Promise<T>,

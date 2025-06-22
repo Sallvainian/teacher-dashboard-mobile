@@ -4,6 +4,7 @@
 import { supabase, supabaseUrl } from '$lib/supabaseClient';
 import { authStore } from './core';
 import { fetchUserProfile } from './profileActions';
+import { joinPresence } from '$lib/stores/presence';
 import type { AuthStoreState } from './core';
 
 // Track if we've already set up auth listener
@@ -75,6 +76,17 @@ export async function initialize(): Promise<void> {
 					// For events after initialization, handle normally
 					if (newSession?.user) {
 						await fetchUserProfile(newSession.user.id, true);
+						
+						// Join presence tracking after profile is loaded
+						try {
+							console.log('🔄 Attempting to join presence after auth state change...');
+							// Give auth state time to propagate
+							await new Promise((resolve) => setTimeout(resolve, 100));
+							await joinPresence();
+						} catch (presenceError) {
+							console.warn('Failed to join presence after auth state change:', presenceError);
+							// Don't fail auth if presence fails
+						}
 					} else {
 						// User logged out - clear everything in one update
 						authStore.update(state => ({
@@ -140,6 +152,19 @@ export async function initialize(): Promise<void> {
 			...state,
 			...stateUpdates
 		}));
+
+		// Join presence tracking if user is authenticated and has a profile
+		if (storedUserId && stateUpdates.profile) {
+			try {
+				console.log('🔄 Attempting to join presence after session restoration...');
+				// Give auth state time to propagate
+				await new Promise((resolve) => setTimeout(resolve, 100));
+				await joinPresence();
+			} catch (presenceError) {
+				console.warn('Failed to join presence during initialization:', presenceError);
+				// Don't fail initialization if presence fails
+			}
+		}
 
 	} catch (err: unknown) {
 		console.error('Auth initialization error:', err);

@@ -25,6 +25,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 		autoRefreshToken: browser,
 		persistSession: browser,
 		detectSessionInUrl: browser
+	},
+	realtime: {
+		params: {
+			eventsPerSecond: 10
+		}
 	}
 });
 

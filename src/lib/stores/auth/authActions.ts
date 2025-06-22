@@ -5,6 +5,7 @@ import { supabase } from '$lib/supabaseClient';
 import { clearSupabaseAuthStorage } from '$lib/utils/authStorage';
 import { authStore } from './core';
 import { fetchUserProfile } from './profileActions';
+import { joinPresence, leavePresence } from '$lib/stores/presence';
 
 // Sign in with email and password
 export async function signIn(email: string, password: string): Promise<boolean> {
@@ -42,6 +43,16 @@ export async function signIn(email: string, password: string): Promise<boolean> 
 
 			// Give auth state time to propagate
 			await new Promise((resolve) => setTimeout(resolve, 100));
+			
+			// Join presence tracking after successful authentication
+			try {
+				console.log('🔄 Attempting to join presence after sign in...');
+				await joinPresence();
+			} catch (presenceError) {
+				console.warn('Failed to join presence:', presenceError);
+				// Don't fail sign in if presence fails
+			}
+			
 			return true;
 		}
 
@@ -243,6 +254,14 @@ export async function signUpTeacher(data: {
 // Sign out
 export async function signOut(): Promise<boolean> {
 	try {
+		// Leave presence tracking before signing out
+		try {
+			await leavePresence();
+		} catch (presenceError) {
+			console.warn('Failed to leave presence:', presenceError);
+			// Continue with sign out even if presence fails
+		}
+
 		// First clear local state immediately
 		authStore.update(state => ({
 			...state,
