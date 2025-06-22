@@ -632,8 +632,16 @@ let setupInProgress = false;
 
 function setupRealtimeSubscriptions(): void {
 	const user = getUser(get(authStore));
-	if (!user || subscriptionsActive || setupInProgress) return;
+	if (!user || subscriptionsActive || setupInProgress) {
+		console.log('🚫 Skipping realtime setup:', { 
+			hasUser: !!user, 
+			subscriptionsActive, 
+			setupInProgress 
+		});
+		return;
+	}
 
+	console.log('🚀 Setting up realtime subscriptions for user:', user.id);
 
 	// Prevent multiple simultaneous setup calls
 	setupInProgress = true;
@@ -652,6 +660,7 @@ function setupRealtimeSubscriptions(): void {
 				table: 'conversations'
 			},
 			(payload) => {
+				console.log('🔄 Conversations realtime event:', payload);
 				// Only reload conversations if it's a conversation creation/deletion, not updates
 				if (payload.eventType === 'INSERT' || payload.eventType === 'DELETE') {
 					loadConversations();
@@ -659,7 +668,9 @@ function setupRealtimeSubscriptions(): void {
 				// For UPDATE events, we don't need to reload since message updates handle this
 			}
 		)
-		.subscribe();
+		.subscribe((status) => {
+			console.log('📡 Conversations subscription status:', status);
+		});
 
 	// Subscribe to messages with unique channel name
 	messagesChannel = supabase
@@ -673,6 +684,8 @@ function setupRealtimeSubscriptions(): void {
 			},
 			async (payload) => {
 				const newMessage = payload.new as Message;
+				
+				// Message received via realtime
 
 				// Check if user is part of this conversation
 				const { data: participation, error: participationError } = await supabase
@@ -683,8 +696,11 @@ function setupRealtimeSubscriptions(): void {
 					.single();
 
 				if (!participation) {
+					console.log('❌ User not participant in conversation, skipping notification');
 					return;
 				}
+				
+				console.log('✅ User is participant, proceeding with notification logic');
 
 				// Load full message with sender info
 				const { data: fullMessage, error: messageError } = await supabase
@@ -693,15 +709,24 @@ function setupRealtimeSubscriptions(): void {
 					.eq('id', newMessage.id)
 					.single();
 
+				console.log('🔍 Loaded full message:', {
+					id: fullMessage?.id,
+					sender_id: fullMessage?.sender_id,
+					sender: fullMessage?.sender,
+					error: messageError
+				});
 
 				if (fullMessage) {
 					// Check if sender data is missing and fetch manually if needed
 					if (fullMessage.sender_id && (!fullMessage.sender || (!fullMessage.sender.full_name && !fullMessage.sender.email))) {
+						console.log('❗ Missing sender data, fetching manually for:', fullMessage.sender_id);
 						const { data: senderData } = await supabase
 							.from('app_users')
 							.select('id, full_name, email, avatar_url')
 							.eq('id', fullMessage.sender_id)
 							.single();
+						
+						console.log('👤 Fetched sender data:', senderData);
 						
 						if (senderData) {
 							fullMessage.sender = senderData;
@@ -710,8 +735,17 @@ function setupRealtimeSubscriptions(): void {
 					
 					
 					// Create notification for new messages from other users
+					console.log('Chat notification check:', {
+						senderID: fullMessage.sender_id,
+						currentUserID: user.id,
+						shouldShowNotification: fullMessage.sender_id !== user.id,
+						messageContent: fullMessage.content
+					});
+					
 					if (fullMessage.sender_id !== user.id) {
 						const senderName = fullMessage.sender?.full_name ?? fullMessage.sender?.email ?? 'Someone';
+						
+						console.log('Showing chat notification for message from:', senderName);
 						
 						addPrivateMessageNotification(
 							senderName,
@@ -733,6 +767,7 @@ function setupRealtimeSubscriptions(): void {
 							5000
 						);
 					} else {
+						console.log('Not showing notification - message from current user');
 					}
 					
 					// Add to messages if we have this conversation loaded
@@ -784,7 +819,9 @@ function setupRealtimeSubscriptions(): void {
 				}
 			}
 		)
-		.subscribe();
+		.subscribe((status) => {
+			console.log('📡 Messages subscription status:', status);
+		});
 
 	// Subscribe to typing indicators with shared channel name for all users
 	typingChannel = supabase
@@ -816,7 +853,9 @@ function setupRealtimeSubscriptions(): void {
 				});
 			}
 		})
-		.subscribe();
+		.subscribe((status) => {
+			console.log('📡 Typing subscription status:', status);
+		});
 
 	// Mark subscriptions as active and reset setup flag
 	subscriptionsActive = true;

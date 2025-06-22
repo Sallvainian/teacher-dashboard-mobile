@@ -763,24 +763,26 @@
 										</div>
 
 										<div class="flex-1 min-w-0 overflow-hidden">
-											<div class="flex justify-between items-center mb-1">
+											<div class="mb-1">
 												<div class="font-medium text-highlight truncate">
 													{conversation.name}
 													{#if conversation.is_group}
 														<span class="text-xs text-text-base ml-1">(Group)</span>
 													{/if}
 												</div>
-												<div class="text-xs text-text-base">{conversation.last_message_time}</div>
 											</div>
 											<div class="flex justify-between items-center">
-												<div class="text-sm text-text-base truncate max-w-[180px]">{conversation.last_message_text}</div>
+												<div class="text-sm text-text-base truncate flex-1 min-w-0 mr-2">{conversation.last_message_text}</div>
 												{#if conversation.unread_count > 0}
 													<div
-														class="bg-purple text-highlight text-xs rounded-full w-5 h-5 flex items-center justify-center"
+														class="bg-purple text-highlight text-xs rounded-full w-5 h-5 flex items-center justify-center mr-2"
 													>
 														{conversation.unread_count}
 													</div>
 												{/if}
+											</div>
+											<div class="text-xs text-text-base mt-1">
+												{conversation.last_message_time}
 											</div>
 										</div>
 									</button>
@@ -868,7 +870,7 @@
 
 								<div>
 									<div class="font-medium text-highlight">
-										{activeConversation?.name ?? 'Select a conversation'}
+										{activeConversation ? getConversationDisplayName(activeConversation) : 'Select a conversation'}
 										{#if activeConversation?.is_group}
 											<span class="text-xs text-text-base ml-1"
 												>(Group conversation)</span
