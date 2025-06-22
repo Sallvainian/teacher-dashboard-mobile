@@ -7,6 +7,7 @@
 	import { debounce } from '$utils/performanceOptimized';
 	import { isHTMLElement } from '$lib/utils/domHelpers';
 	import { initializeNotifications } from '$lib/stores/notifications';
+	import { updatePageStatus } from '$lib/stores/presence';
 	import AppHeader from './AppHeader.svelte';
 	import AppSidebar from './AppSidebar.svelte';
 	import ImportWizard from '$components/ImportWizard.svelte';
@@ -34,6 +35,11 @@
 		gradebookStore.ensureDataLoaded().catch(console.error);
 	}, 100);
 
+	// Debounced page status update to prevent rapid updates
+	const debouncedPageStatusUpdate = debounce((pathname: string) => {
+		updatePageStatus(pathname).catch(console.error);
+	}, 500);
+
 	// Close dropdowns when clicking outside
 	$effect(() => {
 		function handleClickOutside(event: MouseEvent) {
@@ -60,6 +66,13 @@
 	$effect(() => {
 		if ($isAuthenticated) {
 			initializeNotifications();
+		}
+	});
+
+	// Update page status when pathname changes (for presence tracking)
+	$effect(() => {
+		if ($isAuthenticated && !isPublicRoute && !isRootRoute) {
+			debouncedPageStatusUpdate($page.url.pathname);
 		}
 	});
 

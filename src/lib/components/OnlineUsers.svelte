@@ -1,14 +1,19 @@
 <script lang="ts">
-	import { onlineUsers, onlineCount, isPresenceConnected, sendPoke } from '$lib/stores/presence';
+	import { onlineUsers, onlineCount, isPresenceConnected, sendPoke, sendEmojiReaction } from '$lib/stores/presence';
+	import { authStore } from '$lib/stores/auth';
 	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import type { OnlineUser } from '$lib/stores/presence';
+	import EmojiPicker from './EmojiPicker.svelte';
 
 	// Limit displayed users to prevent UI overflow
 	const MAX_DISPLAYED_USERS = 6;
 	
 	let displayedUsers = $derived($onlineUsers.slice(0, MAX_DISPLAYED_USERS));
 	let additionalCount = $derived(Math.max(0, $onlineCount - MAX_DISPLAYED_USERS));
+
+	// Track which user's emoji picker is open
+	let emojiPickerOpen = $state<string | null>(null);
 
 	/**
 	 * Get user initials for avatar fallback
@@ -51,6 +56,28 @@
 	 */
 	async function handlePoke(user: OnlineUser): Promise<void> {
 		await sendPoke(user);
+	}
+
+	/**
+	 * Handle emoji selection
+	 */
+	async function handleEmojiSelect(user: OnlineUser, emoji: string): Promise<void> {
+		await sendEmojiReaction(user, emoji);
+		emojiPickerOpen = null;
+	}
+
+	/**
+	 * Toggle emoji picker for a user
+	 */
+	function toggleEmojiPicker(userId: string): void {
+		emojiPickerOpen = emojiPickerOpen === userId ? null : userId;
+	}
+
+	/**
+	 * Check if user is the current user (can't interact with themselves)
+	 */
+	function isCurrentUser(userId: string): boolean {
+		return userId === $authStore.user?.id;
 	}
 </script>
 
@@ -135,23 +162,67 @@
 								{user.full_name}
 							</span>
 						</div>
-						<p class="text-xs text-muted truncate" title={user.email}>
-							{getRelativeTime(user.online_at)}
-						</p>
+						<div class="space-y-0.5">
+							{#if user.status_text}
+								<p class="text-xs text-purple truncate">
+									{user.status_text}
+								</p>
+							{/if}
+							<p class="text-xs text-muted truncate" title={user.email}>
+								{getRelativeTime(user.online_at)}
+							</p>
+						</div>
 					</div>
 
-					<!-- Poke button -->
-					<button
-						onclick={() => handlePoke(user)}
-						class="flex-shrink-0 p-2 text-purple hover:text-purple-hover hover:bg-surface rounded-lg transition-colors"
-						title="Poke {user.full_name}"
-						aria-label="Poke {user.full_name}"
-					>
-						<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-							<path d="M9 12l2 2 4-4"/>
-							<path d="M21 12c0 1.2-.6 2.3-1.5 3L12 21.5 4.5 15c-.9-.7-1.5-1.8-1.5-3C3 9.5 5.5 7 8.5 7c1.3 0 2.5.6 3.5 1.5C13 7.6 14.2 7 15.5 7 18.5 7 21 9.5 21 12z"/>
-						</svg>
-					</button>
+					<!-- Action buttons (hidden for current user) -->
+					{#if !isCurrentUser(user.user_id)}
+						<div class="flex gap-1">
+							<!-- Emoji reaction button -->
+							<div class="relative">
+								<button
+									onclick={() => toggleEmojiPicker(user.user_id)}
+									class="flex-shrink-0 p-2 text-purple hover:text-purple-hover hover:bg-surface rounded-lg transition-colors"
+									title="Send emoji reaction to {user.full_name}"
+									aria-label="Send emoji reaction to {user.full_name}"
+								>
+									<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+										<circle cx="12" cy="12" r="10"/>
+										<path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+										<line x1="9" y1="9" x2="9.01" y2="9"/>
+										<line x1="15" y1="9" x2="15.01" y2="9"/>
+									</svg>
+								</button>
+								
+								<!-- Emoji picker -->
+								{#if emojiPickerOpen === user.user_id}
+									<div class="absolute bottom-full right-0 mb-2">
+										<EmojiPicker
+											on:select={(e) => handleEmojiSelect(user, e.detail)}
+											on:close={() => emojiPickerOpen = null}
+										/>
+									</div>
+								{/if}
+							</div>
+
+							<!-- Poke button -->
+							<button
+								onclick={() => handlePoke(user)}
+								class="flex-shrink-0 p-2 text-purple hover:text-purple-hover hover:bg-surface rounded-lg transition-colors"
+								title="Poke {user.full_name}"
+								aria-label="Poke {user.full_name}"
+							>
+								<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M9 12l2 2 4-4"/>
+									<path d="M21 12c0 1.2-.6 2.3-1.5 3L12 21.5 4.5 15c-.9-.7-1.5-1.8-1.5-3C3 9.5 5.5 7 8.5 7c1.3 0 2.5.6 3.5 1.5C13 7.6 14.2 7 15.5 7 18.5 7 21 9.5 21 12z"/>
+								</svg>
+							</button>
+						</div>
+					{:else}
+						<!-- Show indicator for current user -->
+						<div class="flex items-center">
+							<span class="text-xs text-muted bg-surface px-2 py-1 rounded">You</span>
+						</div>
+					{/if}
 				</div>
 			{/each}
 

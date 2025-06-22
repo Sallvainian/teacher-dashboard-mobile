@@ -18,6 +18,8 @@ export interface OnlineUser {
 	avatar_url?: string;
 	role: 'teacher' | 'student';
 	online_at: string;
+	current_page?: string;
+	status_text?: string;
 }
 
 interface PresencePayload {
@@ -27,12 +29,24 @@ interface PresencePayload {
 	avatar_url?: string;
 	role: 'teacher' | 'student';
 	online_at: string;
+	current_page?: string;
+	status_text?: string;
 }
 
 // Stores
 export const onlineUsers = writable<OnlineUser[]>([]);
 export const isPresenceConnected = writable(false);
 export const presenceError = writable<string | null>(null);
+
+// Emoji reactions store
+export interface EmojiReaction {
+	id: string;
+	emoji: string;
+	fromUser: string;
+	timestamp: number;
+}
+
+export const emojiReactions = writable<EmojiReaction[]>([]);
 
 // Derived stores
 export const onlineCount = derived(onlineUsers, ($users) => $users.length);
@@ -46,10 +60,40 @@ export const onlineStudents = derived(onlineUsers, ($users) =>
 // Private variables
 let presenceChannel: RealtimeChannel | null = null;
 let currentUserId: string | null = null;
+let lastPagePath: string | null = null;
 
 // Track recent notifications to prevent spam
 const recentNotifications = new Map<string, number>();
 const NOTIFICATION_COOLDOWN = 30000; // 30 seconds cooldown
+
+/**
+ * Get user-friendly status text based on current page
+ */
+function getStatusFromPage(pathname: string): string {
+	if (pathname === '/') return 'On Dashboard';
+	if (pathname === '/dashboard') return 'On Dashboard';
+	if (pathname === '/gradebook') return 'Grading Students';
+	if (pathname === '/classes') return 'Managing Classes';
+	if (pathname.includes('/seating-chart')) return 'Viewing Seating Chart';
+	if (pathname === '/files') return 'Browsing Files';
+	if (pathname === '/messaging') return 'Messaging';
+	if (pathname === '/jeopardy') return 'Creating Games';
+	if (pathname.startsWith('/jeopardy/play')) return 'Playing Jeopardy';
+	if (pathname === '/snake') return 'Playing Snake';
+	if (pathname === '/settings') return 'In Settings';
+	if (pathname.startsWith('/student')) return 'Student View';
+	if (pathname.includes('/chat')) return 'Chatting';
+	if (pathname.includes('/game')) return 'Gaming';
+	
+	// Fallback for unknown pages
+	const segments = pathname.split('/').filter(Boolean);
+	if (segments.length > 0) {
+		const page = segments[0].charAt(0).toUpperCase() + segments[0].slice(1);
+		return `On ${page}`;
+	}
+	
+	return 'Online';
+}
 
 /**
  * Check if we should show a notification for this user
@@ -123,6 +167,9 @@ export async function joinPresence(): Promise<void> {
 			})
 			.on('broadcast', { event: 'poke' }, ({ payload }) => {
 				handlePokeReceived(payload);
+			})
+			.on('broadcast', { event: 'emoji-reaction' }, ({ payload }) => {
+				handleEmojiReactionReceived(payload);
 			});
 
 		// Subscribe to the channel
@@ -135,13 +182,16 @@ export async function joinPresence(): Promise<void> {
 				presenceError.set(null);
 				
 				// Track current user's presence
+				const currentPage = typeof window !== 'undefined' ? window.location.pathname : '/';
 				const presencePayload: PresencePayload = {
 					user_id: authState.user!.id,
 					full_name: authState.profile!.full_name,
 					email: authState.profile!.email,
 					avatar_url: authState.profile!.avatar_url || undefined,
 					role: authState.profile!.role as 'teacher' | 'student',
-					online_at: new Date().toISOString()
+					online_at: new Date().toISOString(),
+					current_page: currentPage,
+					status_text: getStatusFromPage(currentPage)
 				};
 
 				console.log('👤 Tracking presence with payload:', presencePayload);
@@ -182,6 +232,7 @@ export async function leavePresence(): Promise<void> {
 		
 		isPresenceConnected.set(false);
 		currentUserId = null;
+		lastPagePath = null; // Reset page tracking
 		console.log('✅ Left presence channel');
 	} catch (error: UnknownError) {
 		console.error('Error leaving presence:', error);
@@ -210,7 +261,9 @@ function handlePresenceSync(): void {
 					email: latestPresence.email,
 					avatar_url: latestPresence.avatar_url,
 					role: latestPresence.role,
-					online_at: latestPresence.online_at
+					online_at: latestPresence.online_at,
+					current_page: latestPresence.current_page,
+					status_text: latestPresence.status_text
 				});
 			}
 		}
@@ -271,6 +324,106 @@ function handlePresenceLeave(key: string, leftPresences: any[]): void {
 export function isUserOnline(userId: string): boolean {
 	const users = get(onlineUsers);
 	return users.some(user => user.user_id === userId);
+}
+
+/**
+ * Update current user's page status
+ */
+export async function updatePageStatus(pathname: string): Promise<void> {
+	// Don't update if we're not connected or if the path hasn't changed
+	if (!presenceChannel || !currentUserId || pathname === lastPagePath) {
+		return;
+	}
+
+	const authState = get(authStore);
+	if (!authState.user || !authState.profile) {
+		return;
+	}
+
+	try {
+		lastPagePath = pathname;
+		
+		const presencePayload: PresencePayload = {
+			user_id: authState.user.id,
+			full_name: authState.profile.full_name,
+			email: authState.profile.email,
+			avatar_url: authState.profile.avatar_url || undefined,
+			role: authState.profile.role as 'teacher' | 'student',
+			online_at: new Date().toISOString(),
+			current_page: pathname,
+			status_text: getStatusFromPage(pathname)
+		};
+
+		await presenceChannel.track(presencePayload);
+		console.log('📍 Updated page status:', getStatusFromPage(pathname));
+	} catch (error) {
+		console.error('Failed to update page status:', error);
+		// Don't break presence connection on page status update errors
+		lastPagePath = null; // Reset so we can try again
+	}
+}
+
+/**
+ * Send an emoji reaction to another user
+ */
+export async function sendEmojiReaction(targetUser: OnlineUser, emoji: string): Promise<void> {
+	if (!presenceChannel || !currentUserId) {
+		console.warn('Cannot send emoji reaction: not connected to presence');
+		return;
+	}
+
+	const authState = get(authStore);
+	if (!authState.profile) {
+		console.warn('Cannot send emoji reaction: no user profile');
+		return;
+	}
+
+	try {
+		// Generate UUID with fallback for older browsers
+		const generateUUID = () => {
+			if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+				return crypto.randomUUID();
+			}
+			// Fallback UUID generator
+			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+				const r = Math.random() * 16 | 0;
+				const v = c === 'x' ? r : (r & 0x3 | 0x8);
+				return v.toString(16);
+			});
+		};
+
+		const reactionPayload = {
+			id: generateUUID(),
+			emoji,
+			from_user_id: currentUserId,
+			from_name: authState.profile.full_name,
+			to_user_id: targetUser.user_id,
+			to_name: targetUser.full_name,
+			timestamp: Date.now()
+		};
+
+		await presenceChannel.send({
+			type: 'broadcast',
+			event: 'emoji-reaction',
+			payload: reactionPayload
+		});
+
+		// Show confirmation to sender
+		showInfoToast(
+			`${emoji} Sent to ${targetUser.full_name}!`,
+			'Reaction Sent',
+			2000
+		);
+
+		console.log(`${emoji} Emoji reaction sent to:`, targetUser.full_name);
+	} catch (error) {
+		console.error('Failed to send emoji reaction:', error);
+		showInfoToast(
+			'Failed to send reaction',
+			'Error',
+			3000
+		);
+	}
 }
 
 /**
@@ -337,6 +490,26 @@ function handlePokeReceived(payload: any): void {
 }
 
 /**
+ * Handle receiving an emoji reaction
+ */
+function handleEmojiReactionReceived(payload: any): void {
+	// Only show reaction if it's for the current user
+	if (payload.to_user_id === currentUserId) {
+		const reaction: EmojiReaction = {
+			id: payload.id,
+			emoji: payload.emoji,
+			fromUser: payload.from_name,
+			timestamp: payload.timestamp
+		};
+
+		// Add to reactions store for animation
+		emojiReactions.update(reactions => [...reactions, reaction]);
+
+		console.log(`${payload.emoji} Received emoji reaction from:`, payload.from_name);
+	}
+}
+
+/**
  * Handle page unload - clean up presence
  */
 if (typeof window !== 'undefined') {
@@ -370,8 +543,11 @@ export default {
 	onlineStudents,
 	isPresenceConnected,
 	presenceError,
+	emojiReactions,
 	joinPresence,
 	leavePresence,
 	isUserOnline,
-	sendPoke
+	sendPoke,
+	sendEmojiReaction,
+	updatePageStatus
 };

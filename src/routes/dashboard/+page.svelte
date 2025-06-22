@@ -15,6 +15,7 @@
 	import type { UnknownError } from '$lib/types/ai-enforcement';
 	import type { ConversationWithDetails } from '$lib/types/chat';
 	import OnlineUsers from '$lib/components/OnlineUsers.svelte';
+	import EmojiOverlay from '$lib/components/EmojiOverlay.svelte';
 
 	interface RecentMessage {
 		id: string; // Or number, depending on your data
@@ -515,6 +516,9 @@
 
 			{/if}
 		</div>
+
+		<!-- Emoji Overlay for reactions -->
+		<EmojiOverlay />
 
 		<!-- Keyboard Help Modal -->
 		{#if showHelp}
