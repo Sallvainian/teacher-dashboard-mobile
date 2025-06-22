@@ -11,6 +11,7 @@
 	import { chatStore } from '$lib/stores/chat';
 	import { authStore, isAuthenticated } from '$lib/stores/auth';
 	import { supabase } from '$lib/supabaseClient';
+	import { showSuccessToast, showErrorToast, showWarningToast, showInfoToast } from '$lib/stores/notifications';
 	import type { UnknownError } from '$lib/types/ai-enforcement';
 	import type { ConversationWithDetails } from '$lib/types/chat';
 
@@ -230,6 +231,7 @@
 							<h1 class="text-3xl font-bold text-highlight">Dashboard</h1>
 							<p class="text-text-base">{formattedDate}</p>
 						</div>
+						
 					</div>
 				</div>
 			</div>
