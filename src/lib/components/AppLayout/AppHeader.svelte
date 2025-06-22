@@ -262,10 +262,11 @@
 						</div>
 			{/if}
 		</div>
-	</div>
 
-	<!-- Right side actions -->
-			<div class="flex items-center gap-4">
+		</div>
+
+		<!-- Right side actions -->
+		<div class="flex items-center gap-4">
 				<!-- Notifications - only show if authenticated -->
 				{#if $isAuthenticated}
 					<NotificationDropdown />
