@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { isAuthenticated, isInitialized } from '$lib/stores/auth';
+	import { isAuthenticated, isInitialized } from '$lib/stores/auth/index';
 
 	// Redirect based on authentication status using $effect
 	$effect(() => {

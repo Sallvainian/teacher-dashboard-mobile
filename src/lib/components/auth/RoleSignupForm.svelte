@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { authStore } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth/index';
 	import { goto } from '$app/navigation';
 	import type { StudentSignupData, TeacherSignupData } from '$lib/types/auth';
 	import type { UserRole } from '$lib/types/database';

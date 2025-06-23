@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Class } from '$lib/types/gradebook';
 	import { gradebookStore } from '$lib/stores/gradebook';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth/index';
 	import { get } from 'svelte/store';
 	import type { UnknownError } from '$lib/types/ai-enforcement';
 

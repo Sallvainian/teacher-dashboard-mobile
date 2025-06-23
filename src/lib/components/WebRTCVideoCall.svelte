@@ -8,7 +8,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 	import { currentCall, webrtcService } from '$lib/services/webrtcService';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth/index';
 	import { get } from 'svelte/store';
 
 	let { 

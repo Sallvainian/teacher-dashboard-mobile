@@ -1,7 +1,7 @@
 <script lang="ts">
 	import RoleSignupForm from '$lib/components/auth/RoleSignupForm.svelte';
 	import { goto } from '$app/navigation';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth/index';
 	import { page } from '$app/stores';
 	import { getRole, getIsAuthenticated } from '$lib/utils/storeHelpers';
 

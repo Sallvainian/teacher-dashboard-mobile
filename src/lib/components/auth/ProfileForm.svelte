@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { authStore, user } from '$lib/stores/auth';
+	import { authStore, user } from '$lib/stores/auth/index';
 	import { supabase } from '$lib/supabaseClient';
 	import type { User } from '@supabase/supabase-js';
 	import { getEventTargetFiles } from '$lib/utils/domHelpers';

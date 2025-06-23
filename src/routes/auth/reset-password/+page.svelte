@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ResetPasswordForm from '$lib/components/auth/ResetPasswordForm.svelte';
 	import { goto } from '$app/navigation';
-	import { isAuthenticated } from '$lib/stores/auth';
+	import { isAuthenticated } from '$lib/stores/auth/index';
 
 	// Redirect if already authenticated
 	$effect(() => {

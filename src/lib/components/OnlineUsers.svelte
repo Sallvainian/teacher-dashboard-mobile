@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onlineUsers, onlineCount, isPresenceConnected, sendPoke, sendEmojiReaction } from '$lib/stores/presence';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth/index';
 	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import type { OnlineUser } from '$lib/stores/presence';

@@ -1,7 +1,7 @@
 <script lang="ts">
 	// Refactored Gradebook Page using new component architecture
 	import { gradebookStore } from '$lib/stores/gradebook';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth/index';
 	import LoadingBounce from '$lib/components/LoadingBounce.svelte';
 	import ImportWizard from '$lib/components/ImportWizard.svelte';
 	import AssignmentCreationModal from '$lib/components/AssignmentCreationModal.svelte';

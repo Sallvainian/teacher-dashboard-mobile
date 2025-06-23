@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ProfileForm from '$lib/components/auth/ProfileForm.svelte';
-	import { authStore, user } from '$lib/stores/auth';
+	import { authStore, user } from '$lib/stores/auth/index';
 	import { goto } from '$app/navigation';
 	import { getUser } from '$lib/utils/storeHelpers';
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { authStore, error as authError } from '$lib/stores/auth';
+	import { authStore, error as authError } from '$lib/stores/auth/index';
 	import { goto } from '$app/navigation';
 
 	let email = $state('');

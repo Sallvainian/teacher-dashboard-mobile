@@ -9,7 +9,7 @@
 	import { jeopardyStore } from '$lib/stores/jeopardy';
 	import { fileService } from '$lib/services/fileService';
 	import { chatStore } from '$lib/stores/chat';
-	import { authStore, isAuthenticated } from '$lib/stores/auth';
+	import { authStore, isAuthenticated } from '$lib/stores/auth/index';
 	import { supabase } from '$lib/supabaseClient';
 	import { showSuccessToast, showErrorToast, showWarningToast, showInfoToast } from '$lib/stores/notifications';
 	import type { UnknownError } from '$lib/types/ai-enforcement';

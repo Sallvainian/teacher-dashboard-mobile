@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { get } from 'svelte/store';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth/index';
 	import { chatStore } from '$lib/stores/chat';
 	import { confirmationStore } from '$lib/stores/confirmationModal';
 	import { supabase } from '$lib/supabaseClient';

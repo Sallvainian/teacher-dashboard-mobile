@@ -5,7 +5,7 @@
 	import StudentRoster from '$lib/components/StudentRoster.svelte';
 	import ImportWizard from '$lib/components/ImportWizard.svelte';
 	import { goto } from '$app/navigation';
-	import { isAuthenticated, authStore } from '$lib/stores/auth';
+	import { isAuthenticated, authStore } from '$lib/stores/auth/index';
 
 	// State variables with $state
 	let showImportWizard = $state(false);

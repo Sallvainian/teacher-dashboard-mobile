@@ -1,4 +1,4 @@
-import { authStore } from '$lib/stores/auth';
+import { authStore } from '$lib/stores/auth/index';
 import type { UnknownError } from '$lib/types/ai-enforcement';
 
 let initPromise: Promise<void> | null = null;

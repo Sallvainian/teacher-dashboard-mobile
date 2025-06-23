@@ -3,7 +3,7 @@
 	import type { Class } from '$lib/types/gradebook';
 	import { gradebookStore } from '$lib/stores/gradebook';
 	import { writable, derived } from 'svelte/store';
-	import { authStore } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth/index';
 	import { confirmationStore } from '$lib/stores/confirmationModal';
 	import { getEventTargetFiles, isHTMLInputElement } from '$lib/utils/domHelpers';
 	import type { UnknownError } from '$lib/types/ai-enforcement';

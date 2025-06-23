@@ -74,6 +74,7 @@ function createAuthStore() {
 
 // Create and export the combined auth store
 export const combinedAuthStore = createAuthStore();
+export const authStore = combinedAuthStore; // Main export alias
 
 // Export individual stores for backward compatibility
 export {

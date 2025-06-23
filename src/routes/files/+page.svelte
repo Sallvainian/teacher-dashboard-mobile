@@ -13,7 +13,7 @@
  import type { FileMetadata, FileFolder } from '$lib/types/files';
  import { formatFileSize, getFileIcon } from '$lib/types/files';
  import { supabase } from '$lib/supabaseClient';
- import { isAuthenticated } from '$lib/stores/auth';
+ import { isAuthenticated } from '$lib/stores/auth/index';
  import { goto } from '$app/navigation';
  import { getEventTargetFiles } from '$lib/utils/domHelpers';
 

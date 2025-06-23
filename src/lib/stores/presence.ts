@@ -7,7 +7,7 @@
 import { writable, derived, get } from 'svelte/store';
 import { supabase } from '$lib/supabaseClient';
 import { showInfoToast } from '$lib/stores/notifications';
-import { authStore } from '$lib/stores/auth';
+import { authStore } from '$lib/stores/auth/index';
 import type { RealtimeChannel, RealtimePresenceState } from '@supabase/supabase-js';
 import type { UnknownError } from '$lib/types/ai-enforcement';
 

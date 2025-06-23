@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { authStore } from '$lib/stores/auth';
+	import { authStore } from '$lib/stores/auth/index';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { getUser } from '$lib/utils/storeHelpers';
