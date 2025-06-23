@@ -96,16 +96,36 @@ class WebRTCService {
 		try {
 			this.currentCallId = callId;
 			
-			// Get user media with fallback for HTTP localhost
+			// Check for secure context and mediaDevices availability
+			if (!window.isSecureContext) {
+				throw new Error('Video calls require a secure connection (HTTPS). Please access the site via HTTPS.');
+			}
+			
+			if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+				throw new Error('Your browser does not support camera and microphone access. Please use a modern browser.');
+			}
+
+			// Get user media - try real camera/microphone first
 			try {
 				this.localStream = await navigator.mediaDevices.getUserMedia({
 					video: true,
 					audio: true
 				});
-			} catch (error) {
-				// Fallback for HTTP localhost - create fake stream for testing
-				console.warn('Camera access denied, using fake stream for testing');
-				this.localStream = await this.createFakeStream();
+				console.log('✅ Real camera/microphone access granted');
+			} catch (error: any) {
+				console.warn('❌ Camera/microphone access denied:', error);
+				
+				// Handle specific getUserMedia errors
+				switch (error.name) {
+					case 'NotAllowedError':
+						throw new Error('Camera and microphone access was denied. Please grant permission in your browser settings and try again.');
+					case 'NotFoundError':
+						throw new Error('No camera or microphone found. Please connect a camera and microphone and try again.');
+					case 'OverconstrainedError':
+						throw new Error('Camera or microphone constraints cannot be satisfied. Please try again.');
+					default:
+						throw new Error(`Failed to access camera and microphone: ${error.message}`);
+				}
 			}
 
 			// Update store FIRST so ICE candidate handler can access participants
@@ -151,16 +171,36 @@ class WebRTCService {
 		try {
 			this.currentCallId = callData.callId;
 			
-			// Get user media with fallback for HTTP localhost
+			// Check for secure context and mediaDevices availability
+			if (!window.isSecureContext) {
+				throw new Error('Video calls require a secure connection (HTTPS). Please access the site via HTTPS.');
+			}
+			
+			if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+				throw new Error('Your browser does not support camera and microphone access. Please use a modern browser.');
+			}
+
+			// Get user media - try real camera/microphone first
 			try {
 				this.localStream = await navigator.mediaDevices.getUserMedia({
 					video: true,
 					audio: true
 				});
-			} catch (error) {
-				// Fallback for HTTP localhost - create fake stream for testing
-				console.warn('Camera access denied, using fake stream for testing');
-				this.localStream = await this.createFakeStream();
+				console.log('✅ Real camera/microphone access granted');
+			} catch (error: any) {
+				console.warn('❌ Camera/microphone access denied:', error);
+				
+				// Handle specific getUserMedia errors
+				switch (error.name) {
+					case 'NotAllowedError':
+						throw new Error('Camera and microphone access was denied. Please grant permission in your browser settings and try again.');
+					case 'NotFoundError':
+						throw new Error('No camera or microphone found. Please connect a camera and microphone and try again.');
+					case 'OverconstrainedError':
+						throw new Error('Camera or microphone constraints cannot be satisfied. Please try again.');
+					default:
+						throw new Error(`Failed to access camera and microphone: ${error.message}`);
+				}
 			}
 
 			// Update store FIRST so ICE candidate handler can access participants
@@ -531,68 +571,6 @@ class WebRTCService {
 		}
 	}
 
-	// Create fake stream for HTTP localhost testing
-	private async createFakeStream(): Promise<MediaStream> {
-		// Create a canvas with a simple animation
-		const canvas = document.createElement('canvas');
-		canvas.width = 640;
-		canvas.height = 480;
-		const ctx = canvas.getContext('2d')!;
-		
-		// Simple animation
-		let frame = 0;
-		const animate = () => {
-			ctx.fillStyle = '#1a1a2e';
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
-			
-			ctx.fillStyle = '#8B5CF6';
-			ctx.font = '32px Arial';
-			ctx.textAlign = 'center';
-			ctx.fillText('📹 Video Call Demo', canvas.width / 2, canvas.height / 2 - 40);
-			
-			ctx.fillStyle = '#ffffff';
-			ctx.font = '16px Arial';
-			ctx.fillText('Camera not available on HTTP', canvas.width / 2, canvas.height / 2);
-			ctx.fillText('Use HTTPS for real camera access', canvas.width / 2, canvas.height / 2 + 30);
-			
-			// Animated dot
-			const x = canvas.width / 2 + Math.cos(frame * 0.1) * 50;
-			const y = canvas.height / 2 + 60;
-			ctx.fillStyle = '#8B5CF6';
-			ctx.beginPath();
-			ctx.arc(x, y, 8, 0, Math.PI * 2);
-			ctx.fill();
-			
-			frame++;
-			requestAnimationFrame(animate);
-		};
-		animate();
-		
-		// Get stream from canvas
-		const videoStream = canvas.captureStream(30);
-		
-		// Create silent audio track
-		const audioContext = new AudioContext();
-		const oscillator = audioContext.createOscillator();
-		const gainNode = audioContext.createGain();
-		oscillator.connect(gainNode);
-		gainNode.connect(audioContext.destination);
-		gainNode.gain.value = 0; // Silent
-		oscillator.frequency.value = 440;
-		oscillator.start();
-		
-		// @ts-ignore - MediaStreamAudioDestinationNode exists
-		const audioDestination = audioContext.createMediaStreamDestination();
-		gainNode.connect(audioDestination);
-		
-		// Combine video and audio
-		const combinedStream = new MediaStream([
-			...videoStream.getVideoTracks(),
-			...audioDestination.stream.getAudioTracks()
-		]);
-		
-		return combinedStream;
-	}
 
 	// Helper method to create a unique call ID
 	createCallId(userId1: string, userId2: string): string {
