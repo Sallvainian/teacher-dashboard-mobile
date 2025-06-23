@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { get } from 'svelte/store';
 	import { authStore } from '$lib/stores/auth';
 	import { chatStore } from '$lib/stores/chat';
 	import { confirmationStore } from '$lib/stores/confirmationModal';
@@ -57,44 +58,60 @@
 		}
 	}
 
+	// Function to process conversations 
+	function processConversations(convs: any[]) {
+		const user = getUser($authStore);
+		if (!user || convs.length === 0) return [];
+
+		// Store raw conversations for participant lookup
+		rawConversations = convs as ConversationWithDetails[];
+		
+		// Process conversations
+		const processedConversations = convs.map((conv) => {
+			// Determine if it's a group chat: has more than 2 participants
+			const isGroupChat = conv.participants && conv.participants.length > 2;
+			
+			return {
+				id: conv.id,
+				name: conv.name ?? getConversationDisplayName(conv as ConversationWithDetails),
+				displayName: getConversationDisplayName(conv as ConversationWithDetails),
+				avatar: conv.avatar ?? getConversationInitials(conv as ConversationWithDetails, user.id),
+				displayAvatar: getConversationAvatarUrl(conv as ConversationWithDetails, user.id),
+				is_group: isGroupChat,
+				last_message_text: getLastMessageText(conv as ConversationWithDetails),
+				last_message_time: formatTimeAgo(conv.last_message?.created_at ?? null),
+				unread_count: conv.unread_count ?? 0,
+				is_online: isConversationOnline(conv as ConversationWithDetails, user.id),
+				created_at: conv.created_at ?? new Date().toISOString(),
+				updated_at: conv.updated_at ?? new Date().toISOString()
+			};
+		});
+
+		return processedConversations.map(conv => ({
+			...conv,
+			displayAvatar: conv.displayAvatar ?? '' // Ensure displayAvatar is always a string
+		}));
+	}
+
 	// Subscribe to store changes
 	const unsubscribeConversations = chatStore.conversations.subscribe((convs) => {
 		const user = getUser($authStore);
 		if (user && convs.length > 0) {
-			// Store raw conversations for participant lookup
-			rawConversations = convs as ConversationWithDetails[];
-			
-			// Process conversations
-			const processedConversations = convs.map((conv) => {
-				// Determine if it's a group chat: has more than 2 participants
-				const isGroupChat = conv.participants && conv.participants.length > 2;
-				
-				return {
-					id: conv.id,
-					name: conv.name ?? getConversationDisplayName(conv as ConversationWithDetails),
-					displayName: getConversationDisplayName(conv as ConversationWithDetails),
-					avatar: conv.avatar ?? getConversationInitials(conv as ConversationWithDetails, user.id),
-					displayAvatar: getConversationAvatarUrl(conv as ConversationWithDetails, user.id),
-					is_group: isGroupChat,
-					last_message_text: getLastMessageText(conv as ConversationWithDetails),
-					last_message_time: formatTimeAgo(conv.last_message?.created_at ?? null),
-					unread_count: conv.unread_count ?? 0,
-					is_online: isConversationOnline(conv as ConversationWithDetails, user.id),
-					created_at: conv.created_at ?? new Date().toISOString(),
-					updated_at: conv.updated_at ?? new Date().toISOString()
-				};
-			});
-
-			conversations = processedConversations.map(conv => ({
-				...conv,
-				displayAvatar: conv.displayAvatar ?? '' // Ensure displayAvatar is always a string
-			}));
+			conversations = processConversations(convs);
 
 			// Set active conversation to first one if none selected
 			if (!activeConversation && conversations.length > 0) {
 				activeConversation = conversations[0];
 				chatStore.setActiveConversation(activeConversation.id);
 			}
+		}
+	});
+
+	// Subscribe to messages store to update conversation names when messages load
+	const unsubscribeAllMessages = chatStore.messages.subscribe((messagesData) => {
+		const user = getUser($authStore);
+		if (user && Object.keys(messagesData).length > 0 && rawConversations.length > 0) {
+			conversations = processConversations(rawConversations);
 		}
 	});
 
@@ -112,6 +129,15 @@
 			messages = msgs.map((msg, index) => {
 				// Better fallback for sender name
 				let senderName = 'Unknown User';
+				
+				// console.log(`🎭 UI: Processing message ${index} sender data:`, {
+				// 	messageId: msg.id,
+				// 	senderId: msg.sender_id,
+				// 	hasSender: !!msg.sender,
+				// 	senderFullName: msg.sender?.full_name,
+				// 	senderEmail: msg.sender?.email,
+				// 	senderData: msg.sender
+				// });
 				
 				if (msg.sender && (msg.sender.full_name || msg.sender.email)) {
 					senderName = msg.sender.full_name || msg.sender.email || 'Unknown User';
@@ -154,6 +180,7 @@
 	// Cleanup subscriptions on destroy
 	onDestroy(() => {
 		unsubscribeConversations();
+		unsubscribeAllMessages();
 		unsubscribeMessages();
 		unsubscribeLoading();
 		unsubscribeError();
@@ -167,6 +194,8 @@
 
 	// Helper functions
 	function getConversationDisplayName(conversation: ConversationWithDetails): string {
+		const user = getUser($authStore);
+		
 		if (conversation.name) {
 			return conversation.name;
 		}
@@ -175,13 +204,7 @@
 			return 'Group Conversation';
 		}
 
-		// For direct messages, use last_message sender info if available
-		if (conversation.last_message?.sender && conversation.last_message.sender_id !== getUser($authStore)?.id) {
-			return conversation.last_message.sender.full_name || conversation.last_message.sender.email || 'Unknown User';
-		}
-
-		// Otherwise check participants
-		const user = getUser($authStore);
+		// Simple participant lookup - now works correctly with fixed RLS policy
 		const otherParticipant = conversation.participants?.find(
 			(p: ConversationParticipant) => p.user_id !== user?.id
 		);
@@ -190,7 +213,7 @@
 			return otherParticipant.user.full_name || otherParticipant.user.email || 'Unknown User';
 		}
 
-		return 'Unknown User';
+		return 'New Conversation';
 	}
 
 	function getConversationInitials(conversation: ConversationWithDetails, currentUserId: string): string {
@@ -393,6 +416,7 @@
 	onDestroy(() => {
 		// Clean up subscriptions
 		unsubscribeConversations();
+		unsubscribeAllMessages();
 		unsubscribeMessages();
 		unsubscribeLoading();
 		unsubscribeError();

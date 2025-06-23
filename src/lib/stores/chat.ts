@@ -297,8 +297,8 @@ async function loadConversations(): Promise<void> {
 		// Get last message for each conversation
 		const conversationsWithMessages = await Promise.all(
 			(sortedConversations ?? []).map(async (conv: Record<string, unknown>) => {
-				// Get last message (may not exist for new conversations)
-				const { data: lastMessages } = await supabase
+				// Get recent messages to find other participants (not just last message)
+				const { data: recentMessages } = await supabase
 					.from('messages')
 					.select(
 						`
@@ -308,9 +308,9 @@ async function loadConversations(): Promise<void> {
 					)
 					.eq('conversation_id', conv.id)
 					.order('created_at', { ascending: false })
-					.limit(1);
+					.limit(10);
 
-				const lastMessage = lastMessages?.[0] ?? null;
+				const lastMessage = recentMessages?.[0] ?? null;
 
 				// Get participants separately with better error handling
 				const { data: participants, error: participantsError } = await supabase
@@ -325,7 +325,7 @@ async function loadConversations(): Promise<void> {
 					.eq('is_active', true);  // Only get active participants
 
 				if (participantsError) {
-					console.error('❌ PARTICIPANTS: Error loading participants for conversation', conv.id, participantsError);
+					console.error('Error loading participants:', participantsError);
 				}
 				
 				
@@ -349,6 +349,7 @@ async function loadConversations(): Promise<void> {
 					participants: participants ?? [],
 					conversation_participants: participants ?? [],
 					last_message: lastMessage,
+					recent_messages: recentMessages ?? [],
 					unread_count: unreadCount
 				};
 				
@@ -368,7 +369,6 @@ async function loadConversations(): Promise<void> {
 
 async function loadMessages(conversationId: string): Promise<void> {
 	try {
-		
 		const { data: messagesData, error: messagesError } = await supabase
 			.from('messages')
 			.select(
@@ -382,57 +382,18 @@ async function loadMessages(conversationId: string): Promise<void> {
 			.order('created_at', { ascending: true });
 
 		if (messagesError) {
-			console.error('📖 MESSAGES: Database error:', messagesError);
+			console.error('Database error:', messagesError);
 			throw messagesError;
 		}
 
+		messages.update((current) => ({
+			...current,
+			[conversationId]: messagesData ?? []
+		}));
 
-		// Debug sender information and enhance missing data
-		if (messagesData && messagesData.length > 0) {
-			// Find messages with missing sender data
-			const messagesWithMissingSender = messagesData.filter(msg => 
-				msg.sender_id && (!msg.sender || (!msg.sender.full_name && !msg.sender.email))
-			);
-			
-			if (messagesWithMissingSender.length > 0) {
-				console.warn('📖 MESSAGES: Found messages with missing sender data, fetching manually:', 
-					messagesWithMissingSender.map(m => ({ id: m.id, sender_id: m.sender_id }))
-				);
-				
-				// Fetch missing user data manually
-				const missingUserIds = [...new Set(messagesWithMissingSender.map(m => m.sender_id))];
-				const { data: missingUsers } = await supabase
-					.from('app_users')
-					.select('id, full_name, email, avatar_url')
-					.in('id', missingUserIds);
-				
-				if (missingUsers) {
-					// Patch the missing sender data
-					messagesData.forEach(msg => {
-						if (msg.sender_id && (!msg.sender || (!msg.sender.full_name && !msg.sender.email))) {
-							const userData = missingUsers.find(u => u.id === msg.sender_id);
-							if (userData) {
-								msg.sender = userData;
-							}
-						}
-					});
-				}
-			}
-			
-		}
-
-		messages.update((current) => {
-			const updated = {
-				...current,
-				[conversationId]: messagesData ?? []
-			};
-				return updated;
-		});
-
-		// Mark messages as read
 		await markConversationAsRead(conversationId);
 	} catch (err: UnknownError) {
-		console.error('📖 MESSAGES: Error loading messages:', err);
+		console.error('Error loading messages:', err);
 		error.set(err instanceof Error ? err.message : 'Failed to load messages');
 	}
 }
@@ -641,7 +602,6 @@ function setupRealtimeSubscriptions(): void {
 		return;
 	}
 
-	console.log('🚀 Setting up realtime subscriptions for user:', user.id);
 
 	// Prevent multiple simultaneous setup calls
 	setupInProgress = true;
@@ -660,7 +620,6 @@ function setupRealtimeSubscriptions(): void {
 				table: 'conversations'
 			},
 			(payload) => {
-				console.log('🔄 Conversations realtime event:', payload);
 				// Only reload conversations if it's a conversation creation/deletion, not updates
 				if (payload.eventType === 'INSERT' || payload.eventType === 'DELETE') {
 					loadConversations();
@@ -700,7 +659,6 @@ function setupRealtimeSubscriptions(): void {
 					return;
 				}
 				
-				console.log('✅ User is participant, proceeding with notification logic');
 
 				// Load full message with sender info
 				const { data: fullMessage, error: messageError } = await supabase
@@ -709,24 +667,16 @@ function setupRealtimeSubscriptions(): void {
 					.eq('id', newMessage.id)
 					.single();
 
-				console.log('🔍 Loaded full message:', {
-					id: fullMessage?.id,
-					sender_id: fullMessage?.sender_id,
-					sender: fullMessage?.sender,
-					error: messageError
-				});
 
 				if (fullMessage) {
 					// Check if sender data is missing and fetch manually if needed
 					if (fullMessage.sender_id && (!fullMessage.sender || (!fullMessage.sender.full_name && !fullMessage.sender.email))) {
-						console.log('❗ Missing sender data, fetching manually for:', fullMessage.sender_id);
 						const { data: senderData } = await supabase
 							.from('app_users')
 							.select('id, full_name, email, avatar_url')
 							.eq('id', fullMessage.sender_id)
 							.single();
 						
-						console.log('👤 Fetched sender data:', senderData);
 						
 						if (senderData) {
 							fullMessage.sender = senderData;
@@ -854,7 +804,6 @@ function setupRealtimeSubscriptions(): void {
 			}
 		})
 		.subscribe((status) => {
-			console.log('📡 Typing subscription status:', status);
 		});
 
 	// Mark subscriptions as active and reset setup flag
@@ -1102,6 +1051,7 @@ export const chatStore = {
 	conversations: { subscribe: conversations.subscribe },
 	activeConversation: { subscribe: activeConversation.subscribe },
 	activeMessages: { subscribe: activeMessages.subscribe },
+	messages: { subscribe: messages.subscribe },
 	activeTypingUsers: { subscribe: activeTypingUsers.subscribe },
 	loading: { subscribe: loading.subscribe },
 	error: { subscribe: error.subscribe },
