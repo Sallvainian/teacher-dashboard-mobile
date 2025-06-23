@@ -1,0 +1,615 @@
+/**
+ * @ai-context WebRTC Video Service - Free peer-to-peer video calling
+ * @ai-dependencies supabase for signaling, stores for state management
+ * @ai-sideEffects Creates WebRTC connections, accesses user media
+ * @ai-exports webrtcService for video calling functionality
+ */
+
+import { supabase } from '$lib/supabaseClient';
+import { writable, get } from 'svelte/store';
+import type { RealtimeChannel } from '@supabase/supabase-js';
+
+export interface VideoCall {
+	id: string;
+	participants: string[];
+	isActive: boolean;
+	localStream?: MediaStream;
+	remoteStream?: MediaStream;
+}
+
+// Store for current video call state
+export const currentCall = writable<VideoCall | null>(null);
+export const localVideo = writable<HTMLVideoElement | null>(null);
+export const remoteVideo = writable<HTMLVideoElement | null>(null);
+export const incomingCall = writable<{ isIncoming: boolean; callData: SignalData | null }>({ 
+	isIncoming: false, 
+	callData: null 
+});
+
+interface SignalData {
+	type: 'offer' | 'answer' | 'ice-candidate' | 'end-call';
+	data: any;
+	from: string;
+	to: string;
+	callId: string;
+}
+
+class WebRTCService {
+	private peerConnection: RTCPeerConnection | null = null;
+	private localStream: MediaStream | null = null;
+	private signalChannel: RealtimeChannel | null = null;
+	private currentCallId: string | null = null;
+	
+	// Free STUN servers for NAT traversal (multiple providers for reliability)
+	private readonly iceServers = [
+		{ urls: 'stun:stun.l.google.com:19302' },
+		{ urls: 'stun:stun1.l.google.com:19302' },
+		{ urls: 'stun:stun2.l.google.com:19302' },
+		{ urls: 'stun:stun3.l.google.com:19302' },
+		{ urls: 'stun:stun4.l.google.com:19302' },
+		// Mozilla STUN servers as backup
+		{ urls: 'stun:stun.mozilla.org:3478' },
+		// Other free STUN servers
+		{ urls: 'stun:stun.nextcloud.com:443' },
+		{ urls: 'stun:stun.sipgate.net:3478' }
+	];
+
+	constructor() {
+		this.initializeSignaling();
+	}
+
+	private async initializeSignaling() {
+		// Clean up existing channel first
+		if (this.signalChannel) {
+			console.log('📡 Cleaning up existing signaling channel');
+			await this.signalChannel.unsubscribe();
+			this.signalChannel = null;
+		}
+		
+		try {
+			// Create a SHARED signaling channel for WebRTC (same name for all users)
+			this.signalChannel = supabase.channel('webrtc-signaling-shared');
+			
+			this.signalChannel
+				.on('broadcast', { event: 'signal' }, (payload) => {
+					console.log('📡 Received signal:', payload.payload);
+					this.handleSignal(payload.payload as SignalData);
+				})
+				.subscribe((status) => {
+					console.log('📡 Signaling channel status:', status);
+					if (status === 'SUBSCRIBED') {
+						console.log('✅ WebRTC signaling ready on shared channel');
+					} else if (status === 'CHANNEL_ERROR') {
+						console.error('❌ Signaling channel error');
+						this.signalChannel = null;
+						// Retry initialization after a delay
+						setTimeout(() => this.initializeSignaling(), 2000);
+					}
+				});
+		} catch (error) {
+			console.error('❌ Failed to initialize signaling:', error);
+			this.signalChannel = null;
+		}
+	}
+
+	async startCall(otherUserId: string, callId: string): Promise<boolean> {
+		try {
+			this.currentCallId = callId;
+			
+			// Get user media with fallback for HTTP localhost
+			try {
+				this.localStream = await navigator.mediaDevices.getUserMedia({
+					video: true,
+					audio: true
+				});
+			} catch (error) {
+				// Fallback for HTTP localhost - create fake stream for testing
+				console.warn('Camera access denied, using fake stream for testing');
+				this.localStream = await this.createFakeStream();
+			}
+
+			// Update store FIRST so ICE candidate handler can access participants
+			const currentUserId = await this.getCurrentUserId();
+			currentCall.set({
+				id: callId,
+				participants: [currentUserId, otherUserId],
+				isActive: true,
+				localStream: this.localStream
+			});
+
+			// Create peer connection
+			this.createPeerConnection();
+			
+			// Add local stream to peer connection
+			this.localStream.getTracks().forEach(track => {
+				if (this.peerConnection && this.localStream) {
+					this.peerConnection.addTrack(track, this.localStream);
+				}
+			});
+
+			// Create offer
+			const offer = await this.peerConnection!.createOffer();
+			await this.peerConnection!.setLocalDescription(offer);
+
+			// Send offer via signaling
+			await this.sendSignal({
+				type: 'offer',
+				data: offer,
+				from: currentUserId,
+				to: otherUserId,
+				callId
+			});
+
+			return true;
+		} catch (error) {
+			console.error('Error starting call:', error);
+			return false;
+		}
+	}
+
+	async answerCall(callData: SignalData): Promise<boolean> {
+		try {
+			this.currentCallId = callData.callId;
+			
+			// Get user media with fallback for HTTP localhost
+			try {
+				this.localStream = await navigator.mediaDevices.getUserMedia({
+					video: true,
+					audio: true
+				});
+			} catch (error) {
+				// Fallback for HTTP localhost - create fake stream for testing
+				console.warn('Camera access denied, using fake stream for testing');
+				this.localStream = await this.createFakeStream();
+			}
+
+			// Update store FIRST so ICE candidate handler can access participants
+			const currentUserId = await this.getCurrentUserId();
+			currentCall.set({
+				id: callData.callId,
+				participants: [currentUserId, callData.from],
+				isActive: true,
+				localStream: this.localStream
+			});
+
+			// Create peer connection
+			this.createPeerConnection();
+			
+			// Add local stream
+			this.localStream.getTracks().forEach(track => {
+				if (this.peerConnection && this.localStream) {
+					this.peerConnection.addTrack(track, this.localStream);
+				}
+			});
+
+			// Set remote description (offer)
+			await this.peerConnection!.setRemoteDescription(callData.data);
+
+			// Create answer
+			const answer = await this.peerConnection!.createAnswer();
+			await this.peerConnection!.setLocalDescription(answer);
+
+			// Send answer
+			await this.sendSignal({
+				type: 'answer',
+				data: answer,
+				from: currentUserId,
+				to: callData.from,
+				callId: callData.callId
+			});
+
+			return true;
+		} catch (error) {
+			console.error('Error answering call:', error);
+			return false;
+		}
+	}
+
+	async endCall(): Promise<void> {
+		if (this.currentCallId) {
+			// Send end call signal
+			await this.sendSignal({
+				type: 'end-call',
+				data: {},
+				from: await this.getCurrentUserId(),
+				to: '', // Will be handled by all participants
+				callId: this.currentCallId
+			});
+		}
+
+		this.cleanup();
+	}
+
+	private createPeerConnection() {
+		this.peerConnection = new RTCPeerConnection({
+			iceServers: this.iceServers
+		});
+
+		// Enhanced ICE candidate handling with detailed logging
+		this.peerConnection.onicecandidate = async (event) => {
+			console.log('🧊 ICE candidate event:', event.candidate ? 'New candidate' : 'All candidates sent');
+			if (event.candidate && this.currentCallId) {
+				console.log('🧊 ICE candidate details:', {
+					type: event.candidate.type,
+					protocol: event.candidate.protocol,
+					address: event.candidate.address,
+					port: event.candidate.port
+				});
+				
+				const currentCallData = get(currentCall);
+				if (currentCallData) {
+					const currentUserId = await this.getCurrentUserId();
+					const otherUserId = currentCallData.participants.find(
+						id => id !== currentUserId
+					);
+					
+					if (otherUserId) {
+						console.log('📤 Sending ICE candidate to:', otherUserId, 'type:', event.candidate.type);
+						const result = await this.sendSignal({
+							type: 'ice-candidate',
+							data: event.candidate,
+							from: currentUserId,
+							to: otherUserId,
+							callId: this.currentCallId
+						});
+						console.log('📤 ICE candidate send result:', result);
+					}
+				}
+			} else if (!event.candidate) {
+				console.log('✅ All ICE candidates have been sent');
+			}
+		};
+
+		// Enhanced remote stream handling
+		this.peerConnection.ontrack = (event) => {
+			console.log('🎥 Remote track received:', event.track.kind, event.streams.length, 'streams');
+			const remoteStream = event.streams[0];
+			if (remoteStream) {
+				console.log('✅ Setting remote stream with tracks:', remoteStream.getTracks().length);
+				currentCall.update(call => call ? {
+					...call,
+					remoteStream
+				} : null);
+			}
+		};
+
+		// Enhanced connection state logging
+		this.peerConnection.onconnectionstatechange = () => {
+			const state = this.peerConnection?.connectionState;
+			console.log('🔗 Connection state changed to:', state);
+			
+			switch (state) {
+				case 'connecting':
+					console.log('🔄 WebRTC connection attempting...');
+					break;
+				case 'connected':
+					console.log('✅ WebRTC connection established successfully!');
+					break;
+				case 'disconnected':
+					console.log('⚠️ WebRTC connection disconnected');
+					break;
+				case 'failed':
+					console.log('❌ WebRTC connection failed');
+					console.log('🔍 Checking ICE connection state:', this.peerConnection?.iceConnectionState);
+					console.log('🔍 Checking signaling state:', this.peerConnection?.signalingState);
+					this.cleanup();
+					break;
+				case 'closed':
+					console.log('🔒 WebRTC connection closed');
+					break;
+			}
+		};
+
+		// Enhanced ICE connection state logging
+		this.peerConnection.oniceconnectionstatechange = () => {
+			const iceState = this.peerConnection?.iceConnectionState;
+			console.log('🧊 ICE connection state changed to:', iceState);
+			
+			switch (iceState) {
+				case 'checking':
+					console.log('🔍 ICE candidates are being checked...');
+					break;
+				case 'connected':
+					console.log('✅ ICE connection established!');
+					break;
+				case 'completed':
+					console.log('🎉 ICE connection completed successfully!');
+					break;
+				case 'failed':
+					console.log('❌ ICE connection failed - likely firewall/NAT issues');
+					console.log('💡 Suggestion: Try on different networks or use TURN servers');
+					break;
+				case 'disconnected':
+					console.log('⚠️ ICE connection temporarily disconnected');
+					break;
+				case 'closed':
+					console.log('🔒 ICE connection closed');
+					break;
+			}
+		};
+
+		// Enhanced signaling state logging
+		this.peerConnection.onsignalingstatechange = () => {
+			const signalingState = this.peerConnection?.signalingState;
+			console.log('📡 Signaling state changed to:', signalingState);
+			
+			switch (signalingState) {
+				case 'stable':
+					console.log('✅ Signaling is stable - ready for communication');
+					break;
+				case 'have-local-offer':
+					console.log('📞 Local offer created, waiting for answer');
+					break;
+				case 'have-remote-offer':
+					console.log('📞 Remote offer received, creating answer');
+					break;
+				case 'have-local-pranswer':
+					console.log('📞 Local provisional answer sent');
+					break;
+				case 'have-remote-pranswer':
+					console.log('📞 Remote provisional answer received');
+					break;
+				case 'closed':
+					console.log('🔒 Signaling closed');
+					break;
+			}
+		};
+
+		// Add ICE gathering state logging
+		this.peerConnection.onicegatheringstatechange = () => {
+			const gatheringState = this.peerConnection?.iceGatheringState;
+			console.log('🔍 ICE gathering state changed to:', gatheringState);
+			
+			switch (gatheringState) {
+				case 'new':
+					console.log('🆕 ICE gathering starting...');
+					break;
+				case 'gathering':
+					console.log('🔍 ICE gathering in progress...');
+					break;
+				case 'complete':
+					console.log('✅ ICE gathering completed');
+					break;
+			}
+		};
+	}
+
+	private async handleSignal(signal: SignalData) {
+		// Only handle signals for current user
+		const currentUserId = await this.getCurrentUserId();
+		console.log('🎯 Checking signal:', { signal, currentUserId, shouldHandle: signal.to === currentUserId || signal.to === '' });
+		
+		if (signal.to !== currentUserId && signal.to !== '') {
+			console.log('❌ Ignoring signal - not for this user');
+			return;
+		}
+		
+		try {
+			console.log('✅ Processing signal type:', signal.type);
+			switch (signal.type) {
+				case 'offer':
+					// Incoming call - show notification for user to accept/decline
+					console.log('📞 Incoming call from:', signal.from);
+					// Show incoming call notification (don't auto-answer)
+					this.notifyIncomingCall(signal);
+					break;
+
+				case 'answer':
+					if (this.peerConnection) {
+						console.log('📥 Received answer from:', signal.from);
+						console.log('🔧 Setting remote description (answer)');
+						await this.peerConnection.setRemoteDescription(signal.data);
+						console.log('✅ Remote description (answer) set successfully');
+					}
+					break;
+
+				case 'ice-candidate':
+					if (this.peerConnection) {
+						try {
+							console.log('📥 Adding received ICE candidate:', {
+								type: signal.data.type,
+								protocol: signal.data.protocol,
+								from: signal.from
+							});
+							await this.peerConnection.addIceCandidate(signal.data);
+							console.log('✅ ICE candidate added successfully');
+						} catch (error) {
+							console.error('❌ Failed to add ICE candidate:', error);
+							// Don't fail the entire call for a single bad candidate
+						}
+					}
+					break;
+
+				case 'end-call':
+					this.cleanup();
+					break;
+			}
+		} catch (error) {
+			console.error('Error handling signal:', error);
+		}
+	}
+
+	private async sendSignal(signal: SignalData): Promise<string> {
+		console.log('📤 Sending signal:', signal);
+		if (this.signalChannel) {
+			const result = await this.signalChannel.send({
+				type: 'broadcast',
+				event: 'signal',
+				payload: signal
+			});
+			console.log('📤 Signal sent result:', result);
+			return result;
+		} else {
+			console.error('❌ No signal channel available');
+			return 'error';
+		}
+	}
+
+	private async getCurrentUserId(): Promise<string> {
+		// Get current user ID from Supabase
+		const { data } = await supabase.auth.getUser();
+		return data.user?.id || '';
+	}
+
+	private notifyIncomingCall(signal: SignalData) {
+		// Set incoming call data to show UI with accept/decline options
+		incomingCall.set({ 
+			isIncoming: true, 
+			callData: signal 
+		});
+	}
+
+	// Method to accept an incoming call
+	async acceptCall(): Promise<boolean> {
+		const incoming = get(incomingCall);
+		if (!incoming.isIncoming || !incoming.callData) {
+			console.error('❌ No incoming call to accept');
+			return false;
+		}
+
+		console.log('✅ Accepting incoming call');
+		const success = await this.answerCall(incoming.callData);
+		
+		if (success) {
+			// Clear incoming call notification
+			incomingCall.set({ isIncoming: false, callData: null });
+		}
+		
+		return success;
+	}
+
+	// Method to decline an incoming call
+	async declineCall(): Promise<void> {
+		const incoming = get(incomingCall);
+		if (!incoming.isIncoming || !incoming.callData) {
+			console.error('❌ No incoming call to decline');
+			return;
+		}
+
+		console.log('❌ Declining incoming call');
+		
+		// Send decline signal to caller
+		await this.sendSignal({
+			type: 'end-call',
+			data: { reason: 'declined' },
+			from: await this.getCurrentUserId(),
+			to: incoming.callData.from,
+			callId: incoming.callData.callId
+		});
+
+		// Clear incoming call notification
+		incomingCall.set({ isIncoming: false, callData: null });
+	}
+
+	private cleanup() {
+		// Stop local stream
+		if (this.localStream) {
+			this.localStream.getTracks().forEach(track => track.stop());
+			this.localStream = null;
+		}
+
+		// Close peer connection
+		if (this.peerConnection) {
+			this.peerConnection.close();
+			this.peerConnection = null;
+		}
+
+		// Clear call state
+		currentCall.set(null);
+		incomingCall.set({ isIncoming: false, callData: null });
+		this.currentCallId = null;
+	}
+	
+	// Method to completely destroy the service and clean up resources
+	destroy() {
+		this.cleanup();
+		
+		// Unsubscribe from signaling channel
+		if (this.signalChannel) {
+			this.signalChannel.unsubscribe();
+			this.signalChannel = null;
+		}
+	}
+
+	// Create fake stream for HTTP localhost testing
+	private async createFakeStream(): Promise<MediaStream> {
+		// Create a canvas with a simple animation
+		const canvas = document.createElement('canvas');
+		canvas.width = 640;
+		canvas.height = 480;
+		const ctx = canvas.getContext('2d')!;
+		
+		// Simple animation
+		let frame = 0;
+		const animate = () => {
+			ctx.fillStyle = '#1a1a2e';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			
+			ctx.fillStyle = '#8B5CF6';
+			ctx.font = '32px Arial';
+			ctx.textAlign = 'center';
+			ctx.fillText('📹 Video Call Demo', canvas.width / 2, canvas.height / 2 - 40);
+			
+			ctx.fillStyle = '#ffffff';
+			ctx.font = '16px Arial';
+			ctx.fillText('Camera not available on HTTP', canvas.width / 2, canvas.height / 2);
+			ctx.fillText('Use HTTPS for real camera access', canvas.width / 2, canvas.height / 2 + 30);
+			
+			// Animated dot
+			const x = canvas.width / 2 + Math.cos(frame * 0.1) * 50;
+			const y = canvas.height / 2 + 60;
+			ctx.fillStyle = '#8B5CF6';
+			ctx.beginPath();
+			ctx.arc(x, y, 8, 0, Math.PI * 2);
+			ctx.fill();
+			
+			frame++;
+			requestAnimationFrame(animate);
+		};
+		animate();
+		
+		// Get stream from canvas
+		const videoStream = canvas.captureStream(30);
+		
+		// Create silent audio track
+		const audioContext = new AudioContext();
+		const oscillator = audioContext.createOscillator();
+		const gainNode = audioContext.createGain();
+		oscillator.connect(gainNode);
+		gainNode.connect(audioContext.destination);
+		gainNode.gain.value = 0; // Silent
+		oscillator.frequency.value = 440;
+		oscillator.start();
+		
+		// @ts-ignore - MediaStreamAudioDestinationNode exists
+		const audioDestination = audioContext.createMediaStreamDestination();
+		gainNode.connect(audioDestination);
+		
+		// Combine video and audio
+		const combinedStream = new MediaStream([
+			...videoStream.getVideoTracks(),
+			...audioDestination.stream.getAudioTracks()
+		]);
+		
+		return combinedStream;
+	}
+
+	// Helper method to create a unique call ID
+	createCallId(userId1: string, userId2: string): string {
+		const participants = [userId1, userId2].sort();
+		return `call-${participants[0]}-${participants[1]}-${Date.now()}`;
+	}
+}
+
+// Singleton instance
+let webrtcServiceInstance: WebRTCService | null = null;
+
+export const webrtcService = (() => {
+	if (!webrtcServiceInstance) {
+		console.log('🔄 Creating new WebRTC service instance');
+		webrtcServiceInstance = new WebRTCService();
+	} else {
+		console.log('♻️ Reusing existing WebRTC service instance');
+	}
+	return webrtcServiceInstance;
+})();

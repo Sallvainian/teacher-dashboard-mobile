@@ -9,6 +9,8 @@
 	import TypingIndicator from '$lib/components/TypingIndicator.svelte';
 	import GifPicker from '$lib/components/GifPicker.svelte';
 	import ImagePreviewModal from '$lib/components/ImagePreviewModal.svelte';
+	import WebRTCVideoCall from '$lib/components/WebRTCVideoCall.svelte';
+	import { webrtcService, incomingCall } from '$lib/services/webrtcService';
 	import type { ChatUIConversation, ChatUIMessage, ConversationWithDetails, ConversationParticipant } from '$lib/types/chat';
 	import { getUser } from '$lib/utils/storeHelpers';
 	import { isHTMLElement, isHTMLInputElement, getEventTargetValue } from '$lib/utils/domHelpers';
@@ -35,6 +37,7 @@
 	let messagesContainer: HTMLDivElement;
 	let typingTimeout: number | null = null;
 	let fileInput: HTMLInputElement;
+	let showVideoCall = $state(false);
 	
 	// Format time ago for conversation list
 	function formatTimeAgo(timestamp: string | null): string {
@@ -92,6 +95,20 @@
 			displayAvatar: conv.displayAvatar ?? '' // Ensure displayAvatar is always a string
 		}));
 	}
+
+	let showIncomingCallModal = $state(false);
+	let incomingCallData = $state<any>(null);
+
+	// Subscribe to incoming calls
+	const unsubscribeIncomingCall = incomingCall.subscribe((incoming) => {
+		if (incoming.isIncoming && incoming.callData) {
+			showIncomingCallModal = true;
+			incomingCallData = incoming.callData;
+		} else {
+			showIncomingCallModal = false;
+			incomingCallData = null;
+		}
+	});
 
 	// Subscribe to store changes
 	const unsubscribeConversations = chatStore.conversations.subscribe((convs) => {
@@ -185,6 +202,7 @@
 		unsubscribeLoading();
 		unsubscribeError();
 		unsubscribeTyping();
+		unsubscribeIncomingCall();
 		
 		// Clean up typing timeout
 		if (typingTimeout) {
@@ -696,6 +714,79 @@
 			console.error('Error sending file:', err);
 		}
 	}
+
+	// Start video call
+	async function startVideoCall() {
+		if (!activeConversation) return;
+		
+		try {
+			const user = getUser($authStore);
+			if (!user) return;
+			
+			// Get other participant for 1-on-1 calls
+			const rawConv = rawConversations.find(c => c.id === activeConversation?.id);
+			const otherParticipant = rawConv?.participants?.find(p => p.user_id !== user.id);
+			
+			if (!otherParticipant) {
+				console.error('No other participant found');
+				return;
+			}
+			
+			// Create a unique call ID
+			const callId = webrtcService.createCallId(user.id, otherParticipant.user_id);
+			
+			// Start the WebRTC call
+			const success = await webrtcService.startCall(otherParticipant.user_id, callId);
+			
+			if (success) {
+				// Send a message about the video call
+				await chatStore.sendMessage(
+					activeConversation.id,
+					`📹 Started a video call`
+				);
+				
+				// Show video call interface
+				showVideoCall = true;
+			}
+		} catch (error) {
+			console.error('Error starting video call:', error);
+		}
+	}
+
+	function closeVideoCall() {
+		showVideoCall = false;
+	}
+
+	// Accept incoming video call
+	async function acceptIncomingCall() {
+		try {
+			const success = await webrtcService.acceptCall();
+			if (success) {
+				showIncomingCallModal = false;
+				showVideoCall = true;
+				
+				// Send a message about accepting the call
+				if (activeConversation) {
+					await chatStore.sendMessage(
+						activeConversation.id,
+						`📹 Joined the video call`
+					);
+				}
+			}
+		} catch (error) {
+			console.error('Error accepting call:', error);
+		}
+	}
+
+	// Decline incoming video call
+	async function declineIncomingCall() {
+		try {
+			await webrtcService.declineCall();
+			showIncomingCallModal = false;
+		} catch (error) {
+			console.error('Error declining call:', error);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -956,6 +1047,8 @@
 							</button>
 							<button
 								class="p-2 text-text-base hover:text-text-hover rounded-full hover:bg-surface transition-colors"
+								onclick={startVideoCall}
+								disabled={!activeConversation}
 								aria-label="Start video call"
 							>
 								<svg
@@ -1294,4 +1387,53 @@
 		imageUrl={previewImageUrl}
 		onClose={closeImagePreview}
 	/>
+
+	<!-- Incoming Call Modal -->
+	{#if showIncomingCallModal && incomingCallData}
+		<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+			<div class="bg-card rounded-lg shadow-lg max-w-md w-full mx-4 p-6">
+				<div class="text-center">
+					<!-- Incoming call icon -->
+					<div class="w-16 h-16 bg-purple rounded-full flex items-center justify-center mx-auto mb-4">
+						<svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+						</svg>
+					</div>
+					
+					<h3 class="text-xl font-semibold text-highlight mb-2">Incoming Video Call</h3>
+					<p class="text-text-base mb-6">
+						Someone is calling you
+					</p>
+					
+					<!-- Action buttons -->
+					<div class="flex gap-4 justify-center">
+						<button
+							onclick={declineIncomingCall}
+							class="flex items-center gap-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
+						>
+							<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M18 6L6 18"></path>
+								<path d="M6 6l12 12"></path>
+							</svg>
+							Decline
+						</button>
+						<button
+							onclick={acceptIncomingCall}
+							class="flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+						>
+							<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+							</svg>
+							Accept
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	{/if}
+
+	<!-- Video Call Modal -->
+	{#if showVideoCall}
+		<WebRTCVideoCall onClose={closeVideoCall} />
+	{/if}
 </div>
