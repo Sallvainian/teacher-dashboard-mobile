@@ -171,7 +171,6 @@
 				class="w-full h-full object-cover"
 				muted={false}
 				playsinline
-				playsinline
 			></video>
 
 			<!-- Local Video (picture-in-picture) -->
@@ -241,7 +240,6 @@
 				class={`p-4 rounded-full transition-colors ${isMuted ? 'bg-red-500 text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
 				aria-label={isMuted ? 'Unmute' : 'Mute'}
 				title={isMuted ? 'Unmute' : 'Mute'}
-				title={isMuted ? 'Unmute' : 'Mute'}
 			>
 				{#if isMuted}
 					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -268,7 +266,6 @@
 				aria-label={isVideoOff ? 'Turn video on' : 'Turn video off'}
 				title={isVideoOff ? 'Turn video on' : 'Turn video off'}
 				disabled={!localStream?.getVideoTracks().length}
-				title={isVideoOff ? 'Turn video on' : 'Turn video off'}
 			>
 				{#if isVideoOff}
 					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -322,90 +319,6 @@
 				onclick={swapCameras}
 				class="p-4 bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors"
 				aria-label="Swap cameras"
-				title="Swap cameras"
-			>
-				<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
-					<line x1="16" y1="5" x2="22" y2="5"></line>
-					<line x1="19" y1="2" x2="19" y2="8"></line>
-					<circle cx="9" cy="9" r="2"></circle>
-					<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-				</svg>
-			</button>
-			
-			<!-- Fullscreen Button -->
-			<button
-				onclick={toggleFullScreen}
-				class="p-4 bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors"
-				aria-label={isFullScreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-				title={isFullScreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-			>
-				{#if isFullScreen}
-					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
-					</svg>
-				{:else}
-					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-					</svg>
-				{/if}
-			</button>
-
-			<!-- End Call Button -->
-			<button
-				onclick={endCall}
-				class="p-4 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-				aria-label="End call"
-				title="End call"
-				title="End call"
-			>
-				<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-					<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-				</svg>
-			</button>
-		</div>
-
-		<!-- Call Status -->
-		<div class="px-6 pb-20">
-			<div class="text-center">
-				{#if isCallActive && remoteStream && remoteStream.getTracks().length > 0}
-					<p class="text-sm text-green-500">🟢 Connected</p>
-					{#if isAudioOnly || !remoteStream.getVideoTracks().length}
-						<p class="text-sm text-white/80 mt-1">Audio-only call</p>
-					{/if}
-				{:else if isCallActive}
-					<p class="text-sm text-yellow-500">🟡 Connecting...</p>
-				{:else}
-					<p class="text-sm text-white/60">Call ended</p>
-				{/if}
-			</div>
-		</div>
-	</div>
-</div>
-
-<style>
-	/* Ensure videos fill their containers properly */
-	video {
-		object-fit: cover;
-		background-color: #000;
-	}
-	
-	/* Smooth transitions for UI elements */
-	button {
-		transition: all 0.2s ease;
-	}
-	
-	/* Ensure the component takes up the full screen */
-	.video-call-container {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		z-index: 9999;
-		background-color: rgba(0, 0, 0, 0.9);
-	}
-</style>
 
 <style>
 	/* Ensure videos fill their containers properly */
