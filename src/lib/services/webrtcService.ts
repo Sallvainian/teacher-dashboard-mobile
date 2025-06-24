@@ -208,7 +208,6 @@ class WebRTCService {
 
 			return true;
 		} catch (error) {
-			console.error('Error starting call:', error);
 			return false;
 		}
 	}
@@ -320,7 +319,6 @@ class WebRTCService {
 
 			return true;
 		} catch (error) {
-			console.error('Error answering call:', error);
 			return false;
 		}
 	}
