@@ -101,15 +101,15 @@
 		}
 	}
 	
-	// Handle device change
+	// Handle device selection change
 	function handleDeviceChange(event: Event) {
 		const select = event.target as HTMLSelectElement;
 		selectedDeviceId = select.value;
 		onchange?.(selectedDeviceId);
 	}
 	
-	// Listen for device changes
-	function handleDeviceChange() {
+	// Listen for device plug/unplug
+	function handleDeviceListChange() {
 		loadDevices();
 	}
 	
@@ -117,10 +117,10 @@
 		loadDevices();
 		
 		// Listen for device changes (plug/unplug)
-		navigator.mediaDevices.addEventListener('devicechange', handleDeviceChange);
+		navigator.mediaDevices.addEventListener('devicechange', handleDeviceListChange);
 		
 		return () => {
-			navigator.mediaDevices.removeEventListener('devicechange', handleDeviceChange);
+			navigator.mediaDevices.removeEventListener('devicechange', handleDeviceListChange);
 		};
 	});
 	
