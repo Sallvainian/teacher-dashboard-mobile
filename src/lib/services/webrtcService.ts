@@ -68,24 +68,35 @@ class WebRTCService {
 		
 		try {
 			// Create a SHARED signaling channel for WebRTC (same name for all users)
-			this.signalChannel = supabase.channel('webrtc-signaling-shared');
-			
-			this.signalChannel
-				.on('broadcast', { event: 'signal' }, (payload) => {
-					console.log('📡 Received signal:', payload.payload);
-					this.handleSignal(payload.payload as SignalData);
-				})
-				.subscribe((status) => {
-					console.log('📡 Signaling channel status:', status);
-					if (status === 'SUBSCRIBED') {
-						console.log('✅ WebRTC signaling ready on shared channel');
-					} else if (status === 'CHANNEL_ERROR') {
-						console.error('❌ Signaling channel error');
-						this.signalChannel = null;
-						// Retry initialization after a delay
-						setTimeout(() => this.initializeSignaling(), 2000);
+			this.signalChannel = supabase.channel('webrtc-signaling-shared', {
+				config: {
+					presence: {
+						key: ''
 					}
-				});
+				}
+			});
+			
+			// Only subscribe if not already subscribed
+			if (this.signalChannel.state !== 'subscribed') {
+				this.signalChannel
+					.on('broadcast', { event: 'signal' }, (payload) => {
+						console.log('📡 Received signal:', payload.payload);
+						this.handleSignal(payload.payload as SignalData);
+					})
+					.subscribe((status) => {
+						console.log('📡 Signaling channel status:', status);
+						if (status === 'SUBSCRIBED') {
+							console.log('✅ WebRTC signaling ready on shared channel');
+						} else if (status === 'CHANNEL_ERROR') {
+							console.error('❌ Signaling channel error');
+							this.signalChannel = null;
+							// Retry initialization after a delay
+							setTimeout(() => this.initializeSignaling(), 3000);
+						}
+					});
+			} else {
+				console.log('📡 Channel already subscribed');
+			}
 		} catch (error) {
 			console.error('❌ Failed to initialize signaling:', error);
 			this.signalChannel = null;
