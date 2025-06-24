@@ -8,6 +8,7 @@
 import { supabase } from '$lib/supabaseClient';
 import { writable, get } from 'svelte/store';
 import type { RealtimeChannel } from '@supabase/supabase-js';
+import { showErrorToast, showInfoToast } from '$lib/stores/notifications';
 
 export interface VideoCall {
 	id: string;
@@ -109,10 +110,12 @@ class WebRTCService {
 			
 			// Check for secure context and mediaDevices availability
 			if (!window.isSecureContext) {
+				showErrorToast('Video calls require a secure connection (HTTPS). Please access the site via HTTPS.');
 				throw new Error('Video calls require a secure connection (HTTPS). Please access the site via HTTPS.');
 			}
 			
 			if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+				showErrorToast('Your browser does not support camera and microphone access. Please use a modern browser.');
 				throw new Error('Your browser does not support camera and microphone access. Please use a modern browser.');
 			}
 
@@ -124,13 +127,14 @@ class WebRTCService {
 			console.log('📱 Available devices:', { hasCamera, hasMicrophone });
 			
 			if (!hasCamera && !hasMicrophone) {
+				showErrorToast('No camera or microphone devices found. Please connect audio/video devices and try again.');
 				throw new Error('No camera or microphone devices found. Please connect audio/video devices and try again.');
 			}
 			
 			// Get user media - gracefully handle missing devices
 			try {
 				const constraints: MediaStreamConstraints = {
-					video: hasCamera,
+					video: hasCamera ? { facingMode: 'user' } : false,
 					audio: hasMicrophone
 				};
 				
@@ -140,8 +144,10 @@ class WebRTCService {
 					console.log('✅ Camera and microphone access granted');
 				} else if (hasCamera) {
 					console.log('✅ Camera access granted (no microphone available)');
+					showInfoToast('No microphone detected. Others won\'t be able to hear you.', 'Audio Unavailable');
 				} else {
 					console.log('✅ Microphone access granted (no camera available)');
+					showInfoToast('No camera detected. Others won\'t be able to see you.', 'Video Unavailable');
 				}
 			} catch (error: any) {
 				console.warn('❌ Media access error:', error);
@@ -149,14 +155,19 @@ class WebRTCService {
 				// Handle specific getUserMedia errors
 				switch (error.name) {
 					case 'NotAllowedError':
+						showErrorToast('Camera/microphone access was denied. Please grant permission in your browser settings and try again.');
 						throw new Error('Media access was denied. Please grant permission in your browser settings and try again.');
 					case 'NotFoundError':
+						showErrorToast('No media devices found. Please connect a camera or microphone and try again.');
 						throw new Error('No media devices found. Please connect a camera or microphone and try again.');
 					case 'NotReadableError':
+						showErrorToast('Cannot access your camera or microphone. They may be in use by another application.');
 						throw new Error('Media device is not available or already in use by another application.');
 					case 'OverconstrainedError':
+						showErrorToast('Your camera doesn\'t meet the required constraints. Try using a different camera.');
 						throw new Error('Media device constraints cannot be satisfied. Please try again.');
 					default:
+						showErrorToast(`Failed to access media devices: ${error.message}`);
 						throw new Error(`Failed to access media devices: ${error.message}`);
 				}
 			}
@@ -174,11 +185,13 @@ class WebRTCService {
 			this.createPeerConnection();
 			
 			// Add local stream to peer connection
-			this.localStream.getTracks().forEach(track => {
-				if (this.peerConnection && this.localStream) {
-					this.peerConnection.addTrack(track, this.localStream);
-				}
-			});
+			if (this.localStream) {
+				this.localStream.getTracks().forEach(track => {
+					if (this.peerConnection && this.localStream) {
+						this.peerConnection.addTrack(track, this.localStream);
+					}
+				});
+			}
 
 			// Create offer
 			const offer = await this.peerConnection!.createOffer();
@@ -206,10 +219,12 @@ class WebRTCService {
 			
 			// Check for secure context and mediaDevices availability
 			if (!window.isSecureContext) {
+				showErrorToast('Video calls require a secure connection (HTTPS). Please access the site via HTTPS.');
 				throw new Error('Video calls require a secure connection (HTTPS). Please access the site via HTTPS.');
 			}
 			
 			if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+				showErrorToast('Your browser does not support camera and microphone access. Please use a modern browser.');
 				throw new Error('Your browser does not support camera and microphone access. Please use a modern browser.');
 			}
 
@@ -221,13 +236,14 @@ class WebRTCService {
 			console.log('📱 Available devices:', { hasCamera, hasMicrophone });
 			
 			if (!hasCamera && !hasMicrophone) {
+				showErrorToast('No camera or microphone devices found. Please connect audio/video devices and try again.');
 				throw new Error('No camera or microphone devices found. Please connect audio/video devices and try again.');
 			}
 			
 			// Get user media - gracefully handle missing devices
 			try {
 				const constraints: MediaStreamConstraints = {
-					video: hasCamera,
+					video: hasCamera ? { facingMode: 'user' } : false,
 					audio: hasMicrophone
 				};
 				
@@ -237,8 +253,10 @@ class WebRTCService {
 					console.log('✅ Camera and microphone access granted');
 				} else if (hasCamera) {
 					console.log('✅ Camera access granted (no microphone available)');
+					showInfoToast('No microphone detected. Others won\'t be able to hear you.', 'Audio Unavailable');
 				} else {
 					console.log('✅ Microphone access granted (no camera available)');
+					showInfoToast('No camera detected. Others won\'t be able to see you.', 'Video Unavailable');
 				}
 			} catch (error: any) {
 				console.warn('❌ Media access error:', error);
@@ -246,14 +264,19 @@ class WebRTCService {
 				// Handle specific getUserMedia errors
 				switch (error.name) {
 					case 'NotAllowedError':
+						showErrorToast('Camera/microphone access was denied. Please grant permission in your browser settings and try again.');
 						throw new Error('Media access was denied. Please grant permission in your browser settings and try again.');
 					case 'NotFoundError':
+						showErrorToast('No media devices found. Please connect a camera or microphone and try again.');
 						throw new Error('No media devices found. Please connect a camera or microphone and try again.');
 					case 'NotReadableError':
+						showErrorToast('Cannot access your camera or microphone. They may be in use by another application.');
 						throw new Error('Media device is not available or already in use by another application.');
 					case 'OverconstrainedError':
+						showErrorToast('Your camera doesn\'t meet the required constraints. Try using a different camera.');
 						throw new Error('Media device constraints cannot be satisfied. Please try again.');
 					default:
+						showErrorToast(`Failed to access media devices: ${error.message}`);
 						throw new Error(`Failed to access media devices: ${error.message}`);
 				}
 			}
@@ -271,11 +294,13 @@ class WebRTCService {
 			this.createPeerConnection();
 			
 			// Add local stream
-			this.localStream.getTracks().forEach(track => {
-				if (this.peerConnection && this.localStream) {
-					this.peerConnection.addTrack(track, this.localStream);
-				}
-			});
+			if (this.localStream) {
+				this.localStream.getTracks().forEach(track => {
+					if (this.peerConnection && this.localStream) {
+						this.peerConnection.addTrack(track, this.localStream);
+					}
+				});
+			}
 
 			// Set remote description (offer)
 			await this.peerConnection!.setRemoteDescription(callData.data);
