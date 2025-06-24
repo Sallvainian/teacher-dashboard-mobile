@@ -335,7 +335,7 @@
 
 		<!-- Settings Panel -->
 		{#if showSettings}
-			<div class="absolute bottom-28 left-4 right-4 mx-auto max-w-md bg-black/95 backdrop-blur-sm border border-white/20 rounded-lg p-4 space-y-4 z-20 shadow-xl">
+			<div class="absolute bottom-28 left-4 right-4 mx-auto max-w-lg bg-black/95 backdrop-blur-sm border border-white/20 rounded-lg p-4 space-y-4 z-20 shadow-xl">
 				<div class="flex justify-between items-center mb-3">
 					<h3 class="text-white font-semibold">Device Settings</h3>
 					<button 

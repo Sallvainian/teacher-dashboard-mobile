@@ -134,7 +134,7 @@
 	});
 </script>
 
-<div class="flex items-center gap-2">
+<div class="flex items-center gap-3 w-full">
 	{@html getDeviceIcon()}
 	
 	{#if isLoading}
@@ -145,7 +145,7 @@
 		<div class="text-sm text-white/60">No {getDeviceTypeLabel().toLowerCase()} found</div>
 	{:else}
 		<select 
-			class="bg-white/10 text-white border border-white/20 rounded px-3 py-1 text-sm focus:outline-none focus:border-white/40"
+			class="bg-white/10 text-white border border-white/20 rounded px-3 py-1 text-sm focus:outline-none focus:border-white/40 w-full min-w-0 flex-1"
 			value={selectedDeviceId}
 			onchange={handleDeviceChange}
 		>
