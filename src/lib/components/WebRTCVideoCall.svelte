@@ -181,7 +181,6 @@
 					muted={true}
 					class="w-full h-full object-cover"
 					playsinline
-					playsinline
 				></video>
 				
 				<!-- No camera indicator -->

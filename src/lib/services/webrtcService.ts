@@ -123,7 +123,7 @@ class WebRTCService {
 
 			// Check available devices first
 			const devices = await navigator.mediaDevices.enumerateDevices();
-			const hasCamera = devices.some(device => device.kind === 'videoinput');
+			let hasCamera = devices.some(device => device.kind === 'videoinput');
 			let hasMicrophone = devices.some(device => device.kind === 'audioinput');
 			
 			console.log('📱 Available devices:', { hasCamera, hasMicrophone });
@@ -297,7 +297,7 @@ class WebRTCService {
 
 			// Check available devices first
 			const devices = await navigator.mediaDevices.enumerateDevices();
-			const hasCamera = devices.some(device => device.kind === 'videoinput');
+			let hasCamera = devices.some(device => device.kind === 'videoinput');
 			const hasMicrophone = devices.some(device => device.kind === 'audioinput');
 			
 			console.log('📱 Available devices:', { hasCamera, hasMicrophone });
