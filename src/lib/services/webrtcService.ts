@@ -175,8 +175,8 @@ class WebRTCService {
 				}
 				
 				// Check what we actually got
-				const hasVideoTrack = this.localStream?.getVideoTracks().length > 0;
-				const hasAudioTrack = this.localStream?.getAudioTracks().length > 0;
+				const hasVideoTrack = this.localStream.getVideoTracks().length > 0;
+				const hasAudioTrack = this.localStream.getAudioTracks().length > 0;
 				
 				if (hasVideoTrack && hasAudioTrack) {
 					console.log('✅ Got camera and microphone access');
