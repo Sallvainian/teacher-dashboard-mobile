@@ -10,6 +10,7 @@
 	import { updatePageStatus } from '$lib/stores/presence';
 	import AppHeader from './AppHeader.svelte';
 	import AppSidebar from './AppSidebar.svelte';
+	import MobileNav from './MobileNav.svelte';
 	import ImportWizard from '$components/ImportWizard.svelte';
 
 	// Get children snippet
@@ -28,6 +29,7 @@
 	let sidebarCollapsed = $state(false);
 	let userMenuOpen = $state(false);
 	let classesDropdownOpen = $state(false);
+	let mobileMenuOpen = $state(false);
 	let showImportWizard = $state(false);
 
 	// Debounced data loading to not block initial render
@@ -115,14 +117,14 @@
 	<!-- Authenticated layout with full dashboard -->
 	<div class="min-h-screen bg-bg-base text-text-base flex flex-col transition-colors">
 		<!-- Header -->
-		<AppHeader bind:userMenuOpen bind:classesDropdownOpen />
+		<AppHeader bind:userMenuOpen bind:classesDropdownOpen bind:mobileMenuOpen />
 
 		<div class="flex flex-grow relative">
 			<!-- Sidebar -->
 			<AppSidebar bind:sidebarCollapsed />
 
 			<!-- Main content -->
-			<main class="flex-grow p-6 overflow-y-auto relative z-0">
+			<main class="flex-grow p-3 sm:p-6 overflow-y-auto relative z-0">
 				{#if $navigating}
 					<div
 						class="absolute inset-0 bg-bg-base backdrop-blur-sm flex items-center justify-center z-50"
@@ -140,6 +142,9 @@
 		>
 			Teacher Dashboard • {new Date().getFullYear()}
 		</footer>
+		
+		<!-- Mobile Navigation -->
+		<MobileNav bind:open={mobileMenuOpen} />
 	</div>
 
 	<!-- Import Wizard Modal -->

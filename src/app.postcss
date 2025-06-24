@@ -1,0 +1,70 @@
+/* Mobile-specific styles */
+@layer utilities {
+	/* Hide scrollbar on mobile but keep functionality */
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+	
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+	
+	/* Mobile-optimized touch targets */
+	.touch-target {
+		min-height: 44px;
+		min-width: 44px;
+	}
+	
+	/* Safe area padding for notched devices */
+	.safe-top {
+		padding-top: env(safe-area-inset-top);
+	}
+	
+	.safe-bottom {
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+	
+	.safe-left {
+		padding-left: env(safe-area-inset-left);
+	}
+	
+	.safe-right {
+		padding-right: env(safe-area-inset-right);
+	}
+}
+
+/* Responsive table wrapper */
+@layer components {
+	.table-wrapper {
+		@apply w-full overflow-x-auto;
+	}
+	
+	/* Mobile card view for tables */
+	@media (max-width: 640px) {
+		.mobile-table {
+			@apply block;
+		}
+		
+		.mobile-table thead {
+			@apply hidden;
+		}
+		
+		.mobile-table tbody {
+			@apply block;
+		}
+		
+		.mobile-table tr {
+			@apply block mb-4 p-4 bg-card rounded-lg border border-border;
+		}
+		
+		.mobile-table td {
+			@apply block text-sm;
+		}
+		
+		.mobile-table td::before {
+			content: attr(data-label);
+			@apply font-semibold text-muted mr-2;
+		}
+	}
+}

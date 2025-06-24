@@ -20,7 +20,7 @@
 	}
 
 	// Props
-	let { userMenuOpen = $bindable(false), classesDropdownOpen = $bindable(false), gamesDropdownOpen = $bindable(false) } = $props();
+	let { userMenuOpen = $bindable(false), classesDropdownOpen = $bindable(false), gamesDropdownOpen = $bindable(false), mobileMenuOpen = $bindable(false) } = $props();
 
 	// Debounced handlers
 	const debouncedClassSelect = debounce(async (...args: unknown[]) => {
@@ -73,9 +73,20 @@
 <svelte:window onclick={handleClickOutside} />
 
 <nav class="bg-card border-b border-border relative z-50">
-	<div class="px-6 py-4 flex justify-between items-center">
-		<!-- Navigation moved to left -->
-		<div class="flex items-center gap-6">
+	<div class="px-4 sm:px-6 py-4 flex justify-between items-center">
+		<!-- Mobile menu button -->
+		<button
+			onclick={() => mobileMenuOpen = !mobileMenuOpen}
+			class="md:hidden p-2 rounded-lg hover:bg-accent text-text-hover"
+			aria-label="Open menu"
+		>
+			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+			</svg>
+		</button>
+		
+		<!-- Desktop navigation -->
+		<div class="hidden md:flex items-center gap-6">
 			<!-- Main navigation -->
 			<a href="/dashboard" class="nav-button">Dashboard</a>
 			<a href="/files" class="nav-button">Files</a>
