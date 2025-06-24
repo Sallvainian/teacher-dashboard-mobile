@@ -39,22 +39,24 @@
 	function getDeviceIcon() {
 		switch (type) {
 			case 'audioinput':
-				return `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				return `<div class="text-white/80"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
 					<path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
 					<line x1="12" y1="19" x2="12" y2="23"></line>
 					<line x1="8" y1="23" x2="16" y2="23"></line>
-				</svg>`;
+				</svg></div>`;
 			case 'audiooutput':
-				return `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				return `<div class="text-white/80"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
 					<path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-				</svg>`;
+				</svg></div>`;
 			case 'videoinput':
-				return `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				return `<div class="text-white/80"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<polygon points="23 7 16 12 23 17 23 7"></polygon>
 					<rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-				</svg>`;
+				</svg></div>`;
+			default:
+				return '';
 		}
 	}
 	
@@ -133,7 +135,7 @@
 </script>
 
 <div class="flex items-center gap-2">
-	<div class="text-white/80" {@html getDeviceIcon()}></div>
+	{@html getDeviceIcon()}
 	
 	{#if isLoading}
 		<div class="text-sm text-white/60">Loading devices...</div>

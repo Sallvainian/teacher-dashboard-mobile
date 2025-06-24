@@ -351,36 +351,27 @@
 				</div>
 				
 				<!-- Microphone Selection -->
-				<div class="space-y-2">
-					<label class="text-white/80 text-sm">Microphone</label>
-					<DeviceSelector 
-						type="audioinput" 
-						currentDeviceId={currentAudioDevice}
-						onchange={handleAudioDeviceChange}
-					/>
-				</div>
+				<DeviceSelector 
+					type="audioinput" 
+					currentDeviceId={currentAudioDevice}
+					onchange={handleAudioDeviceChange}
+				/>
 				
 				<!-- Camera Selection -->
 				{#if !isAudioOnly}
-					<div class="space-y-2">
-						<label class="text-white/80 text-sm">Camera</label>
-						<DeviceSelector 
-							type="videoinput" 
-							currentDeviceId={currentVideoDevice}
-							onchange={handleVideoDeviceChange}
-						/>
-					</div>
+					<DeviceSelector 
+						type="videoinput" 
+						currentDeviceId={currentVideoDevice}
+						onchange={handleVideoDeviceChange}
+					/>
 				{/if}
 				
 				<!-- Speaker Selection -->
-				<div class="space-y-2">
-					<label class="text-white/80 text-sm">Speakers</label>
-					<DeviceSelector 
-						type="audiooutput" 
-						currentDeviceId={currentAudioOutput}
-						onchange={handleAudioOutputChange}
-					/>
-				</div>
+				<DeviceSelector 
+					type="audiooutput" 
+					currentDeviceId={currentAudioOutput}
+					onchange={handleAudioOutputChange}
+				/>
 			</div>
 		{/if}
 
