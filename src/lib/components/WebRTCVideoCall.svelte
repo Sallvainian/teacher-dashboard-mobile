@@ -206,6 +206,13 @@
 					</div>
 				</div>
 			{/if}
+			
+			<!-- Audio-only indicator when there's no video -->
+			{#if remoteStream && (!remoteStream.getVideoTracks().length || !remoteStream.getVideoTracks()[0]?.enabled)}
+				<div class="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-lg text-sm">
+					Audio-only call
+				</div>
+			{/if}
 		</div>
 
 		<!-- Controls -->

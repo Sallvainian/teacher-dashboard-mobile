@@ -161,8 +161,8 @@ class WebRTCService {
 						showErrorToast('No media devices found. Please connect a camera or microphone and try again.');
 						throw new Error('No media devices found. Please connect a camera or microphone and try again.');
 					case 'NotReadableError':
-						showErrorToast('Cannot access your camera or microphone. They may be in use by another application.');
-						throw new Error('Media device is not available or already in use by another application.');
+						showErrorToast('Cannot access your camera. It may be in use by another application (like Zoom, Teams, or another browser tab). Please close other applications using your camera and try again.', 'Camera Busy', 8000);
+						throw new Error('Camera is already in use by another application. Unlike microphones, cameras can only be used by one application at a time.');
 					case 'OverconstrainedError':
 						showErrorToast('Your camera doesn\'t meet the required constraints. Try using a different camera.');
 						throw new Error('Media device constraints cannot be satisfied. Please try again.');
@@ -208,6 +208,7 @@ class WebRTCService {
 
 			return true;
 		} catch (error) {
+			// No need for console.error here as we've already shown a toast notification
 			return false;
 		}
 	}
@@ -269,8 +270,8 @@ class WebRTCService {
 						showErrorToast('No media devices found. Please connect a camera or microphone and try again.');
 						throw new Error('No media devices found. Please connect a camera or microphone and try again.');
 					case 'NotReadableError':
-						showErrorToast('Cannot access your camera or microphone. They may be in use by another application.');
-						throw new Error('Media device is not available or already in use by another application.');
+						showErrorToast('Cannot access your camera. It may be in use by another application (like Zoom, Teams, or another browser tab). Please close other applications using your camera and try again.', 'Camera Busy', 8000);
+						throw new Error('Camera is already in use by another application. Unlike microphones, cameras can only be used by one application at a time.');
 					case 'OverconstrainedError':
 						showErrorToast('Your camera doesn\'t meet the required constraints. Try using a different camera.');
 						throw new Error('Media device constraints cannot be satisfied. Please try again.');
@@ -319,6 +320,7 @@ class WebRTCService {
 
 			return true;
 		} catch (error) {
+			// No need for console.error here as we've already shown a toast notification
 			return false;
 		}
 	}
