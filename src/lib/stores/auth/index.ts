@@ -6,7 +6,6 @@ import { storeRegistry } from '../registry';
 
 // Core stores
 import {
-	authStore,
 	user,
 	profile,
 	session,
