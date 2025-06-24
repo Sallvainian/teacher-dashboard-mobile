@@ -11,6 +11,7 @@
 	import { authStore } from '$lib/stores/auth/index';
 	import { get } from 'svelte/store';
 	import { showErrorToast } from '$lib/stores/notifications';
+	import DeviceSelector from './DeviceSelector.svelte';
 
 	let { 
 		onClose
@@ -29,6 +30,10 @@
 	let isAudioOnly = $state(false);
 	let callDuration = $state(0);
 	let callTimer: number | null = null;
+	let showSettings = $state(false);
+	let currentAudioDevice = $state('');
+	let currentVideoDevice = $state('');
+	let currentAudioOutput = $state('');
 
 	// Subscribe to call state
 	const unsubscribe = currentCall.subscribe((call) => {
@@ -36,6 +41,9 @@
 		localStream = call?.localStream || null;
 		remoteStream = call?.remoteStream || null;
 		isAudioOnly = call?.isAudioOnly || false;
+		currentAudioDevice = call?.currentAudioDevice || '';
+		currentVideoDevice = call?.currentVideoDevice || '';
+		currentAudioOutput = call?.currentAudioOutput || '';
 		
 		// If there's a local stream but no video tracks, consider it audio only
 		if (localStream && localStream.getVideoTracks().length === 0) {
@@ -137,6 +145,26 @@
 		const temp = localVideoElement.srcObject;
 		localVideoElement.srcObject = remoteVideoElement.srcObject;
 		remoteVideoElement.srcObject = temp;
+	}
+	
+	// Handle audio device change
+	async function handleAudioDeviceChange(deviceId: string) {
+		await webrtcService.switchAudioDevice(deviceId);
+	}
+	
+	// Handle video device change
+	async function handleVideoDeviceChange(deviceId: string) {
+		await webrtcService.switchVideoDevice(deviceId);
+	}
+	
+	// Handle audio output change
+	async function handleAudioOutputChange(deviceId: string) {
+		await webrtcService.setAudioOutput(deviceId, remoteVideoElement);
+	}
+	
+	// Toggle settings panel
+	function toggleSettings() {
+		showSettings = !showSettings;
 	}
 </script>
 
@@ -290,7 +318,71 @@
 					<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
 				</svg>
 			</button>
+
+			<!-- Settings Button -->
+			<button
+				onclick={toggleSettings}
+				class={`p-4 rounded-full transition-colors ${showSettings ? 'bg-purple text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
+				aria-label="Settings"
+				title="Settings"
+			>
+				<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+					<circle cx="12" cy="12" r="3"></circle>
+				</svg>
+			</button>
 		</div>
+
+		<!-- Settings Panel -->
+		{#if showSettings}
+			<div class="absolute bottom-28 left-4 right-4 mx-auto max-w-md bg-black/95 backdrop-blur-sm border border-white/20 rounded-lg p-4 space-y-4 z-20 shadow-xl">
+				<div class="flex justify-between items-center mb-3">
+					<h3 class="text-white font-semibold">Device Settings</h3>
+					<button 
+						onclick={toggleSettings}
+						class="text-white/60 hover:text-white transition-colors"
+						aria-label="Close settings"
+					>
+						<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<line x1="18" y1="6" x2="6" y2="18"></line>
+							<line x1="6" y1="6" x2="18" y2="18"></line>
+						</svg>
+					</button>
+				</div>
+				
+				<!-- Microphone Selection -->
+				<div class="space-y-2">
+					<label class="text-white/80 text-sm">Microphone</label>
+					<DeviceSelector 
+						type="audioinput" 
+						currentDeviceId={currentAudioDevice}
+						onchange={handleAudioDeviceChange}
+					/>
+				</div>
+				
+				<!-- Camera Selection -->
+				{#if !isAudioOnly}
+					<div class="space-y-2">
+						<label class="text-white/80 text-sm">Camera</label>
+						<DeviceSelector 
+							type="videoinput" 
+							currentDeviceId={currentVideoDevice}
+							onchange={handleVideoDeviceChange}
+						/>
+					</div>
+				{/if}
+				
+				<!-- Speaker Selection -->
+				<div class="space-y-2">
+					<label class="text-white/80 text-sm">Speakers</label>
+					<DeviceSelector 
+						type="audiooutput" 
+						currentDeviceId={currentAudioOutput}
+						onchange={handleAudioOutputChange}
+					/>
+				</div>
+			</div>
+		{/if}
 
 		<!-- Call Status -->
 		<div class="px-6 pb-4 absolute bottom-16 left-0 right-0 flex justify-center z-10">

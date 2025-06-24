@@ -18,6 +18,9 @@ export interface VideoCall {
 	localStream?: MediaStream;
 	remoteStream?: MediaStream;
 	isAudioOnly?: boolean;
+	currentAudioDevice?: string;
+	currentVideoDevice?: string;
+	currentAudioOutput?: string;
 }
 
 // Store for current video call state
@@ -350,6 +353,12 @@ class WebRTCService {
 				}
 			}
 
+			// Get device IDs from the stream
+			const audioTrack = this.localStream?.getAudioTracks()[0];
+			const videoTrack = this.localStream?.getVideoTracks()[0];
+			const audioDeviceId = audioTrack?.getSettings().deviceId || '';
+			const videoDeviceId = videoTrack?.getSettings().deviceId || '';
+
 			// Update store FIRST so ICE candidate handler can access participants
 			const currentUserId = await this.getCurrentUserId();
 			currentCall.set({
@@ -357,7 +366,9 @@ class WebRTCService {
 				participants: [currentUserId, otherUserId],
 				isActive: true,
 				localStream: this.localStream,
-				isAudioOnly: !this.localStream?.getVideoTracks().length
+				isAudioOnly: !this.localStream?.getVideoTracks().length,
+				currentAudioDevice: audioDeviceId,
+				currentVideoDevice: videoDeviceId
 			});
 
 			// Create peer connection
@@ -409,6 +420,12 @@ class WebRTCService {
 			// Initialize media (get camera/mic)
 			await this.initializeMedia();
 
+			// Get device IDs from the stream
+			const audioTrack = this.localStream?.getAudioTracks()[0];
+			const videoTrack = this.localStream?.getVideoTracks()[0];
+			const audioDeviceId = audioTrack?.getSettings().deviceId || '';
+			const videoDeviceId = videoTrack?.getSettings().deviceId || '';
+
 			// Update store FIRST so ICE candidate handler can access participants
 			const currentUserId = await this.getCurrentUserId();
 			currentCall.set({
@@ -416,7 +433,9 @@ class WebRTCService {
 				participants: [currentUserId, callData.from],
 				isActive: true,
 				localStream: this.localStream || new MediaStream(),
-				isAudioOnly: !this.localStream?.getVideoTracks()?.length
+				isAudioOnly: !this.localStream?.getVideoTracks()?.length,
+				currentAudioDevice: audioDeviceId,
+				currentVideoDevice: videoDeviceId
 			});
 
 			// Create peer connection
@@ -999,6 +1018,154 @@ class WebRTCService {
 	createCallId(userId1: string, userId2: string): string {
 		const participants = [userId1, userId2].sort();
 		return `call-${participants[0]}-${participants[1]}-${Date.now()}`;
+	}
+
+	// Switch audio input device
+	async switchAudioDevice(deviceId: string): Promise<boolean> {
+		if (!this.localStream) return false;
+		
+		try {
+			console.log('🎤 Switching audio device to:', deviceId);
+			
+			// Get new stream with the selected audio device
+			const newStream = await navigator.mediaDevices.getUserMedia({
+				audio: {
+					deviceId: { exact: deviceId },
+					echoCancellation: true,
+					noiseSuppression: true,
+					autoGainControl: true,
+					sampleRate: 48000
+				},
+				video: this.localStream.getVideoTracks().length > 0 ? {
+					deviceId: this.localStream.getVideoTracks()[0].getSettings().deviceId
+				} : false
+			});
+			
+			// Replace audio track in peer connection
+			if (this.peerConnection) {
+				const senders = this.peerConnection.getSenders();
+				const audioSender = senders.find(sender => sender.track?.kind === 'audio');
+				
+				if (audioSender && newStream.getAudioTracks().length > 0) {
+					await audioSender.replaceTrack(newStream.getAudioTracks()[0]);
+				}
+			}
+			
+			// Stop old audio tracks
+			this.localStream.getAudioTracks().forEach(track => track.stop());
+			
+			// Remove old audio tracks and add new ones
+			this.localStream.getAudioTracks().forEach(track => {
+				this.localStream!.removeTrack(track);
+			});
+			newStream.getAudioTracks().forEach(track => {
+				this.localStream!.addTrack(track);
+			});
+			
+			// Update current call with new device
+			currentCall.update(call => call ? {
+				...call,
+				currentAudioDevice: deviceId
+			} : null);
+			
+			console.log('✅ Audio device switched successfully');
+			return true;
+		} catch (error) {
+			console.error('❌ Failed to switch audio device:', error);
+			showErrorToast('Failed to switch microphone');
+			return false;
+		}
+	}
+
+	// Switch video input device
+	async switchVideoDevice(deviceId: string): Promise<boolean> {
+		if (!this.localStream) return false;
+		
+		try {
+			console.log('📹 Switching video device to:', deviceId);
+			
+			// Get new stream with the selected video device
+			const newStream = await navigator.mediaDevices.getUserMedia({
+				video: {
+					deviceId: { exact: deviceId },
+					facingMode: undefined // Remove facingMode when using exact deviceId
+				},
+				audio: this.localStream.getAudioTracks().length > 0 ? {
+					deviceId: this.localStream.getAudioTracks()[0].getSettings().deviceId
+				} : false
+			});
+			
+			// Replace video track in peer connection
+			if (this.peerConnection) {
+				const senders = this.peerConnection.getSenders();
+				const videoSender = senders.find(sender => sender.track?.kind === 'video');
+				
+				if (videoSender && newStream.getVideoTracks().length > 0) {
+					await videoSender.replaceTrack(newStream.getVideoTracks()[0]);
+				}
+			}
+			
+			// Stop old video tracks
+			this.localStream.getVideoTracks().forEach(track => track.stop());
+			
+			// Remove old video tracks and add new ones
+			this.localStream.getVideoTracks().forEach(track => {
+				this.localStream!.removeTrack(track);
+			});
+			newStream.getVideoTracks().forEach(track => {
+				this.localStream!.addTrack(track);
+			});
+			
+			// Update current call with new device
+			currentCall.update(call => call ? {
+				...call,
+				currentVideoDevice: deviceId
+			} : null);
+			
+			console.log('✅ Video device switched successfully');
+			return true;
+		} catch (error) {
+			console.error('❌ Failed to switch video device:', error);
+			showErrorToast('Failed to switch camera');
+			return false;
+		}
+	}
+
+	// Set audio output device (for remote audio)
+	async setAudioOutput(deviceId: string, audioElement?: HTMLAudioElement | HTMLVideoElement): Promise<boolean> {
+		try {
+			console.log('🔊 Setting audio output device to:', deviceId);
+			
+			// Get the remote video element if not provided
+			const element = audioElement || get(remoteVideo);
+			
+			if (!element) {
+				console.warn('No audio element to set output device on');
+				return false;
+			}
+			
+			// Check if setSinkId is supported
+			if ('setSinkId' in element) {
+				await (element as any).setSinkId(deviceId);
+				
+				// Update current call with new device
+				currentCall.update(call => call ? {
+					...call,
+					currentAudioOutput: deviceId
+				} : null);
+				
+				console.log('✅ Audio output device set successfully');
+				return true;
+			} else {
+				console.warn('setSinkId not supported in this browser');
+				showInfoToast('Audio output selection not supported in this browser');
+				return false;
+			}
+		} catch (error) {
+			console.error('❌ Failed to set audio output device:', error);
+			showErrorToast('Failed to switch speakers');
+			return false;
+		}
 	}
 }
 
