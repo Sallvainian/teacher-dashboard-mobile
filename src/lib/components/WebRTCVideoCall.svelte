@@ -26,6 +26,7 @@
 	let isMuted = $state(false);
 	let isVideoOff = $state(false);
 	let isFullScreen = $state(false);
+	let isAudioOnly = $state(false);
 	let callDuration = $state(0);
 	let callTimer: number | null = null;
 
@@ -34,6 +35,12 @@
 		isCallActive = !!call?.isActive;
 		localStream = call?.localStream || null;
 		remoteStream = call?.remoteStream || null;
+		isAudioOnly = call?.isAudioOnly || false;
+		
+		// If there's a local stream but no video tracks, consider it audio only
+		if (localStream && localStream.getVideoTracks().length === 0) {
+			isVideoOff = true;
+		}
 		
 		// Update video elements when streams change
 		if (localVideoElement && localStream) {
@@ -164,6 +171,7 @@
 				class="w-full h-full object-cover"
 				muted={false}
 				playsinline
+				playsinline
 			></video>
 
 			<!-- Local Video (picture-in-picture) -->
@@ -174,7 +182,21 @@
 					muted={true}
 					class="w-full h-full object-cover"
 					playsinline
+					playsinline
 				></video>
+				
+				<!-- No camera indicator -->
+				{#if isVideoOff || !localStream?.getVideoTracks().length || !localStream?.getVideoTracks()[0]?.enabled}
+					<div class="absolute inset-0 flex items-center justify-center bg-black/80">
+						<div class="text-center">
+							<svg class="w-8 h-8 mx-auto mb-2 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10"></path>
+								<line x1="1" y1="1" x2="23" y2="23"></line>
+							</svg>
+							<p class="text-xs text-white/60">Camera off</p>
+						</div>
+					</div>
+				{/if}
 				
 				<!-- No camera indicator -->
 				{#if isVideoOff || !localStream?.getVideoTracks().length || !localStream?.getVideoTracks()[0]?.enabled}
@@ -203,14 +225,10 @@
 							</svg>
 						</div>
 						<p class="text-lg">Waiting for other participant's video...</p>
+						{#if isAudioOnly}
+							<p class="text-sm mt-2 bg-black/40 py-2 px-4 rounded-full inline-block">Audio-only call</p>
+						{/if}
 					</div>
-				</div>
-			{/if}
-			
-			<!-- Audio-only indicator when there's no video -->
-			{#if remoteStream && (!remoteStream.getVideoTracks().length || !remoteStream.getVideoTracks()[0]?.enabled)}
-				<div class="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-lg text-sm">
-					Audio-only call
 				</div>
 			{/if}
 		</div>
@@ -222,6 +240,7 @@
 				onclick={toggleMute}
 				class={`p-4 rounded-full transition-colors ${isMuted ? 'bg-red-500 text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
 				aria-label={isMuted ? 'Unmute' : 'Mute'}
+				title={isMuted ? 'Unmute' : 'Mute'}
 				title={isMuted ? 'Unmute' : 'Mute'}
 			>
 				{#if isMuted}
@@ -247,6 +266,8 @@
 				onclick={toggleVideo}
 				class={`p-4 rounded-full transition-colors ${isVideoOff ? 'bg-red-500 text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
 				aria-label={isVideoOff ? 'Turn video on' : 'Turn video off'}
+				title={isVideoOff ? 'Turn video on' : 'Turn video off'}
+				disabled={!localStream?.getVideoTracks().length}
 				title={isVideoOff ? 'Turn video on' : 'Turn video off'}
 			>
 				{#if isVideoOff}
@@ -295,12 +316,47 @@
 					</svg>
 				{/if}
 			</button>
+			
+			<!-- Swap Cameras Button -->
+			<button
+				onclick={swapCameras}
+				class="p-4 bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors"
+				aria-label="Swap cameras"
+				title="Swap cameras"
+			>
+				<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
+					<line x1="16" y1="5" x2="22" y2="5"></line>
+					<line x1="19" y1="2" x2="19" y2="8"></line>
+					<circle cx="9" cy="9" r="2"></circle>
+					<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+				</svg>
+			</button>
+			
+			<!-- Fullscreen Button -->
+			<button
+				onclick={toggleFullScreen}
+				class="p-4 bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors"
+				aria-label={isFullScreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+				title={isFullScreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+			>
+				{#if isFullScreen}
+					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+					</svg>
+				{:else}
+					<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+					</svg>
+				{/if}
+			</button>
 
 			<!-- End Call Button -->
 			<button
 				onclick={endCall}
 				class="p-4 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
 				aria-label="End call"
+				title="End call"
 				title="End call"
 			>
 				<svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -312,8 +368,11 @@
 		<!-- Call Status -->
 		<div class="px-6 pb-20">
 			<div class="text-center">
-				{#if isCallActive && remoteStream}
+				{#if isCallActive && remoteStream && remoteStream.getTracks().length > 0}
 					<p class="text-sm text-green-500">🟢 Connected</p>
+					{#if isAudioOnly || !remoteStream.getVideoTracks().length}
+						<p class="text-sm text-white/80 mt-1">Audio-only call</p>
+					{/if}
 				{:else if isCallActive}
 					<p class="text-sm text-yellow-500">🟡 Connecting...</p>
 				{:else}
@@ -323,6 +382,30 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	/* Ensure videos fill their containers properly */
+	video {
+		object-fit: cover;
+		background-color: #000;
+	}
+	
+	/* Smooth transitions for UI elements */
+	button {
+		transition: all 0.2s ease;
+	}
+	
+	/* Ensure the component takes up the full screen */
+	.video-call-container {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 9999;
+		background-color: rgba(0, 0, 0, 0.9);
+	}
+</style>
 
 <style>
 	/* Ensure videos fill their containers properly */

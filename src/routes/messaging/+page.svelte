@@ -742,14 +742,19 @@
 				// Send a message about the video call
 				await chatStore.sendMessage(
 					activeConversation.id,
-					`📹 Started a video call`
+					`📞 Started a call`
 				);
 				
 				// Show video call interface
 				showVideoCall = true;
+			} else {
+				// If success is false but no error was thrown, it means the call couldn't start 
+				// but the error was already handled (e.g., by showing a toast notification)
+				console.log('Call could not be started, but error was already handled');
 			}
 		} catch (error) {
 			console.error('Error starting video call:', error);
+			showErrorToast('Failed to start call. Please try again later.');
 		}
 	}
 
@@ -769,12 +774,13 @@
 				if (activeConversation) {
 					await chatStore.sendMessage(
 						activeConversation.id,
-						`📹 Joined the video call`
+						`📞 Joined the call`
 					);
 				}
 			}
 		} catch (error) {
 			console.error('Error accepting call:', error);
+			showErrorToast('Failed to accept call. Please try again.');
 		}
 	}
 
