@@ -185,6 +185,9 @@ class WebRTCService {
 						} else {
 							// Other errors
 							console.error('Media access error:', error);
+						}
+					}
+				}
 				
 				// Check what we actually got
 				const hasVideoTrack = this.localStream?.getVideoTracks().length > 0;
