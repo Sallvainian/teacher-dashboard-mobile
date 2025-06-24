@@ -122,61 +122,73 @@ class WebRTCService {
 			}
 
 			// Check available devices first
-			const devices = await navigator.mediaDevices.enumerateDevices();
-			let hasCamera = devices.some(device => device.kind === 'videoinput');
-			let hasMicrophone = devices.some(device => device.kind === 'audioinput');
-			
-			console.log('📱 Available devices:', { hasCamera, hasMicrophone });
-			
-			if (!hasMicrophone) {
-				// No audio devices at all - show a warning but don't block the call
-				showErrorToast('No camera or microphone devices found. Please connect audio/video devices and try again.');
-				hasMicrophone = false;
-				showInfoToast('This will be a silent call. You won\'t be heard.', 'Audio Unavailable', 8000);
-			}
-			
-			// Get user media - gracefully handle missing devices
 			try {
-				const constraints: MediaStreamConstraints = {
-					video: hasCamera ? { facingMode: 'user' } : false,
-					audio: hasMicrophone
-				};
+				// First try enumerating devices to check what's available
+				const devices = await navigator.mediaDevices.enumerateDevices();
+				const hasCamera = devices.some(device => device.kind === 'videoinput');
+				const hasMicrophone = devices.some(device => device.kind === 'audioinput');
 				
-				try {
-					// Try to get media with the requested constraints
-					this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
-				} catch (mediaError: UnknownError) {
-					// If that fails and we requested video, try again with just audio
-					if (hasCamera) {
-						console.log('📱 Failed to get video, trying audio only');
-						try {
-							this.localStream = await navigator.mediaDevices.getUserMedia({ audio: hasMicrophone, video: false });
-							// We got audio-only even though camera exists
-							showInfoToast('Your camera is unavailable or in use by another application. Proceeding with audio only.', 'Video Unavailable', 8000);
-							hasCamera = false;
-						} catch (audioOnlyError: UnknownError) {
-							// Both video and audio failed, try one last time with just audio
-							if (hasMicrophone) {
-								try {
-									this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-								} catch (finalError: UnknownError) {
-									throw finalError;
-								}
-							} else {
-								// Nothing worked - create an empty stream as a last resort
-								this.localStream = new MediaStream();
-								showInfoToast('No audio or video available. Others won\'t be able to see or hear you.', 'Limited Call', 8000);
-							}
-						}
-					} else {
-						// We were already trying audio-only, so re-throw
-						throw mediaError;
-					}
+				console.log('📱 Available devices:', { hasCamera, hasMicrophone });
+				
+				if (!hasMicrophone && !hasCamera) {
+					// No devices at all - show a warning but create an empty stream
+					showErrorToast('No camera or microphone devices found. Please connect audio/video devices.', undefined, 8000);
+					this.localStream = new MediaStream();
+					return;
 				}
+
+				// Try with video first if camera is available
+				if (hasCamera) {
+					try {
+						// First try both audio and video
+						this.localStream = await navigator.mediaDevices.getUserMedia({
+							video: { facingMode: "user" },
+							audio: hasMicrophone
+						});
+						console.log('✅ Got camera and microphone access');
+					} catch (error: any) {
+						// Handle specific camera-in-use error
+						if (error.name === 'NotReadableError') {
+							showInfoToast('Your camera is in use by another application (like Zoom or Teams). Unlike microphones which can be shared, cameras can only be used by one app at a time.', 'Camera Busy', 8000);
+							
+							try {
+								// Try with audio only
+								this.localStream = await navigator.mediaDevices.getUserMedia({
+									audio: hasMicrophone,
+									video: false
+								});
+								console.log('✅ Got audio-only after camera busy error');
+							} catch (audioError) {
+								// If even audio fails, create empty stream
+								console.error('Failed to get audio after camera busy:', audioError);
+								this.localStream = new MediaStream();
+								showInfoToast('Unable to access any devices. Others won\'t see or hear you.', 'Limited Call', 5000);
+							}
+						} else if (error.name === 'NotFoundError') {
+							// No devices found despite enumeration saying they exist
+							showInfoToast('Camera reported as available but could not be accessed.', 'Hardware Error', 5000);
+							
+							try {
+								// Try with audio only
+								this.localStream = await navigator.mediaDevices.getUserMedia({
+									audio: hasMicrophone,
+									video: false
+								});
+							} catch (audioError) {
+								this.localStream = new MediaStream();
+								showInfoToast('Unable to access any devices. Others won\'t see or hear you.', 'Limited Call', 5000);
+							}
+						} else if (error.name === 'NotAllowedError') {
+							// Permission denied
+							showErrorToast('Permission to use camera/microphone was denied. Please check your browser settings.', undefined, 8000);
+							this.localStream = new MediaStream();
+						} else {
+							// Other errors
+							console.error('Media access error:', error);
 				
 				// Check what we actually got
-				const hasVideoTrack = this.localStream.getVideoTracks().length > 0;
-				const hasAudioTrack = this.localStream.getAudioTracks().length > 0;
+				const hasVideoTrack = this.localStream?.getVideoTracks().length > 0;
+				const hasAudioTrack = this.localStream?.getAudioTracks().length > 0;
 				
 				if (hasVideoTrack && hasAudioTrack) {
 					console.log('✅ Got camera and microphone access');
@@ -295,61 +307,8 @@ class WebRTCService {
 				throw new Error('Your browser does not support camera and microphone access. Please use a modern browser.');
 			}
 
-			// Check available devices first
-			const devices = await navigator.mediaDevices.enumerateDevices();
-			let hasCamera = devices.some(device => device.kind === 'videoinput');
-			const hasMicrophone = devices.some(device => device.kind === 'audioinput');
-			
-			console.log('📱 Available devices:', { hasCamera, hasMicrophone });
-			
-			if (!hasCamera && !hasMicrophone) {
-				showErrorToast('No camera or microphone devices found. Please connect audio/video devices and try again.');
-				throw new Error('No camera or microphone devices found. Please connect audio/video devices and try again.');
-			}
-			
-			// Get user media - gracefully handle missing devices
-			try {
-				const constraints: MediaStreamConstraints = {
-					video: hasCamera ? { facingMode: 'user' } : false,
-					audio: hasMicrophone
-				};
-				
-				this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
-				
-				if (hasCamera && hasMicrophone) {
-					console.log('✅ Camera and microphone access granted');
-				} else if (hasCamera) {
-					console.log('✅ Camera access granted (no microphone available)');
-					showInfoToast('No microphone detected. Others won\'t be able to hear you.', 'Audio Unavailable');
-				} else if (hasMicrophone) {
-					console.log('✅ Microphone access granted (no camera available)');
-					showInfoToast('No camera detected. Others won\'t be able to see you.', 'Video Unavailable');
-				} else {
-					console.log('⚠️ No audio or video available');
-					showInfoToast('No audio or video available. This will be a limited call.', 'Limited Call');
-				}
-			} catch (error: any) {
-				console.warn('❌ Media access error:', error);
-				
-				// Handle specific getUserMedia errors
-				switch (error.name) {
-					case 'NotAllowedError':
-						showErrorToast('Camera/microphone access was denied. Please grant permission in your browser settings and try again.');
-						throw new Error('Media access was denied. Please grant permission in your browser settings and try again.');
-					case 'NotFoundError':
-						showErrorToast('No media devices found. Please connect a camera or microphone and try again.');
-						throw new Error('No media devices found. Please connect a camera or microphone and try again.');
-					case 'NotReadableError':
-						showErrorToast('Cannot access your camera or microphone. They may be in use by another application.');
-						throw new Error('Media device is not available or already in use by another application.');
-					case 'OverconstrainedError':
-						showErrorToast('Your camera doesn\'t meet the required constraints. Try using a different camera.');
-						throw new Error('Media device constraints cannot be satisfied. Please try again.');
-					default:
-						showErrorToast(`Failed to access media devices: ${error.message}`);
-						throw new Error(`Failed to access media devices: ${error.message}`);
-				}
-			}
+			// Initialize media (get camera/mic)
+			await this.initializeMedia();
 
 			// Update store FIRST so ICE candidate handler can access participants
 			const currentUserId = await this.getCurrentUserId();
@@ -357,7 +316,8 @@ class WebRTCService {
 				id: callData.callId,
 				participants: [currentUserId, callData.from],
 				isActive: true,
-				localStream: this.localStream
+				localStream: this.localStream || new MediaStream(),
+				isAudioOnly: !this.localStream?.getVideoTracks()?.length
 			});
 
 			// Create peer connection
@@ -639,6 +599,129 @@ class WebRTCService {
 		// Get current user ID from Supabase
 		const { data } = await supabase.auth.getUser();
 		return data.user?.id || '';
+	}
+
+	/**
+	 * Initialize media stream with graceful fallbacks for various error cases
+	 */
+	private async initializeMedia(): Promise<void> {
+		try {
+			// First try enumerating devices to check what's available
+			const devices = await navigator.mediaDevices.enumerateDevices();
+			const hasCamera = devices.some(device => device.kind === 'videoinput');
+			const hasMicrophone = devices.some(device => device.kind === 'audioinput');
+			
+			console.log('📱 Available devices:', { hasCamera, hasMicrophone });
+			
+			if (!hasMicrophone && !hasCamera) {
+				// No devices at all - show a warning but create an empty stream
+				showErrorToast('No camera or microphone devices found. Please connect audio/video devices.', undefined, 8000);
+				this.localStream = new MediaStream();
+				return;
+			}
+
+			// Try with video first if camera is available
+			if (hasCamera) {
+				try {
+					// First try both audio and video
+					this.localStream = await navigator.mediaDevices.getUserMedia({
+						video: { facingMode: "user" },
+						audio: hasMicrophone
+					});
+					console.log('✅ Got camera and microphone access');
+				} catch (error: any) {
+					// Handle specific camera-in-use error
+					if (error.name === 'NotReadableError') {
+						console.error('📸 Camera is busy:', error.message);
+						showInfoToast('Your camera is in use by another application (like Zoom, Teams, or another browser tab). Unlike microphones which can be shared, cameras can only be used by one app at a time.', 'Camera Busy', 8000);
+						
+						try {
+							// Try with audio only
+							this.localStream = await navigator.mediaDevices.getUserMedia({
+								audio: hasMicrophone,
+								video: false
+							});
+							console.log('✅ Got audio-only after camera busy error');
+							showInfoToast('Proceeding with audio-only call', 'Audio Only', 5000);
+						} catch (audioError) {
+							// If even audio fails, create empty stream
+							console.error('Failed to get audio after camera busy:', audioError);
+							this.localStream = new MediaStream();
+							showInfoToast('Unable to access any devices. Others won\'t see or hear you.', 'Limited Call', 5000);
+						}
+					} else if (error.name === 'NotFoundError') {
+						// No devices found despite enumeration saying they exist
+						showInfoToast('Camera reported as available but could not be accessed.', 'Hardware Error', 5000);
+						
+						try {
+							// Try with audio only
+							this.localStream = await navigator.mediaDevices.getUserMedia({
+								audio: hasMicrophone,
+								video: false
+							});
+						} catch (audioError) {
+							this.localStream = new MediaStream();
+							showInfoToast('Unable to access any devices. Others won\'t see or hear you.', 'Limited Call', 5000);
+						}
+					} else if (error.name === 'NotAllowedError') {
+						// Permission denied
+						showErrorToast('Permission to use camera/microphone was denied. Please check your browser settings.', undefined, 8000);
+						this.localStream = new MediaStream();
+					} else {
+						// Other errors
+						console.error('Media access error:', error);
+						showErrorToast(`Error accessing media devices: ${error.message || 'Unknown error'}`, undefined, 5000);
+						
+						// Try audio-only as fallback
+						try {
+							this.localStream = await navigator.mediaDevices.getUserMedia({
+								audio: hasMicrophone,
+								video: false
+							});
+							showInfoToast('Using audio only due to camera error', 'Audio Only', 5000);
+						} catch (audioError) {
+							this.localStream = new MediaStream();
+						}
+					}
+				}
+			} else if (hasMicrophone) {
+				// No camera, just try microphone
+				try {
+					this.localStream = await navigator.mediaDevices.getUserMedia({
+						audio: true,
+						video: false
+					});
+					showInfoToast('No camera detected. This will be an audio-only call.', 'Audio Only', 5000);
+				} catch (error) {
+					console.error('Microphone access error:', error);
+					this.localStream = new MediaStream();
+					showInfoToast('Failed to access microphone. Others won\'t be able to hear you.', 'Limited Call', 5000);
+				}
+			} else {
+				// No devices available
+				this.localStream = new MediaStream();
+				showInfoToast('No audio or video devices available. Others won\'t see or hear you.', 'Limited Call', 5000);
+			}
+			
+			// Check what we actually got
+			const hasVideoTrack = this.localStream.getVideoTracks().length > 0;
+			const hasAudioTrack = this.localStream.getAudioTracks().length > 0;
+			
+			if (hasVideoTrack && hasAudioTrack) {
+				console.log('✅ Got camera and microphone access');
+			} else if (hasVideoTrack) {
+				console.log('✅ Got camera access only');
+				showInfoToast('No microphone detected. Others won\'t be able to hear you.', 'Audio Unavailable', 5000);
+			} else if (hasAudioTrack) {
+				console.log('✅ Got microphone access only');
+			} else {
+				console.log('⚠️ No audio or video tracks available');
+			}
+		} catch (error: any) {
+			console.error('❌ Failed to initialize media:', error);
+			this.localStream = new MediaStream();
+			showErrorToast('Failed to initialize media devices', undefined, 5000);
+		}
 	}
 
 	private notifyIncomingCall(signal: SignalData) {
