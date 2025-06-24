@@ -112,7 +112,10 @@ class AudioService {
 		if (this.isRinging) return;
 		
 		this.isRinging = true;
-		console.log('🔔 Starting ringtone');
+		console.log('🔔 DEBUG: Starting incoming call ringtone', { 
+			timestamp: new Date().toISOString(),
+			stackTrace: new Error().stack 
+		});
 
 		// Classic phone ring pattern: two high tones
 		const playRingPattern = async () => {
@@ -148,7 +151,10 @@ class AudioService {
 		if (!this.isRinging) return;
 		
 		this.isRinging = false;
-		console.log('🔕 Stopping ringtone');
+		console.log('🔕 DEBUG: Stopping ringtone', { 
+			timestamp: new Date().toISOString(),
+			stackTrace: new Error().stack 
+		});
 		
 		if (this.ringtoneInterval) {
 			clearInterval(this.ringtoneInterval);
@@ -160,7 +166,10 @@ class AudioService {
 	 * Play missed call notification sound
 	 */
 	async playMissedCallSound() {
-		console.log('📞 Playing missed call sound');
+		console.log('📞 DEBUG: Playing missed call sound', { 
+			timestamp: new Date().toISOString(),
+			stackTrace: new Error().stack 
+		});
 		
 		// Descending tone to indicate missed call
 		await this.playTone(600, 0.3, 0.3);
@@ -172,7 +181,10 @@ class AudioService {
 	 * Play call accepted/connected sound
 	 */
 	async playCallAcceptedSound() {
-		console.log('✅ Playing call accepted sound');
+		console.log('✅ DEBUG: Playing call accepted sound', { 
+			timestamp: new Date().toISOString(),
+			stackTrace: new Error().stack 
+		});
 		
 		// Pleasant ascending chord
 		await this.playChord([440, 554, 659], 0.8, 0.2); // A major chord
@@ -182,7 +194,10 @@ class AudioService {
 	 * Play call ended sound
 	 */
 	async playCallEndedSound() {
-		console.log('📞 Playing call ended sound');
+		console.log('📞 DEBUG: Playing call ended sound', { 
+			timestamp: new Date().toISOString(),
+			stackTrace: new Error().stack 
+		});
 		
 		// Simple descending tone
 		await this.playTone(400, 0.4, 0.2);
@@ -193,7 +208,10 @@ class AudioService {
 	 * Play message notification sound
 	 */
 	async playMessageNotification() {
-		console.log('💬 Playing message notification');
+		console.log('💬 DEBUG: Playing message notification', { 
+			timestamp: new Date().toISOString(),
+			stackTrace: new Error().stack 
+		});
 		
 		// Gentle notification sound
 		await this.playTone(800, 0.2, 0.3);
@@ -204,7 +222,10 @@ class AudioService {
 	 * Play emoji/poke notification sound (more playful)
 	 */
 	async playEmojiNotification() {
-		console.log('😄 Playing emoji notification');
+		console.log('😄 DEBUG: Playing emoji notification', { 
+			timestamp: new Date().toISOString(),
+			stackTrace: new Error().stack 
+		});
 		
 		// Playful ascending tones
 		await this.playTone(600, 0.15, 0.25);
@@ -216,6 +237,11 @@ class AudioService {
 	 * Play typing notification (subtle)
 	 */
 	async playTypingSound() {
+		console.log('⌨️ DEBUG: Playing typing sound', { 
+			timestamp: new Date().toISOString(),
+			stackTrace: new Error().stack 
+		});
+		
 		// Very subtle click sound
 		await this.playTone(1200, 0.05, 0.1);
 	}

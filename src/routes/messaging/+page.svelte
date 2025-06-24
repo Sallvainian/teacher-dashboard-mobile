@@ -202,17 +202,47 @@
 			});
 			
 			// Play notification sound for new messages (not own messages)
+			console.log('🔍 DEBUG: Message notification check', {
+				timestamp: new Date().toISOString(),
+				msgCount: msgs.length,
+				previousCount,
+				hasActiveConversation: !!activeConversation,
+				conversationId: activeConversation?.id,
+				shouldTriggerCheck: msgs.length > previousCount && activeConversation,
+				stackTrace: new Error().stack
+			});
+			
 			if (msgs.length > previousCount && activeConversation) {
 				const newMessages = msgs.slice(previousCount);
 				const hasNewIncomingMessage = newMessages.some(msg => msg.sender_id !== user.id);
 				
+				console.log('🔍 DEBUG: New messages detected', {
+					newMessageCount: newMessages.length,
+					hasNewIncomingMessage,
+					newMessages: newMessages.map(m => ({ 
+						id: m.id, 
+						senderId: m.sender_id, 
+						content: m.content.substring(0, 50), 
+						isOwnMessage: m.sender_id === user.id 
+					})),
+					userId: user.id
+				});
+				
 				if (hasNewIncomingMessage) {
 					const latestMessage = newMessages[newMessages.length - 1];
 					
-					// Check if it's an emoji or special message
-					if (latestMessage.content.match(/^[\u{1F600}-\u{1F64F}]|^[\u{1F300}-\u{1F5FF}]|^[\u{1F680}-\u{1F6FF}]|^[\u{1F1E0}-\u{1F1FF}]|^👋|^😄|^🎉|^❤️|^😊/u) || 
+					const isEmoji = latestMessage.content.match(/^[\u{1F600}-\u{1F64F}]|^[\u{1F300}-\u{1F5FF}]|^[\u{1F680}-\u{1F6FF}]|^[\u{1F1E0}-\u{1F1FF}]|^👋|^😄|^🎉|^❤️|^😊/u) || 
 						latestMessage.content.toLowerCase().includes('poke') ||
-						latestMessage.content.startsWith('🫵')) {
+						latestMessage.content.startsWith('🫵');
+					
+					console.log('🔍 DEBUG: Playing notification sound', {
+						messageContent: latestMessage.content,
+						isEmoji,
+						soundType: isEmoji ? 'emoji' : 'regular'
+					});
+					
+					// Check if it's an emoji or special message
+					if (isEmoji) {
 						// Play emoji/poke sound
 						audioService.playEmojiNotification();
 					} else {
