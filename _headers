@@ -1,0 +1,3 @@
+/*
+  Permissions-Policy: camera=*, microphone=*, display-capture=*
+  Feature-Policy: camera *; microphone *; display-capture *
