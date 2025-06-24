@@ -10,6 +10,7 @@ import { writable, get } from 'svelte/store';
 import type { RealtimeChannel } from '@supabase/supabase-js';
 import { showErrorToast, showInfoToast } from '$lib/stores/notifications';
 import type { UnknownError } from '$lib/types/ai-enforcement';
+import { audioService } from './audioService';
 
 export interface VideoCall {
 	id: string;
@@ -473,6 +474,9 @@ class WebRTCService {
 	}
 
 	async endCall(): Promise<void> {
+		// Play call ended sound
+		audioService.playCallEndedSound();
+		
 		if (this.currentCallId) {
 			// Send end call signal
 			await this.sendSignal({
@@ -939,6 +943,9 @@ class WebRTCService {
 			isIncoming: true, 
 			callData: signal 
 		});
+		
+		// Start ringtone for incoming call
+		audioService.startIncomingCallRingtone();
 	}
 
 	// Method to accept an incoming call
@@ -950,6 +957,11 @@ class WebRTCService {
 		}
 
 		console.log('✅ Accepting incoming call');
+		
+		// Stop ringtone and play accept sound
+		audioService.stopRingtone();
+		audioService.playCallAcceptedSound();
+		
 		const success = await this.answerCall(incoming.callData);
 		
 		if (success) {
@@ -969,6 +981,9 @@ class WebRTCService {
 		}
 
 		console.log('❌ Declining incoming call');
+		
+		// Stop ringtone
+		audioService.stopRingtone();
 		
 		// Send decline signal to caller
 		await this.sendSignal({
@@ -1000,6 +1015,9 @@ class WebRTCService {
 		currentCall.set(null);
 		incomingCall.set({ isIncoming: false, callData: null });
 		this.currentCallId = null;
+		
+		// Stop any ongoing ringtone
+		audioService.stopRingtone();
 	}
 	
 	// Method to completely destroy the service and clean up resources

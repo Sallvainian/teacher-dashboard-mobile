@@ -11,6 +11,7 @@
 	import ImagePreviewModal from '$lib/components/ImagePreviewModal.svelte';
 	import WebRTCVideoCall from '$lib/components/WebRTCVideoCall.svelte';
 	import { webrtcService, incomingCall } from '$lib/services/webrtcService';
+	import { audioService } from '$lib/services/audioService';
 	import type { ChatUIConversation, ChatUIMessage, ConversationWithDetails, ConversationParticipant } from '$lib/types/chat';
 	import { getUser } from '$lib/utils/storeHelpers';
 	import { isHTMLElement, isHTMLInputElement, getEventTargetValue } from '$lib/utils/domHelpers';
@@ -155,6 +156,7 @@
 	const unsubscribeMessages = chatStore.activeMessages.subscribe((msgs) => {
 		const user = getUser($authStore);
 		if (user) {
+			const previousCount = messages.length;
 			
 			messages = msgs.map((msg, index) => {
 				// Better fallback for sender name
@@ -198,6 +200,27 @@
 					attachments: msg.attachments ?? []
 				};
 			});
+			
+			// Play notification sound for new messages (not own messages)
+			if (msgs.length > previousCount && activeConversation) {
+				const newMessages = msgs.slice(previousCount);
+				const hasNewIncomingMessage = newMessages.some(msg => msg.sender_id !== user.id);
+				
+				if (hasNewIncomingMessage) {
+					const latestMessage = newMessages[newMessages.length - 1];
+					
+					// Check if it's an emoji or special message
+					if (latestMessage.content.match(/^[\u{1F600}-\u{1F64F}]|^[\u{1F300}-\u{1F5FF}]|^[\u{1F680}-\u{1F6FF}]|^[\u{1F1E0}-\u{1F1FF}]|^👋|^😄|^🎉|^❤️|^😊/u) || 
+						latestMessage.content.toLowerCase().includes('poke') ||
+						latestMessage.content.startsWith('🫵')) {
+						// Play emoji/poke sound
+						audioService.playEmojiNotification();
+					} else {
+						// Play regular message notification
+						audioService.playMessageNotification();
+					}
+				}
+			}
 		}
 	});
 
