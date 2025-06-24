@@ -1,70 +1,74 @@
 /* Mobile-specific styles */
-@layer utilities {
-	/* Hide scrollbar on mobile but keep functionality */
-	.scrollbar-hide {
-		-ms-overflow-style: none;
-		scrollbar-width: none;
-	}
-	
-	.scrollbar-hide::-webkit-scrollbar {
-		display: none;
-	}
-	
-	/* Mobile-optimized touch targets */
-	.touch-target {
-		min-height: 44px;
-		min-width: 44px;
-	}
-	
-	/* Safe area padding for notched devices */
-	.safe-top {
-		padding-top: env(safe-area-inset-top);
-	}
-	
-	.safe-bottom {
-		padding-bottom: env(safe-area-inset-bottom);
-	}
-	
-	.safe-left {
-		padding-left: env(safe-area-inset-left);
-	}
-	
-	.safe-right {
-		padding-right: env(safe-area-inset-right);
-	}
+.scrollbar-hide {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+
+/* Mobile-optimized touch targets */
+.touch-target {
+	min-height: 44px;
+	min-width: 44px;
+}
+
+/* Safe area padding for notched devices */
+.safe-top {
+	padding-top: env(safe-area-inset-top);
+}
+
+.safe-bottom {
+	padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-left {
+	padding-left: env(safe-area-inset-left);
+}
+
+.safe-right {
+	padding-right: env(safe-area-inset-right);
 }
 
 /* Responsive table wrapper */
-@layer components {
-	.table-wrapper {
-		@apply w-full overflow-x-auto;
+.table-wrapper {
+	width: 100%;
+	overflow-x: auto;
+}
+
+/* Mobile card view for tables */
+@media (max-width: 640px) {
+	.mobile-table {
+		display: block;
 	}
 	
-	/* Mobile card view for tables */
-	@media (max-width: 640px) {
-		.mobile-table {
-			@apply block;
-		}
-		
-		.mobile-table thead {
-			@apply hidden;
-		}
-		
-		.mobile-table tbody {
-			@apply block;
-		}
-		
-		.mobile-table tr {
-			@apply block mb-4 p-4 bg-card rounded-lg border border-border;
-		}
-		
-		.mobile-table td {
-			@apply block text-sm;
-		}
-		
-		.mobile-table td::before {
-			content: attr(data-label);
-			@apply font-semibold text-muted mr-2;
-		}
+	.mobile-table thead {
+		display: none;
+	}
+	
+	.mobile-table tbody {
+		display: block;
+	}
+	
+	.mobile-table tr {
+		display: block;
+		margin-bottom: 1rem;
+		padding: 1rem;
+		background-color: var(--card);
+		border-radius: 0.5rem;
+		border: 1px solid var(--border);
+	}
+	
+	.mobile-table td {
+		display: block;
+		font-size: 0.875rem;
+	}
+	
+	.mobile-table td::before {
+		content: attr(data-label);
+		font-weight: 600;
+		color: var(--muted);
+		margin-right: 0.5rem;
 	}
 }

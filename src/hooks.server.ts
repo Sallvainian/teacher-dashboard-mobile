@@ -34,7 +34,7 @@ const handleSupabase: Handle = async ({ event, resolve }) => {
     const {
       data: { session },
     } = await event.locals.supabase.auth.getSession();
-    
+
     if (!session) {
       return { session: null, user: null };
     }
@@ -43,7 +43,7 @@ const handleSupabase: Handle = async ({ event, resolve }) => {
       data: { user },
       error,
     } = await event.locals.supabase.auth.getUser();
-    
+
     if (error) {
       return { session: null, user: null };
     }
@@ -73,13 +73,13 @@ const handleChromeDevTools: Handle = async ({ event, resolve }) => {
 
   // Generate nonce for inline scripts
   const nonce = Buffer.from(crypto.getRandomValues(new Uint8Array(16))).toString('base64');
-  
+
   // Continue to the next handler with nonce in locals
   event.locals.nonce = nonce;
   const response = await resolve(event, {
     transformPageChunk: ({ html }) => html.replace('%sveltekit.nonce%', nonce)
   });
-  
+
   // Add GoGuardian-compatible CSP headers with nonce
   const cspDirectives = [
     "default-src 'self'",
@@ -99,12 +99,12 @@ const handleChromeDevTools: Handle = async ({ event, resolve }) => {
   if (process.env.NODE_ENV === 'production') {
     response.headers.set('Content-Security-Policy', cspDirectives);
   }
-  
+
   // Add other security headers for GoGuardian compatibility
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  response.headers.set('Permissions-Policy', 'camera=*, microphone=*, geolocation=()');
 
   return response;
 };

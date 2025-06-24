@@ -105,26 +105,48 @@ class WebRTCService {
 				throw new Error('Your browser does not support camera and microphone access. Please use a modern browser.');
 			}
 
-			// Get user media - try real camera/microphone first
+			// Check available devices first
+			const devices = await navigator.mediaDevices.enumerateDevices();
+			const hasCamera = devices.some(device => device.kind === 'videoinput');
+			const hasMicrophone = devices.some(device => device.kind === 'audioinput');
+			
+			console.log('📱 Available devices:', { hasCamera, hasMicrophone });
+			
+			if (!hasCamera && !hasMicrophone) {
+				throw new Error('No camera or microphone devices found. Please connect audio/video devices and try again.');
+			}
+			
+			// Get user media - gracefully handle missing devices
 			try {
-				this.localStream = await navigator.mediaDevices.getUserMedia({
-					video: true,
-					audio: true
-				});
-				console.log('✅ Real camera/microphone access granted');
+				const constraints: MediaStreamConstraints = {
+					video: hasCamera,
+					audio: hasMicrophone
+				};
+				
+				this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
+				
+				if (hasCamera && hasMicrophone) {
+					console.log('✅ Camera and microphone access granted');
+				} else if (hasCamera) {
+					console.log('✅ Camera access granted (no microphone available)');
+				} else {
+					console.log('✅ Microphone access granted (no camera available)');
+				}
 			} catch (error: any) {
-				console.warn('❌ Camera/microphone access denied:', error);
+				console.warn('❌ Media access error:', error);
 				
 				// Handle specific getUserMedia errors
 				switch (error.name) {
 					case 'NotAllowedError':
-						throw new Error('Camera and microphone access was denied. Please grant permission in your browser settings and try again.');
+						throw new Error('Media access was denied. Please grant permission in your browser settings and try again.');
 					case 'NotFoundError':
-						throw new Error('No camera or microphone found. Please connect a camera and microphone and try again.');
+						throw new Error('No media devices found. Please connect a camera or microphone and try again.');
+					case 'NotReadableError':
+						throw new Error('Media device is not available or already in use by another application.');
 					case 'OverconstrainedError':
-						throw new Error('Camera or microphone constraints cannot be satisfied. Please try again.');
+						throw new Error('Media device constraints cannot be satisfied. Please try again.');
 					default:
-						throw new Error(`Failed to access camera and microphone: ${error.message}`);
+						throw new Error(`Failed to access media devices: ${error.message}`);
 				}
 			}
 
@@ -180,26 +202,48 @@ class WebRTCService {
 				throw new Error('Your browser does not support camera and microphone access. Please use a modern browser.');
 			}
 
-			// Get user media - try real camera/microphone first
+			// Check available devices first
+			const devices = await navigator.mediaDevices.enumerateDevices();
+			const hasCamera = devices.some(device => device.kind === 'videoinput');
+			const hasMicrophone = devices.some(device => device.kind === 'audioinput');
+			
+			console.log('📱 Available devices:', { hasCamera, hasMicrophone });
+			
+			if (!hasCamera && !hasMicrophone) {
+				throw new Error('No camera or microphone devices found. Please connect audio/video devices and try again.');
+			}
+			
+			// Get user media - gracefully handle missing devices
 			try {
-				this.localStream = await navigator.mediaDevices.getUserMedia({
-					video: true,
-					audio: true
-				});
-				console.log('✅ Real camera/microphone access granted');
+				const constraints: MediaStreamConstraints = {
+					video: hasCamera,
+					audio: hasMicrophone
+				};
+				
+				this.localStream = await navigator.mediaDevices.getUserMedia(constraints);
+				
+				if (hasCamera && hasMicrophone) {
+					console.log('✅ Camera and microphone access granted');
+				} else if (hasCamera) {
+					console.log('✅ Camera access granted (no microphone available)');
+				} else {
+					console.log('✅ Microphone access granted (no camera available)');
+				}
 			} catch (error: any) {
-				console.warn('❌ Camera/microphone access denied:', error);
+				console.warn('❌ Media access error:', error);
 				
 				// Handle specific getUserMedia errors
 				switch (error.name) {
 					case 'NotAllowedError':
-						throw new Error('Camera and microphone access was denied. Please grant permission in your browser settings and try again.');
+						throw new Error('Media access was denied. Please grant permission in your browser settings and try again.');
 					case 'NotFoundError':
-						throw new Error('No camera or microphone found. Please connect a camera and microphone and try again.');
+						throw new Error('No media devices found. Please connect a camera or microphone and try again.');
+					case 'NotReadableError':
+						throw new Error('Media device is not available or already in use by another application.');
 					case 'OverconstrainedError':
-						throw new Error('Camera or microphone constraints cannot be satisfied. Please try again.');
+						throw new Error('Media device constraints cannot be satisfied. Please try again.');
 					default:
-						throw new Error(`Failed to access camera and microphone: ${error.message}`);
+						throw new Error(`Failed to access media devices: ${error.message}`);
 				}
 			}
 
