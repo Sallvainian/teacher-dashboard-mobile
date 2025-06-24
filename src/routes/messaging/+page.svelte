@@ -38,6 +38,7 @@
 	let typingTimeout: number | null = null;
 	let fileInput: HTMLInputElement;
 	let showVideoCall = $state(false);
+	let isMobile = $state(false);
 	
 	// Format time ago for conversation list
 	function formatTimeAgo(timestamp: string | null): string {
@@ -133,10 +134,22 @@
 	});
 
 	// Load conversations on mount if not already loaded
+	// Check if mobile on mount and resize
+	function checkMobile() {
+		isMobile = window.innerWidth < 768;
+	}
+
 	onMount(async () => {
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+		
 		if (conversations.length === 0) {
 			await chatStore.loadConversations();
 		}
+		
+		return () => {
+			window.removeEventListener('resize', checkMobile);
+		};
 	});
 
 	const unsubscribeMessages = chatStore.activeMessages.subscribe((msgs) => {
@@ -820,7 +833,7 @@
 		<div class="card-dark p-0 overflow-hidden">
 			<div class="flex h-[calc(100vh-12rem)]">
 				<!-- Sidebar -->
-				<div class="w-80 border-r border-border flex flex-col">
+				<div class="w-full md:w-80 border-r border-border flex flex-col" class:hidden={activeConversation && isMobile}>
 					<!-- Search -->
 					<div class="p-4 border-b border-border">
 						<div class="relative">
@@ -963,9 +976,22 @@
 				</div>
 
 				<!-- Messaging Area -->
-				<div class="flex-1 flex flex-col">
+				<div class="flex-1 flex flex-col w-full md:w-auto" class:hidden={!activeConversation && isMobile}>
 					<!-- Message Header -->
 					<div class="p-4 border-b border-border flex justify-between items-center">
+						<!-- Back button for mobile -->
+						<button 
+							class="md:hidden p-2 text-text-base hover:text-text-hover rounded-full hover:bg-surface transition-colors mr-3"
+							onclick={() => activeConversation = null}
+							aria-label="Back to conversations"
+						>
+							<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M19 12H5"></path>
+								<path d="M12 19l-7-7 7-7"></path>
+							</svg>
+						</button>
+						
+						<div class="flex-1 flex justify-between items-center">
 						{#if activeConversation}
 							<div class="flex items-center gap-3">
 								<div class="relative">
@@ -1084,6 +1110,7 @@
 									<line x1="12" y1="8" x2="12.01" y2="8"></line>
 								</svg>
 							</button>
+						</div>
 						</div>
 					</div>
 
