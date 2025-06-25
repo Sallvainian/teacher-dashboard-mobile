@@ -1,17 +1,30 @@
 <script lang="ts">
-	import { authStore, user } from '$lib/stores/auth/index';
+	import { authStore, user, profile } from '$lib/stores/auth/index';
 	import { supabase } from '$lib/supabaseClient';
 	import type { User } from '@supabase/supabase-js';
 	import { getEventTargetFiles } from '$lib/utils/domHelpers';
 
 	let fullName = $state(($user as User | null)?.user_metadata?.full_name || '');
-	let avatarUrl = $state(($user as User | null)?.user_metadata?.avatar_url || '');
+	let avatarUrl = $state($profile?.avatar_url || '');
 	let loading = $state(false);
 	let uploadingAvatar = $state(false);
 	let error = $state('');
 	let success = $state(false);
 	let avatarPreview = $state<string | null>(null);
 	let fileInput: HTMLInputElement;
+
+	// Keep avatarUrl and fullName in sync with user/profile store changes
+	$effect(() => {
+		if ($user) {
+			fullName = $user.user_metadata?.full_name || '';
+		}
+		if ($profile) {
+			// Only update avatarUrl if we don't have a preview (i.e., user hasn't uploaded a new image)
+			if (!avatarPreview) {
+				avatarUrl = $profile.avatar_url || '';
+			}
+		}
+	});
 
 	function getInitials(name: string): string {
 		if (!name) return 'U';
