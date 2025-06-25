@@ -266,7 +266,7 @@
 					
 					<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
 						<!-- Students -->
-						<a href="/classes" class="bg-card border border-border rounded-lg p-6 hover:bg-surface transition-colors">
+						<a href="/classes" class="bg-card border border-border rounded-lg p-6 hover:bg-surface transition-colors" aria-label="View students and class management">
 							<div class="flex items-center justify-between mb-4">
 								<h3 class="text-sm font-medium text-highlight">Students</h3>
 								<svg class="w-5 h-5 text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -288,7 +288,7 @@
 						</a>
 
 						<!-- Classes -->
-						<a href="/classes" class="bg-card border border-border rounded-lg p-6 hover:bg-surface transition-colors">
+						<a href="/classes" class="bg-card border border-border rounded-lg p-6 hover:bg-surface transition-colors" aria-label="Manage active classes and assignments">
 							<div class="flex items-center justify-between mb-4">
 								<h3 class="text-sm font-medium text-highlight">Classes</h3>
 								<svg class="w-5 h-5 text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -308,7 +308,7 @@
 						</a>
 
 						<!-- Jeopardy Games -->
-						<a href="/jeopardy" class="bg-card border border-border rounded-lg p-6 hover:bg-surface transition-colors">
+						<a href="/jeopardy" class="bg-card border border-border rounded-lg p-6 hover:bg-surface transition-colors" aria-label="Create and manage Jeopardy games">
 							<div class="flex items-center justify-between mb-4">
 								<h3 class="text-sm font-medium text-highlight">Jeopardy</h3>
 								<svg class="w-5 h-5 text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -327,7 +327,7 @@
 						</a>
 
 						<!-- Files -->
-						<a href="/files" class="bg-card border border-border rounded-lg p-6 hover:bg-surface transition-colors">
+						<a href="/files" class="bg-card border border-border rounded-lg p-6 hover:bg-surface transition-colors" aria-label="Manage uploaded files and storage">
 							<div class="flex items-center justify-between mb-4">
 								<h3 class="text-sm font-medium text-highlight">Files</h3>
 								<svg class="w-5 h-5 text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -401,19 +401,19 @@
 						<h2 class="text-lg font-semibold text-highlight mb-6">Quick Actions</h2>
 
 						<div class="space-y-3">
-							<a href="/classes" class="w-full p-3 bg-surface/50 rounded-lg hover:bg-surface transition-colors flex items-center gap-3">
+							<a href="/classes" class="w-full p-3 bg-surface/50 rounded-lg hover:bg-surface transition-colors flex items-center gap-3" aria-label="Navigate to class management page">
 								<svg class="w-5 h-5 text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 									<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
 								</svg>
 								<span class="text-highlight">Manage Classes</span>
 							</a>
-							<a href="/gradebook" class="w-full p-3 bg-surface/50 rounded-lg hover:bg-surface transition-colors flex items-center gap-3">
+							<a href="/gradebook" class="w-full p-3 bg-surface/50 rounded-lg hover:bg-surface transition-colors flex items-center gap-3" aria-label="Navigate to student gradebook">
 								<svg class="w-5 h-5 text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 									<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
 								</svg>
 								<span class="text-highlight">Grade Students</span>
 							</a>
-							<a href="/jeopardy" class="w-full p-3 bg-surface/50 rounded-lg hover:bg-surface transition-colors flex items-center gap-3">
+							<a href="/jeopardy" class="w-full p-3 bg-surface/50 rounded-lg hover:bg-surface transition-colors flex items-center gap-3" aria-label="Navigate to Jeopardy game creator">
 								<svg class="w-5 h-5 text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 									<path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
 								</svg>
@@ -506,6 +506,7 @@
 								<button
 									onclick={() => goto('/settings')}
 									class="text-sm text-purple hover:text-purple-hover transition-colors"
+									aria-label="Upgrade storage plan"
 								>
 									Upgrade Storage
 								</button>
@@ -551,7 +552,7 @@
 							<span class="text-text-base">Show this help</span>
 						</div>
 					</div>
-					<button onclick={() => (showHelp = false)} class="btn btn-primary mt-4 w-full">
+					<button onclick={() => (showHelp = false)} class="btn btn-primary mt-4 w-full" aria-label="Close keyboard shortcuts help">
 						Close
 					</button>
 				</div>

@@ -80,7 +80,7 @@
 		--text-base: #64748b;
 		--text-hover: #475569;
 		--highlight: #1e293b;
-		--muted: #94a3b8;
+		--muted: #64748b;
 
 		/* Light borders */
 		--border: #e2e8f0;
@@ -121,7 +121,7 @@
 		--text-base: #ffffff;
 		--text-hover: #ffffff;
 		--highlight: #ffffff;
-		--muted: #6b7280;
+		--muted: #a1a1aa;
 
 		/* Dark borders - very subtle */
 		--border: #262626;
