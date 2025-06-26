@@ -45,3 +45,6 @@ pnpm-lock.yaml
 
 # Platform-specific info
 .platform-info.json
+
+# Android build files
+android/
