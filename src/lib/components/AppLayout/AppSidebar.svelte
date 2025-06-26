@@ -46,7 +46,7 @@
 	];
 
 	// Filter navigation items based on user role
-	let navItems = $derived(
+	const navItems = $derived(
 		allNavItems.filter(item => {
 			const userRole = $authStore.role;
 			return !userRole || item.roles.includes(userRole);

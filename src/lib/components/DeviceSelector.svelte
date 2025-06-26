@@ -8,7 +8,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	
-	let { 
+	const { 
 		type,
 		currentDeviceId = '',
 		onchange
@@ -77,7 +77,7 @@
 					stream.getTracks().forEach(track => track.stop());
 					hasPermission = true;
 				} catch (error) {
-					console.warn(`No permission for ${type}:`, error);
+					// Permission denied
 					hasPermission = false;
 				}
 			}
@@ -96,7 +96,7 @@
 				selectedDeviceId = devices[0]?.deviceId || '';
 			}
 		} catch (error) {
-			console.error('Error enumerating devices:', error);
+				// Error enumerating devices
 			devices = [];
 		} finally {
 			isLoading = false;
@@ -135,7 +135,24 @@
 </script>
 
 <div class="flex items-center gap-3 w-full">
-	{@html getDeviceIcon()}
+	{#if type === 'audioinput'}
+		<div class="text-white/80"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+			<path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+			<line x1="12" y1="19" x2="12" y2="23"></line>
+			<line x1="8" y1="23" x2="16" y2="23"></line>
+		</svg></div>
+	{:else if type === 'audiooutput'}
+		<div class="text-white/80"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+			<path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+		</svg></div>
+	{:else}
+		<div class="text-white/80"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+			<circle cx="12" cy="13" r="4"></circle>
+		</svg></div>
+	{/if}
 	
 	{#if isLoading}
 		<div class="text-sm text-white/60">Loading devices...</div>
@@ -149,7 +166,7 @@
 			value={selectedDeviceId}
 			onchange={handleDeviceChange}
 		>
-			{#each devices as device}
+			{#each devices as device (device.deviceId)}
 				<option value={device.deviceId} class="bg-gray-800">
 					{device.label || `${getDeviceTypeLabel()} ${devices.indexOf(device) + 1}`}
 				</option>

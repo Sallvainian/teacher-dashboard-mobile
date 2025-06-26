@@ -1,26 +1,28 @@
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import netlify from '@sveltejs/adapter-netlify';
+import adapter from '@sveltejs/adapter-static';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: vitePreprocess(),
 	// Remove runes setting - let Svelte auto-detect
 	kit: {
-		adapter: netlify(),
+		adapter: adapter({
+			pages: 'build',
+			assets: 'build',
+			fallback: 'index.html',
+			precompress: false,
+			strict: true
+		}),
+		paths: {
+			base: '',
+			relative: true
+		},
 		alias: {
 			$components: 'src/lib/components',
 			$stores: 'src/lib/stores',
 			$services: 'src/lib/services',
 			$utils: 'src/lib/utils',
 			$types: 'src/lib/types'
-		},
-		prerender: {
-			handleHttpError: ({ status, path, referrer, message }) => {
-				// Ignore 404 errors during prerendering
-				if (status === 404) return;
-				const referrerText = referrer ? ` - referrer: ${referrer}` : '';
-				throw new Error(`${message} (status: ${status}, path: ${path}${referrerText})`);
-			}
 		}
 	},
 	compilerOptions: {

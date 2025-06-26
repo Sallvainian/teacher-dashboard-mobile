@@ -2,7 +2,6 @@
 	import type { FileMetadata } from '$lib/types/files';
 	import { getFileType } from '$lib/types/files';
 	import { fileService } from '$lib/services/fileService';
-	import PDFViewer from './PDFViewer.svelte';
 	import type { UnknownError } from '$lib/types/ai-enforcement';
 
 	let {
@@ -316,10 +315,19 @@
 							</button>
 						</div>
 					{:else if pdfUrl}
-						<div class="h-[70vh] relative">
-							{#key pdfUrl}
-								<PDFViewer {pdfUrl} height="100%" />
-							{/key}
+						<div class="flex flex-col items-center justify-center h-64 text-center">
+							<svg class="w-16 h-16 text-purple mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+								<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+								<polyline points="14 2 14 8 20 8"/>
+								<line x1="16" y1="13" x2="8" y2="13"/>
+								<line x1="16" y1="17" x2="8" y2="17"/>
+								<polyline points="10 9 9 9 8 9"/>
+							</svg>
+							<p class="text-text-base font-medium mb-2">PDF Preview</p>
+							<p class="text-muted text-sm mb-4">Use your device's native PDF viewer for the best experience</p>
+							<button class="btn btn-primary" onclick={openInNewTab}>
+								Open PDF
+							</button>
 						</div>
 					{/if}
 				{:else}

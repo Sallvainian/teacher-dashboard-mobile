@@ -8,7 +8,6 @@
 	import { debounce } from '$utils/performanceOptimized';
 	import type { User } from '@supabase/supabase-js';
 	import type { UserRole } from '$lib/types/database';
-	import type { UnknownError } from '$lib/types/ai-enforcement';
 
 	// Define the profile type
 	interface UserProfile {
@@ -50,8 +49,8 @@
 		try {
 			userMenuOpen = false;
 			await authStore.signOut();
-		} catch (error: UnknownError) {
-			console.error('Sign out error:', error);
+		} catch (_error: unknown) {
+			// Handle sign out error silently
 		}
 	}
 

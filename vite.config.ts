@@ -2,10 +2,10 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 // import { imagetools } from 'vite-imagetools'; // Temporarily disabled
 import Icons from 'unplugin-icons/vite';
-import compression from 'vite-plugin-compression';
-import { visualizer } from 'rollup-plugin-visualizer';
+// import compression from 'vite-plugin-compression'; // Temporarily disabled
+// import { visualizer } from 'rollup-plugin-visualizer'; // Temporarily disabled
 
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ command, mode: _mode }) => {
 	const dev = command === 'serve';
 	
 	return {
@@ -34,23 +34,23 @@ export default defineConfig(({ command, mode }) => {
 
 		sveltekit(),
 
-		// Asset Compression - Gzip/Brotli for better loading times
-		compression({
-			algorithm: 'gzip',
-			ext: '.gz'
-		}),
-		compression({
-			algorithm: 'brotliCompress',
-			ext: '.br'
-		}),
+		// Asset Compression - Temporarily disabled (missing package)
+		// compression({
+		// 	algorithm: 'gzip',
+		// 	ext: '.gz'
+		// }),
+		// compression({
+		// 	algorithm: 'brotliCompress',
+		// 	ext: '.br'
+		// }),
 
-		// Bundle Analysis - Visualize bundle sizes
-		visualizer({
-			filename: 'dist/stats.html',
-			open: false,
-			gzipSize: true,
-			brotliSize: true
-		})
+		// Bundle Analysis - Temporarily disabled (missing package)
+		// visualizer({
+		// 	filename: 'dist/stats.html',
+		// 	open: false,
+		// 	gzipSize: true,
+		// 	brotliSize: true
+		// })
 	],
 
 	define: {
@@ -90,12 +90,25 @@ export default defineConfig(({ command, mode }) => {
 		]
 	},
 
+	ssr: {
+		// For static builds, only externalize Capacitor plugins, not ionic-svelte
+		external: [
+			'@capacitor/core',
+			'@capacitor/app',
+			'@capacitor/haptics',
+			'@capacitor/keyboard',
+			'@capacitor/status-bar'
+		],
+		// Always bundle ionic-svelte for static builds
+		noExternal: ['ionic-svelte']
+	},
+
 	build: {
 		sourcemap: true,
 		target: 'esnext',
-		// Build optimizations
+		// Build optimizations - ionic-svelte must be bundled for static builds
 		rollupOptions: {
-			// Netlify adapter handles chunk splitting automatically
+			// DO NOT externalize ionic-svelte for Capacitor - it needs to be bundled
 		},
 		// Build optimizations for production
 		chunkSizeWarningLimit: 1000,
